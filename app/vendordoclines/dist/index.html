@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reconly — Enterprise Vendor Reconciliation</title>
+  <script>
+    if (!window.location.hash || window.location.hash === '#' || window.location.hash === '#/') {
+      window.location.replace('/landing.html');
+    }
+  </script>
+  <link rel="icon" href="../landing-assets/logo-icon.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/login.css?v=3">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://ui5.sap.com/resources/sap-ui-core.js"
+    data-sap-ui-theme="sap_horizon"
+    data-sap-ui-resourceroots='{"vendordoclines": "./"}'
+    data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
+    data-sap-ui-compatVersion="edge"
+    data-sap-ui-async="true">
+  </script>
+</head>
+<body class="sapUiBody" id="content">
+  <div data-sap-ui-component data-name="vendordoclines" data-id="app" data-settings='{"id":"vendordoclines"}'></div>
+</body>
+</html>

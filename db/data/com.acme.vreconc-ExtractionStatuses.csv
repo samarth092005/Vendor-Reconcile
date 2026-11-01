@@ -1,0 +1,4 @@
+code;name;descr
+Extracted;Extracted;All fields extracted successfully
+Failed;Failed;Extraction failed
+PartiallyExtracted;Partial;Some fields could not be extracted

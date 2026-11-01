@@ -1,0 +1,8 @@
+code;name;descr;criticality
+Matched;Matched;Auto-matched successfully;3
+Tolerance;Tolerance;Matched within tolerance threshold;2
+Mismatch;Mismatch;Values differ beyond tolerance;1
+MissingInS4;Missing in S/4;Invoice found in file, not posted in S/4;1
+MissingInFile;Missing in File;S/4 invoice not found in shared drive;1
+Duplicate;Duplicate;Suspected duplicate invoice;2
+Blocked;Blocked;Blocked for payment in S/4;1

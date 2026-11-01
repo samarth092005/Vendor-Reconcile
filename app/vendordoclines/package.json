@@ -1,0 +1,12 @@
+{
+  "name": "vendordoclines",
+  "version": "1.0.0",
+  "description": "Vendor Reconciliation UI5 App",
+  "scripts": {
+    "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist"
+  },
+  "devDependencies": {
+    "@ui5/cli": "^3.11.14",
+    "ui5-task-zipper": "^3.7.0"
+  }
+}

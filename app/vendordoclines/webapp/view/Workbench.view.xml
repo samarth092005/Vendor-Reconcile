@@ -1,0 +1,133 @@
+<mvc:View controllerName="vendordoclines.controller.Workbench" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" height="100%">
+  <Page showHeader="false" enableScrolling="false" class="sapUiContentPadding">
+    <l:Splitter height="100%">
+      
+      <!-- LEFT COLUMN: Inbox List -->
+      <VBox width="40%" height="100%" class="vrSplitterLeft">
+        <Toolbar class="sapUiTinyMarginBottom">
+          <Title text="Reconciliation Inbox" level="H3"/>
+          <ToolbarSpacer/>
+          <SegmentedButton selectedKey="{wb>/filter}" selectionChange="onFilterChange">
+            <items>
+              <SegmentedButtonItem key="ALL" text="All"/>
+              <SegmentedButtonItem key="EXCEPTIONS" text="Exceptions"/>
+            </items>
+          </SegmentedButton>
+        </Toolbar>
+        
+        <SearchField width="100%" liveChange="onSearch" placeholder="Search Invoice / PO" class="sapUiSmallMarginBottom"/>
+        
+        <List id="wbList" items="{wb>/rows}" mode="SingleSelectMaster" selectionChange="onItemSelect">
+          <ObjectListItem 
+              title="{wb>vendorInvoiceNo}"
+              number="{path: 'wb>invoiceAmount', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}"
+              numberUnit="{wb>currency}"
+              intro="PO: {wb>poReference}">
+            <firstStatus>
+              <ObjectStatus text="{wb>outcomeCode}" state="{wb>outcomeState}" icon="{= ${wb>outcomeState} === 'Success' ? 'sap-icon://sys-enter-2' : 'sap-icon://error'}"/>
+            </firstStatus>
+            <attributes>
+              <ObjectAttribute title="Vendor" text="{wb>sourceVendorCode}"/>
+              <ObjectAttribute text="{wb>invoiceDate}"/>
+            </attributes>
+          </ObjectListItem>
+        </List>
+      </VBox>
+      
+      <!-- RIGHT COLUMN: Command Center (Split View) -->
+      <VBox width="60%" height="100%" class="vrSplitterRight" visible="{= !!${wb>/active/vendorInvoiceNo} }">
+        <Toolbar>
+          <Title text="Reconciliation Command Center - {wb>/active/vendorInvoiceNo}" level="H2"/>
+          <ToolbarSpacer/>
+          <ObjectStatus text="{wb>/active/outcomeCode}" state="{wb>/active/outcomeState}" class="sapUiMediumMarginEnd" icon="{= ${wb>/active/outcomeState} === 'Success' ? 'sap-icon://sys-enter-2' : 'sap-icon://error'}"/>
+          <Button text="Close" press="onCloseDetails" icon="sap-icon://decline"/>
+        </Toolbar>
+        
+        <ScrollContainer height="100%" vertical="true" horizontal="false" class="sapUiSmallMargin">
+          <MessageStrip
+              text="{wb>/active/reason}"
+              type="{= ${wb>/active/outcomeState} === 'Success' ? 'Success' : 'Error'}"
+              showIcon="true"
+              class="sapUiSmallMarginBottom">
+          </MessageStrip>
+
+          <HBox width="100%" class="sapUiSmallMarginBottom">
+            
+            <!-- VENDOR TRUTH (Left) -->
+            <VBox width="50%" class="sapUiTinyMarginEnd sapUiBoxShadow" backgroundDesign="Solid">
+              <Toolbar class="sapUiTinyMarginTopBottom">
+                <core:Icon src="sap-icon://supplier" class="sapUiSmallMarginBegin sapUiTinyMarginEnd"/>
+                <Title text="Vendor Invoice Data (S21)" level="H4"/>
+              </Toolbar>
+              <VBox class="sapUiSmallMargin">
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                  <Text text="Invoice No:"/>
+                  <Text text="{wb>/active/vendorInvoiceNo}" design="Bold"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                  <Text text="Date:"/>
+                  <Text text="{wb>/active/invoiceDate}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                  <Text text="Gross Amount:"/>
+                  <Text text=",1{path: 'wb>/active/invoiceAmount', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" design="Bold"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Invoiced Qty:"/>
+                  <Text text="{wb>/active/invoicedQty} EA"/>
+                </HBox>
+              </VBox>
+            </VBox>
+
+            <!-- SAP TRUTH (Right) -->
+            <VBox width="50%" class="sapUiTinyMarginBegin sapUiBoxShadow" backgroundDesign="Solid">
+              <Toolbar class="sapUiTinyMarginTopBottom">
+                <core:Icon src="sap-icon://database" class="sapUiSmallMarginBegin sapUiTinyMarginEnd"/>
+                <Title text="S/4HANA PO &amp; GR Truth" level="H4"/>
+              </Toolbar>
+              <VBox class="sapUiSmallMargin">
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                  <Text text="Purchase Order:"/>
+                  <Text text="{wb>/active/poReference}" design="Bold"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                  <Text text="Expected Amount:"/>
+                  <Text text=",1{path: 'wb>/active/expectedAmount', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" design="Bold"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                  <Text text="Received GR Qty:"/>
+                  <ObjectStatus text="{wb>/active/receivedQty} EA" state="{= ${wb>/active/receivedQty} > 0 ? 'Success' : 'Error'}" design="Bold"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Variance (Delta):"/>
+                  <Text text=",1{path: 'wb>/active/amountDelta', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}}" class="{= ${wb>/active/amountDelta} > 0 ? 'vrRedText' : 'vrGreenText' }"/>
+                </HBox>
+              </VBox>
+            </VBox>
+          </HBox>
+          
+          <Panel headerText="Exception Resolution" visible="{wb>/active/hasException}" class="sapUiSmallMarginTop">
+            <VBox>
+              <Text text="Recommended Action: {wb>/active/recommendedAction}" class="sapUiSmallMarginBottom vrBoldText"/>
+              <HBox>
+                <Button text="Force Approve Exception" type="Accept" press="onResolveFromDialog" icon="sap-icon://accept" class="sapUiTinyMarginEnd"/>
+                <Button text="Reject / Request Credit Note" type="Reject" press="onDisputeFromDialog" icon="sap-icon://decline" class="sapUiTinyMarginEnd"/>
+                <Button text="Request MIGO Posting" press="onRequestMigo" icon="sap-icon://shipping-status"/>
+              </HBox>
+              <Input id="resolutionNote" placeholder="Enter mandatory resolution note here..." class="sapUiSmallMarginTop" width="100%"/>
+            </VBox>
+          </Panel>
+
+          <Panel headerText="Automated Workflow Actions" visible="{= RegExp('^MATCHED').test(${wb>/active/outcomeCode}) }" class="sapUiSmallMarginTop">
+            <VBox>
+              <Text text="This invoice is a perfect match and is ready for automated MIRO posting." class="sapUiSmallMarginBottom"/>
+              <Button text="Trigger MIRO Auto-Post to S/4HANA" type="Emphasized" press="onApproveForPaymentFromDialog" icon="sap-icon://sap-logo-shape"/>
+            </VBox>
+          </Panel>
+          
+        </ScrollContainer>
+      </VBox>
+      
+    </l:Splitter>
+  </Page>
+</mvc:View>

@@ -1,0 +1,298 @@
+<mvc:View controllerName="vendordoclines.controller.GRWorkbench"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:l="sap.ui.layout"
+          xmlns:mc="sap.suite.ui.microchart"
+          xmlns:core="sap.ui.core"
+          height="100%">
+
+  <Page id="grWorkbenchPage" showHeader="false" enableScrolling="true" class="vrDashboardPage">
+    <!-- ============ HEADER BAR ============ -->
+    <Toolbar class="vrHeaderBar" height="4.5rem" design="Solid">
+      <VBox>
+        <Title text="Goods Receipt Workbench" class="vrHeaderTitle" level="H2"/>
+        <Text text="MM Material Documents · MIGO Postings · QA32 Inspection · GR/IR Clearing" class="vrHeaderSubtitle"/>
+      </VBox>
+      <ToolbarSpacer/>
+      <Button icon="sap-icon://refresh" text="Refresh" press="loadKpis" class="sapUiTinyMarginEnd"/>
+      <Button icon="sap-icon://synchronize" text="Sync with S21 ERP" type="Emphasized" press="onSyncS21" class="sapUiTinyMarginEnd"/>
+    </Toolbar>
+
+    <!-- ============ ALERT NOTIFICATION ============ -->
+    <VBox class="sapUiSmallMarginBeginEnd sapUiTinyMarginBottom">
+      <MessageStrip class="vrAlertStrip"
+        text="Real-time MM Notification: 3 Goods Receipt postings are pending. 1 short delivery requires return investigation."
+        type="Information" showIcon="true" showCloseButton="true"/>
+    </VBox>
+
+    <!-- ============ KPI CARDS ROW (Admin Cockpit Style) ============ -->
+    <l:Grid defaultSpan="XL2 L4 M6 S12" containerQuery="true" hSpacing="1" vSpacing="1" class="sapUiSmallMarginBeginEnd sapUiSmallMarginBottom">
+      <VBox class="vrKpiCard severity-warning">
+        <Text text="PENDING GRS" class="vrKpiLabel"/>
+        <Text text="{gr>/pendingGR}" class="vrKpiValue"/>
+        <Text text="Awaiting MIGO receipt" class="vrKpiSub"/>
+      </VBox>
+      <VBox class="vrKpiCard severity-good">
+        <Text text="POSTED TODAY" class="vrKpiLabel"/>
+        <Text text="{gr>/grPostedToday}" class="vrKpiValue"/>
+        <Text text="Material docs verified" class="vrKpiSub"/>
+      </VBox>
+      <VBox class="vrKpiCard severity-warning">
+        <Text text="GR/IR CLEARING" class="vrKpiLabel"/>
+        <Text text="{gr>/grirClearing}" class="vrKpiValue"/>
+        <Text text="Awaiting invoice match" class="vrKpiSub"/>
+      </VBox>
+      <VBox class="vrKpiCard severity-error">
+        <Text text="SHORT DELIVERIES" class="vrKpiLabel"/>
+        <Text text="{gr>/shortDeliveries}" class="vrKpiValue"/>
+        <Text text="Discrepancy items" class="vrKpiSub"/>
+      </VBox>
+      <VBox class="vrKpiCard severity-info">
+        <Text text="RETURNS / REVERSALS" class="vrKpiLabel"/>
+        <Text text="{gr>/returns}" class="vrKpiValue"/>
+        <Text text="Movement 122 / 102" class="vrKpiSub"/>
+      </VBox>
+      <VBox class="vrKpiCard severity-good">
+        <Text text="PO COVERAGE" class="vrKpiLabel"/>
+        <Text text="{gr>/poCoverage}%" class="vrKpiValue"/>
+        <Text text="Line fulfillment rate" class="vrKpiSub"/>
+      </VBox>
+    </l:Grid>
+
+    <!-- ============ ANALYTICS & TRACKING GRID ============ -->
+    <l:Grid defaultSpan="XL4 L4 M12 S12" hSpacing="1" vSpacing="1" containerQuery="true" class="sapUiSmallMarginBeginEnd sapUiSmallMarginBottom">
+      <!-- Panel 1: Inventory Receipt Tracking -->
+      <VBox class="vrChartCard">
+        <Title text="Inventory Receipt Tracking" class="vrChartTitle" level="H4"/>
+        <VBox class="sapUiTinyMarginTop">
+          <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+            <Label text="GR vs PO Quantity" design="Bold"/>
+            <Text text="{gr>/grVsPOPct}%" class="vrBold"/>
+          </HBox>
+          <ProgressIndicator percentValue="{gr>/grVsPOPct}" displayValue="{gr>/grVsPOPct}%" state="Success" class="sapUiSmallMarginBottom"/>
+
+          <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+            <Label text="GR/IR Cleared Balance" design="Bold"/>
+            <Text text="{gr>/grirClearedPct}%" class="vrBold"/>
+          </HBox>
+          <ProgressIndicator percentValue="{gr>/grirClearedPct}" displayValue="{gr>/grirClearedPct}%" state="Warning" class="sapUiSmallMarginBottom"/>
+
+          <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+            <Label text="On-Time Delivery Compliance" design="Bold"/>
+            <Text text="{gr>/onTimePct}%" class="vrBold"/>
+          </HBox>
+          <ProgressIndicator percentValue="{gr>/onTimePct}" displayValue="{gr>/onTimePct}%" state="Success"/>
+        </VBox>
+      </VBox>
+
+      <!-- Panel 2: Fulfilment Tracker MicroChart -->
+      <VBox class="vrChartCard">
+        <Title text="PO vs GR Fulfilment Tracker" class="vrChartTitle" level="H4"/>
+        <VBox alignItems="Center" class="sapUiTinyMarginTop">
+          <mc:ComparisonMicroChart size="L" scale="Qty" class="sapUiSmallMarginTopBottom" width="100%">
+            <mc:data>
+              <mc:ComparisonMicroChartData title="PO-1002" value="95" color="Good" displayValue="95 / 100"/>
+              <mc:ComparisonMicroChartData title="PO-1003" value="60" color="Critical" displayValue="60 / 100"/>
+              <mc:ComparisonMicroChartData title="PO-1005" value="25" color="Error" displayValue="25 / 120"/>
+            </mc:data>
+          </mc:ComparisonMicroChart>
+        </VBox>
+      </VBox>
+
+      <!-- Panel 3: Delivery Integrity Overview -->
+      <VBox class="vrChartCard">
+        <Title text="Delivery Integrity Overview" class="vrChartTitle" level="H4"/>
+        <VBox class="sapUiTinyMarginTop">
+          <VBox class="sapUiSmallMarginBottom">
+            <HBox justifyContent="SpaceBetween">
+              <ObjectStatus text="On-Time Posts" state="Success" icon="sap-icon://sys-enter-2"/>
+              <Text text="90%" class="vrBold"/>
+            </HBox>
+            <ProgressIndicator percentValue="90" displayValue="90%" state="Success" class="sapUiTinyMarginTop"/>
+          </VBox>
+          <VBox class="sapUiSmallMarginBottom">
+            <HBox justifyContent="SpaceBetween">
+              <ObjectStatus text="Late Postings" state="Warning" icon="sap-icon://history"/>
+              <Text text="10%" class="vrBold"/>
+            </HBox>
+            <ProgressIndicator percentValue="10" displayValue="10%" state="Warning" class="sapUiTinyMarginTop"/>
+          </VBox>
+          <VBox>
+            <HBox justifyContent="SpaceBetween">
+              <ObjectStatus text="Discrepant Shipments" state="Error" icon="sap-icon://alert"/>
+              <Text text="8%" class="vrBold"/>
+            </HBox>
+            <ProgressIndicator percentValue="8" displayValue="8%" state="Error" class="sapUiTinyMarginTop"/>
+          </VBox>
+        </VBox>
+      </VBox>
+    </l:Grid>
+
+    <!-- ============ WORKLIST SECTION ============ -->
+    <VBox class="vrChartCard sapUiSmallMarginBeginEnd sapUiSmallMarginBottom">
+      <Title text="Goods Receipt Worklist &amp; Operations" class="vrChartTitle" level="H4"/>
+
+      <IconTabBar id="grWorklistTabs" class="sapUiResponsiveContentPadding">
+        <items>
+          <!-- Open GR Tasks -->
+          <IconTabFilter text="Open GR Tasks" icon="sap-icon://shipping-status" iconColor="Default" count="{gr>/pendingGR}">
+            <content>
+              <Table class="sapMListTbl" items="{gr>/openGRs}" fixedLayout="false" noDataText="No pending Goods Receipt tasks">
+                <columns>
+                  <Column><Text text="PO Number"/></Column>
+                  <Column><Text text="Item"/></Column>
+                  <Column><Text text="Supplier"/></Column>
+                  <Column><Text text="Material"/></Column>
+                  <Column><Text text="Expected Date"/></Column>
+                  <Column><Text text="Status"/></Column>
+                  <Column hAlign="Right"><Text text="Pending Qty"/></Column>
+                  <Column hAlign="Center"><Text text="Action"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem>
+                    <cells>
+                      <Text text="{gr>purchaseOrder}" class="vrCode"/>
+                      <Text text="{gr>poItem}"/>
+                      <Text text="{gr>supplier}" class="vrBold"/>
+                      <Text text="{gr>material}"/>
+                      <Text text="{gr>expectedDate}"/>
+                      <ObjectStatus text="{gr>status}" state="{gr>statusState}" class="sapMObjStatusInverted"/>
+                      <Text text="{ parts: [{path:'gr>poQty'}, {path:'gr>receivedQty'}], formatter: '.formatPendingQty' }" class="vrBold vr-tabular-num"/>
+                      <Button text="Post Goods Receipt (MIGO)" icon="sap-icon://accept" type="Emphasized" press="onPostGRDialog" enabled="true"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </content>
+          </IconTabFilter>
+
+          <!-- Posted GR Documents -->
+          <IconTabFilter text="Posted GR Documents" icon="sap-icon://sys-enter-2" iconColor="Positive" count="{gr>/grPostedToday}">
+            <content>
+              <Table class="sapMListTbl" items="{gr>/postedGRs}" fixedLayout="false" noDataText="No posted Goods Receipt documents today">
+                <columns>
+                  <Column><Text text="GR Document"/></Column>
+                  <Column><Text text="Quality Status"/></Column>
+                  <Column hAlign="Center"><Text text="QA Evidence"/></Column>
+                  <Column><Text text="PO Reference"/></Column>
+                  <Column><Text text="Vendor / Supplier"/></Column>
+                  <Column hAlign="Right"><Text text="Qty Posted"/></Column>
+                  <Column hAlign="Center"><Text text="Posting Date"/></Column>
+                  <Column hAlign="Center"><Text text="MIRO Status"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem>
+                    <cells>
+                      <Text text="{gr>grDoc}" class="vrCode"/>
+                      <ObjectStatus text="{gr>qualityStatus}" state="{gr>qualityState}" class="sapMObjStatusInverted"/>
+                      <Button icon="sap-icon://attachment-photo" text="View Image" press="onViewImage" enabled="{ path: 'gr>productImage', formatter: '.formatHasImage' }"/>
+                      <Text text="{gr>poNo}" class="vrCode"/>
+                      <Text text="{gr>vendor}"/>
+                      <Text text="{gr>qtyPosted}" class="vrBold vr-tabular-num"/>
+                      <Text text="{gr>postingDate}"/>
+                      <ObjectStatus text="{gr>miroStatus}" state="{gr>miroState}" class="sapMObjStatusInverted"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </content>
+          </IconTabFilter>
+
+          <!-- GR/IR Clearing Monitor -->
+          <IconTabFilter text="GR/IR Clearing Monitor" icon="sap-icon://compare" iconColor="Critical" count="{gr>/grirClearing}">
+            <content>
+              <Table class="sapMListTbl" items="{gr>/grirItems}" fixedLayout="false" noDataText="No uncleared GR/IR items">
+                <columns>
+                  <Column><Text text="PO Reference"/></Column>
+                  <Column><Text text="GR Post Date"/></Column>
+                  <Column hAlign="Right"><Text text="GR Amount"/></Column>
+                  <Column hAlign="Center"><Text text="MIRO Billing"/></Column>
+                  <Column hAlign="Center"><Text text="Days Uncleared"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem>
+                    <cells>
+                      <Text text="{gr>poNo}" class="vrCode"/>
+                      <Text text="{gr>grDate}"/>
+                      <Text text="{gr>grAmount}" class="vrBold vr-tabular-num"/>
+                      <ObjectStatus text="{gr>miroStatus}" state="{gr>miroState}" class="sapMObjStatusInverted"/>
+                      <Text text="{gr>daysPending} days"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </content>
+          </IconTabFilter>
+
+          <!-- Gate Entry / ASN Log -->
+          <IconTabFilter text="Gate Entry / ASN Log" icon="sap-icon://fob-watch" iconColor="Neutral">
+            <content>
+              <Table class="sapMListTbl" items="{gr>/gateEntries}" fixedLayout="false">
+                <columns>
+                  <Column><Text text="Gate Pass No."/></Column>
+                  <Column><Text text="Vehicle No."/></Column>
+                  <Column><Text text="Vendor"/></Column>
+                  <Column hAlign="Center"><Text text="Entry Time"/></Column>
+                  <Column hAlign="Center"><Text text="Status"/></Column>
+                  <Column hAlign="Center"><Text text="Action"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem>
+                    <cells>
+                      <Text text="{gr>gatePass}" class="vrCode"/>
+                      <Text text="{gr>vehicleNo}" class="vrBold"/>
+                      <Text text="{gr>vendor}"/>
+                      <Text text="{gr>entryTime}"/>
+                      <ObjectStatus text="{gr>status}" state="{gr>statusState}" class="sapMObjStatusInverted"/>
+                      <Button text="Verify Truck" type="Emphasized" press="onMockAction"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </content>
+          </IconTabFilter>
+
+          <!-- Vendor Returns -->
+          <IconTabFilter text="Vendor Returns" icon="sap-icon://undo" iconColor="Negative" count="{gr>/returns}">
+            <content>
+              <Table class="sapMListTbl" items="{gr>/returnsList}" fixedLayout="false">
+                <columns>
+                  <Column><Text text="Return Doc (122)"/></Column>
+                  <Column><Text text="Original PO"/></Column>
+                  <Column hAlign="Right"><Text text="Return Qty"/></Column>
+                  <Column><Text text="Defect Code"/></Column>
+                  <Column hAlign="Center"><Text text="Status"/></Column>
+                  <Column hAlign="Center"><Text text="Action"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem>
+                    <cells>
+                      <Text text="{gr>returnDoc}" class="vrCode"/>
+                      <Text text="{gr>poNo}" class="vrCode"/>
+                      <Text text="{gr>qty}" class="vrBold vr-tabular-num"/>
+                      <Text text="{gr>defectCode}"/>
+                      <ObjectStatus text="{gr>status}" state="Warning" class="sapMObjStatusInverted"/>
+                      <Button text="Print Return Slip" icon="sap-icon://print" press="onMockAction"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </content>
+          </IconTabFilter>
+        </items>
+      </IconTabBar>
+    </VBox>
+
+    <!-- ============ QUICK ACTIONS ============ -->
+    <VBox class="vrChartCard sapUiSmallMarginBeginEnd sapUiMediumMarginBottom">
+      <Title text="Quick Logistics &amp; MM Operations" class="vrChartTitle" level="H4"/>
+      <HBox wrap="Wrap">
+        <Button text="Record Gate Pass" icon="sap-icon://vehicle-truck" type="Emphasized" press="onMockAction" class="sapUiTinyMarginEnd sapUiTinyMarginBottom"/>
+        <Button text="Print Pallet Labels / GR Slip" icon="sap-icon://print" press="onMockAction" class="sapUiTinyMarginEnd sapUiTinyMarginBottom"/>
+        <Button text="Reverse GR Document (102)" icon="sap-icon://undo" type="Reject" press="onMockAction" class="sapUiTinyMarginEnd sapUiTinyMarginBottom"/>
+        <Button text="Request Tolerance Approval" type="Emphasized" icon="sap-icon://approvals" press="onMockAction" class="sapUiTinyMarginEnd sapUiTinyMarginBottom"/>
+      </HBox>
+    </VBox>
+
+  </Page>
+</mvc:View>

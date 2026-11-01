@@ -1,0 +1,24 @@
+ID;result_ID;stepAt;stepName_code;status;detail
+PL-001-1;RR-001;2026-07-14T08:32:14Z;FileIngestion;Success;File picked from \\shared\vendor-invoices\siemens\
+PL-001-2;RR-001;2026-07-14T08:32:18Z;OCRExtraction;Success;Header + 5 line items extracted | Confidence: 98.5%
+PL-001-3;RR-001;2026-07-14T08:32:22Z;DataValidation;Success;Vendor GST ID verified against S/4 master
+PL-001-4;RR-001;2026-07-14T08:32:26Z;MatchingEngine;Success;Matched on Vendor + Invoice + FY | PO 4500008231 verified
+PL-001-5;RR-001;2026-07-14T08:32:29Z;VarianceCheck;Warning;Line 003: Quantity variance 1 unit | Line 005: Price variance $20.00
+PL-001-6;RR-001;2026-07-14T08:32:31Z;S4Integration;Success;GET /sap/invoices/5100000287 - 200 OK
+PL-001-7;RR-001;2026-07-14T08:32:33Z;ResultPersisted;Success;ReconciliationResult created | Status: Tolerance
+PL-002-1;RR-002;2026-07-14T08:32:15Z;FileIngestion;Success;File picked from \\shared\vendor-invoices\bosch\
+PL-002-2;RR-002;2026-07-14T08:32:19Z;OCRExtraction;Success;Header + 2 line items extracted | Confidence: 97.2%
+PL-002-3;RR-002;2026-07-14T08:32:27Z;MatchingEngine;Success;Matched on Vendor + Invoice + FY
+PL-002-4;RR-002;2026-07-14T08:32:30Z;VarianceCheck;Warning;Line 002: Unit price variance $8.00
+PL-002-5;RR-002;2026-07-14T08:32:33Z;ResultPersisted;Success;ReconciliationResult created | Status: Tolerance
+PL-003-1;RR-003;2026-07-14T08:32:16Z;FileIngestion;Success;File picked from \\shared\vendor-invoices\schneider\
+PL-003-2;RR-003;2026-07-14T08:32:20Z;OCRExtraction;Success;Header + 2 line items extracted | Confidence: 95.1%
+PL-003-3;RR-003;2026-07-14T08:32:28Z;VarianceCheck;Warning;Net amount mismatch $780.00 exceeds 2% tolerance
+PL-003-4;RR-003;2026-07-14T08:32:33Z;ResultPersisted;Success;ReconciliationResult created | Status: Mismatch
+PL-004-1;RR-004;2026-07-14T08:32:17Z;FileIngestion;Success;File picked from \\shared\vendor-invoices\abb\
+PL-004-2;RR-004;2026-07-14T08:32:21Z;OCRExtraction;Success;Header + 1 line item extracted | Confidence: 96.3%
+PL-004-3;RR-004;2026-07-14T08:32:31Z;S4Integration;Warning;GET /sap/invoices?vendor=ABB&inv=9910234 - 404 Not Found
+PL-004-4;RR-004;2026-07-14T08:32:33Z;ResultPersisted;Success;ReconciliationResult created | Status: Missing in S/4
+PL-005-1;RR-005;2026-07-14T08:32:31Z;S4Integration;Success;GET /sap/invoices/5100000301 - 200 OK
+PL-005-2;RR-005;2026-07-14T08:32:32Z;MatchingEngine;Warning;No source file found for Honeywell inv 5100000301
+PL-005-3;RR-005;2026-07-14T08:32:33Z;ResultPersisted;Success;ReconciliationResult created | Status: Missing in File

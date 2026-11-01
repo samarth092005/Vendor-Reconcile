@@ -1,0 +1,29 @@
+<mvc:View controllerName="vendordoclines.controller.VendorView" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core">
+  <VBox class="sapUiLargeMargin">
+    
+    <Title text="My Invoices (Vendor Portal)" level="H2" class="sapUiSmallMarginBottom"/>
+    <Table class="sapMListTbl" items="{ path: '/VendorDocLines', parameters: { $$operationMode: 'Server' }, sorter: { path: 'createdAt', descending: true } }">
+      <columns>
+        <Column><Text text="Invoice No"/></Column>
+        <Column><Text text="Date"/></Column>
+        <Column><Text text="Amount"/></Column>
+        <Column><Text text="PO Number"/></Column>
+        <Column><Text text="Approval Status"/></Column>
+        <Column><Text text="Payment Status"/></Column>
+      </columns>
+      <items>
+        <ColumnListItem>
+          <cells>
+            <Text text="{vendorInvoiceNo}" class="vrCode"/>
+            <Text text="{invoiceDate}"/>
+            <Text text="{invoiceAmount}"/>
+            <Text text="{poReference}"/>
+            <ObjectStatus text="{= ${approvedForPayment} ? 'Approved' : 'Pending Verification' }" state="{= ${approvedForPayment} ? 'Success' : 'Warning' }"/>
+            <ObjectStatus text="{paymentStatus}" state="{= ${paymentStatus} === 'PAID' ? 'Success' : (${paymentStatus} === 'POSTED' ? 'Information' : 'Warning') }"/>
+          </cells>
+        </ColumnListItem>
+      </items>
+    </Table>
+
+  </VBox>
+</mvc:View>

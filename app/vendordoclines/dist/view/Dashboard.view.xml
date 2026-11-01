@@ -1,0 +1,166 @@
+<mvc:View
+  controllerName="vendordoclines.controller.Dashboard"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:l="sap.ui.layout"
+  height="100%">
+
+  <Page id="dashboardPage" showHeader="false" enableScrolling="true" class="vrDashboardPage">
+
+    <!-- ============ HEADER BAR ============ -->
+    <Toolbar class="vrHeaderBar" height="4rem" design="Solid">
+      <VBox>
+        <Title text="{i18n>dashboardTitle}" class="vrHeaderTitle" level="H2"/>
+        <Text  text="{i18n>dashboardSubtitle}" class="vrHeaderSubtitle"/>
+      </VBox>
+      <ToolbarSpacer/>
+      <Label text="{i18n>timeRangeLabel}:" class="sapUiTinyMarginEnd"/>
+      <Select id="timeRangeSelect" selectedKey="24h" width="10rem" change=".onTimeRangeChange">
+        <core:Item key="24h" text="{i18n>timeRange24h}"/>
+        <core:Item key="7d"  text="{i18n>timeRange7d}"/>
+        <core:Item key="30d" text="{i18n>timeRange30d}"/>
+      </Select>
+      <Button icon="sap-icon://refresh" text="{i18n>btnRefresh}"    press=".onRefresh"/>
+      <Button icon="sap-icon://play"    text="Run Matching Engine" type="Emphasized" press=".onTriggerRun"/>
+    </Toolbar>
+
+    <!-- ============ KPI CARDS ROW ============ -->
+    <core:HTML id="kpiHost" content="&lt;div class=&quot;vrKpiGrid&quot;&gt;&lt;/div&gt;"/>
+
+    <!-- ============ ACTIVE DRILLDOWN FILTER BANNER ============ -->
+    <HBox id="kpiFilterBanner" visible="false" alignItems="Center" justifyContent="SpaceBetween" class="vrKpiFilterBanner sapUiSmallMarginBeginEnd sapUiTinyMarginBottom">
+      <HBox alignItems="Center">
+        <core:Icon src="sap-icon://filter" size="0.95rem" color="#2563EB" class="sapUiTinyMarginEnd"/>
+        <Text id="kpiFilterText" text="Filtered View" class="vrKpiFilterText"/>
+      </HBox>
+      <HBox alignItems="Center">
+        <Button text="View in Match Results ➔" type="Emphasized" press=".onGoToMatchResults" class="sapUiTinyMarginEnd"/>
+        <Button text="Reset Filter" icon="sap-icon://clear-filter" type="Transparent" press=".onClearKpiFilter" class="vrResetFilterBtn"/>
+      </HBox>
+    </HBox>
+
+    <!-- ============ CHART GRID (rendered as SVG via core:HTML for reliability) ============ -->
+    <l:Grid defaultSpan="XL6 L6 M12 S12" hSpacing="1" vSpacing="1" containerQuery="true" class="sapUiSmallMarginBeginEnd">
+
+      <VBox class="vrChartCard">
+        <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+          <HBox alignItems="Center">
+            <core:Icon src="sap-icon://pie-chart" size="1.05rem" color="#2563EB" class="sapUiTinyMarginEnd"/>
+            <Title text="{i18n>chartStatusDist}" class="vrChartTitle" level="H4"/>
+          </HBox>
+        </HBox>
+        <core:HTML id="chartStatusDist" content="&lt;div class=&quot;vrChartHost&quot;&gt;&lt;/div&gt;"/>
+      </VBox>
+
+      <VBox class="vrChartCard">
+        <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+          <HBox alignItems="Center">
+            <core:Icon src="sap-icon://supplier" size="1.05rem" color="#EF4444" class="sapUiTinyMarginEnd"/>
+            <Title text="{i18n>chartMismatchVendor}" class="vrChartTitle" level="H4"/>
+          </HBox>
+        </HBox>
+        <core:HTML id="chartMismatchVendor" content="&lt;div class=&quot;vrChartHost&quot;&gt;&lt;/div&gt;"/>
+      </VBox>
+
+      <VBox class="vrChartCard">
+        <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+          <HBox alignItems="Center">
+            <core:Icon src="sap-icon://line-chart" size="1.05rem" color="#10B981" class="sapUiTinyMarginEnd"/>
+            <Title text="{i18n>chartTrend}" class="vrChartTitle" level="H4"/>
+          </HBox>
+        </HBox>
+        <core:HTML id="chartTrend" content="&lt;div class=&quot;vrChartHost&quot;&gt;&lt;/div&gt;"/>
+      </VBox>
+
+      <VBox class="vrChartCard">
+        <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+          <HBox alignItems="Center">
+            <core:Icon src="sap-icon://alert" size="1.05rem" color="#F59E0B" class="sapUiTinyMarginEnd"/>
+            <Title text="{i18n>chartVarianceType}" class="vrChartTitle" level="H4"/>
+          </HBox>
+        </HBox>
+        <core:HTML id="chartVarianceType" content="&lt;div class=&quot;vrChartHost&quot;&gt;&lt;/div&gt;"/>
+      </VBox>
+
+    </l:Grid>
+
+    <!-- ============ RESULTS TABLE ============ -->
+    <Panel class="vrTableCard" backgroundDesign="Solid" expandable="false">
+      <headerToolbar>
+        <OverflowToolbar>
+          <Title text="{i18n>tableTitle}" level="H3"/>
+          <ObjectStatus text="{runContext>/currentRunId}" state="Information" class="sapUiSmallMarginBegin"/>
+          <ToolbarSpacer/>
+          <SearchField width="18rem"
+                       placeholder="{i18n>searchPlaceholder}"
+                       search=".onSearch"
+                       liveChange=".onSearch"/>
+          <ToolbarSeparator/>
+          <Button icon="sap-icon://filter"           text="Filter" press=".onOpenFilter"/>
+          <Button icon="sap-icon://excel-attachment" text="Export" press=".onExport"/>
+        </OverflowToolbar>
+      </headerToolbar>
+
+      <Table id="resultsTable"
+             inset="false"
+             growing="true"
+             growingThreshold="20"
+             sticky="ColumnHeaders,HeaderToolbar"
+             mode="MultiSelect"
+             items="{ path: 'recon>/ReconciliationResults', templateShareable: false }">
+
+        <columns>
+          <Column width="14rem"><Text text="{i18n>colVendor}"/></Column>
+          <Column width="9rem"><Text text="{i18n>colInvoiceFile}"/></Column>
+          <Column width="9rem"><Text text="{i18n>colInvoiceS4}"/></Column>
+          <Column width="8rem"><Text text="{i18n>colPO}"/></Column>
+          <Column width="8rem"><Text text="{i18n>colGR}"/></Column>
+          <Column width="8rem" hAlign="End"><Text text="{i18n>colFileGross}"/></Column>
+          <Column width="8rem" hAlign="End"><Text text="{i18n>colS4Gross}"/></Column>
+          <Column width="8rem" hAlign="End"><Text text="{i18n>colVariance}"/></Column>
+          <Column width="5rem" hAlign="End"><Text text="{i18n>colVariancePct}"/></Column>
+          <Column width="10rem"><Text text="{i18n>colStatus}"/></Column>
+          <Column width="10rem"><Text text="{i18n>colAssigned}"/></Column>
+          <Column width="14rem" hAlign="End"><Text text="{i18n>colActions}"/></Column>
+        </columns>
+
+        <items>
+          <ColumnListItem type="Navigation" press=".onRowPress">
+            <cells>
+              <VBox>
+                <Text text="{recon>vendor/name}" class="sapMTextBold"/>
+                <Text text="{recon>vendor/code}"/>
+              </VBox>
+              <Text text="{recon>invNumberFile}"/>
+              <Text text="{recon>invNumberS4}"/>
+              <Text text="{recon>poNumber}"/>
+              <Text text="{recon>grNumber}"/>
+              <Text text="{ parts: [{path:'recon>fileGross'}, {path:'recon>currency_code'}], formatter: '.formatter.currencyFmt' }"/>
+              <Text text="{ parts: [{path:'recon>s4Gross'},   {path:'recon>currency_code'}], formatter: '.formatter.currencyFmt' }"/>
+              <ObjectNumber
+                number="{ path: 'recon>varianceAmount', formatter: '.formatter.currencyFmt' }"
+                unit="{recon>currency_code}"
+                state="{ path: 'recon>varianceAmount', formatter: '.formatter.varianceState' }"/>
+              <ObjectNumber
+                number="{ path: 'recon>variancePct', formatter: '.formatter.pctFmt' }"
+                state="{ path: 'recon>variancePct', formatter: '.formatter.varianceState' }"/>
+              <ObjectStatus
+                text="{ path: 'recon>status_code', formatter: '.formatter.statusLabel' }"
+                state="{ path: 'recon>status_code', formatter: '.formatter.statusState' }"
+                icon="{ path: 'recon>status_code', formatter: '.formatter.statusIcon' }"
+                inverted="true"/>
+              <Text text="{recon>assignedTo}"/>
+              <HBox class="vrRowActions" justifyContent="End">
+                <Button icon="sap-icon://accept"    type="Accept" tooltip="Accept match" press=".onQuickAccept"/>
+                <Button icon="sap-icon://decline"   type="Reject" tooltip="Reject match" press=".onQuickReject"/>
+                <Button icon="sap-icon://arrow-top"               tooltip="Escalate"     press=".onQuickEscalate"/>
+              </HBox>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </Panel>
+
+  </Page>
+</mvc:View>

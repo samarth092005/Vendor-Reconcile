@@ -1,0 +1,4 @@
+code;name;descr
+Exact;Exact;Header + line items match exactly
+Tolerance;Tolerance;Amount or field within configured tolerance
+Manual;Manual;Requires manual review / handling

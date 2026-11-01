@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Open Sans', sans-serif; color: #222; margin: 0; padding: 40px; font-size: 11px; line-height: 1.6; }
+        .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #003366; padding-bottom: 12px; margin-bottom: 25px; }
+        .title { font-size: 26px; font-weight: 800; color: #003366; margin: 0; }
+        .title span { color: #ff6600; }
+        .subtitle { font-size: 14px; color: #0078d4; margin-top: 5px; font-weight: 600; }
+        .version { font-size: 10px; color: #666; font-weight: 600; margin-top: 8px;}
+        .badge { background: #f0f8ff; border: 1px solid #b3d4ff; color: #0056b3; padding: 5px 14px; border-radius: 4px; font-weight: 800; font-size: 10px; display: inline-block; }
+        
+        .exec-summary { border: 1px solid #b3d4ff; border-radius: 4px; padding: 18px; margin-bottom: 30px; background: #fafcff; }
+        .exec-summary strong { color: #003366; font-size: 12px; }
+
+        .section-title { display: flex; align-items: center; font-size: 16px; font-weight: 800; color: #003366; margin: 35px 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 6px; text-transform: uppercase; }
+        .section-title::before { content: ''; display: block; width: 6px; height: 18px; background: #ff6600; margin-right: 12px; }
+
+        .text-block { font-size: 11px; color: #444; margin-bottom: 15px; }
+        
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        
+        .box { border: 1px solid #cce0ff; background: #fdfdfe; border-radius: 6px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .box h4 { margin: 0 0 8px 0; color: #003366; font-size: 13px; border-bottom: 1px solid #f0f0f0; padding-bottom: 6px; }
+        .box p { margin: 0; color: #555; }
+        .box ul { margin: 8px 0 0 0; padding-left: 20px; color: #555; }
+        .box li { margin-bottom: 4px; }
+
+        .role-box { border: 1px solid #ddd; background: #fff; border-radius: 8px; padding: 15px; text-align: center; }
+        .role-icon { background: #003366; color: white; border-radius: 4px; padding: 6px 0; margin: 0 auto 12px auto; font-weight: 800; font-size: 14px; width: 60%; }
+        .role-title { font-weight: 800; color: #333; margin-bottom: 8px; font-size: 12px; }
+        .role-desc { font-size: 10px; color: #666; text-align: left; }
+
+        .table-container { border: 1px solid #003366; border-radius: 6px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th { background: #003366; color: white; text-align: left; padding: 12px 15px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; vertical-align: top; color: #444; }
+        td:last-child { border-right: none; }
+        tr:nth-child(even) { background-color: #fafbfc; }
+        tr:last-child td { border-bottom: none; }
+        
+        .status-badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 800; color: white; }
+        .status-green { background: #28a745; }
+        .status-red { background: #dc3545; }
+        .status-orange { background: #ffc107; color: #333; }
+        
+        .arch-layer { border: 2px solid #003366; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fff; position: relative; }
+        .arch-title { font-size: 13px; font-weight: 800; color: #003366; margin: 0 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .arch-items { display: flex; justify-content: space-between; gap: 10px; }
+        .arch-node { flex: 1; background: #f0f8ff; border: 1px solid #b3d4ff; padding: 10px; text-align: center; border-radius: 4px; font-weight: 600; color: #0056b3; font-size: 11px; }
+        .arch-arrow { text-align: center; color: #ff6600; font-weight: 800; font-size: 16px; margin: 5px 0; }
+        
+        .footer { font-size: 9px; color: #999; margin-top: 40px; text-align: left; border-top: 1px solid #eee; padding-top: 10px; }
+        .page-break { page-break-before: always; }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 -->
+    <div class="header">
+        <div>
+            <h1 class="title">VENDOR <span>RECONCILE</span> &mdash; Detailed Enterprise Blueprint</h1>
+            <div class="subtitle">Comprehensive SAP-Connected Reconciliation &amp; Match Engine Architecture</div>
+        </div>
+        <div style="text-align: right;">
+            <div class="badge">COMPLETE SOLUTION OVERVIEW</div>
+            <div class="version">Version 3.0 &bull; September 2026</div>
+        </div>
+    </div>
+
+    <div class="exec-summary">
+        <strong>Executive Summary</strong><br/><br/>
+        Vendor Reconcile is a robust, enterprise-grade execution platform built on the <b>SAP Cloud Application Programming (CAP)</b> framework and Node.js. It is specifically engineered to eliminate manual financial discrepancies by acting as a highly automated verification layer between internal procurement workflows and external vendor billing.<br/><br/>
+        The system has achieved complete live integration with the <b>SAP S/4HANA (S21) ERP</b> system, actively pulling Purchase Orders, Goods Receipts, and Vendor Master Data natively via secure OData APIs. By orchestrating a mathematically rigorous 3-Way Matching Engine, the platform empowers Accounts Payable teams to achieve touchless processing for clear invoices while providing a dedicated dispute management portal for exceptions.
+    </div>
+
+    <div class="section-title">1. CORE PROJECT PILLARS &amp; VALUE PROPOSITION</div>
+    <div class="grid-3">
+        <div class="box">
+            <h4>&#10003; End-to-End P2P Governance</h4>
+            <p>Complete lifecycle management from Purchase Requisition creation to UTR payment clearing, governed by strict Role-Based Access Control (RBAC) across five distinct operational personas.</p>
+        </div>
+        <div class="box">
+            <h4>&#10003; Automated Invoice Matching</h4>
+            <p>System-driven 3-way matching logic automatically simulates MIRO clearance, highlighting exact price/quantity variances down to the decimal without manual cross-referencing.</p>
+        </div>
+        <div class="box">
+            <h4>&#10003; Seamless SAP S21 Sync</h4>
+            <p>Bi-directional data continuity via secure REST/OData APIs ensures the platform always acts on a unified operational truth, eliminating data silos between logistics and finance.</p>
+        </div>
+    </div>
+
+    <div class="section-title">2. DEEP-DIVE ARCHITECTURE &amp; TECHNOLOGY STACK</div>
+    <div class="text-block">
+        The application operates on a modern, decoupled architecture ensuring massive scalability, secure data custody, and responsive user experiences.
+    </div>
+    
+    <div class="arch-layer">
+        <div class="arch-title">3. PRESENTATION LAYER (SAP Fiori Elements / UI5)</div>
+        <div class="arch-items">
+            <div class="arch-node">Executive AP Dashboard</div>
+            <div class="arch-node">Data Intake &amp; Lines Workspace</div>
+            <div class="arch-node">Vendor Exception Portal</div>
+        </div>
+    </div>
+    <div class="arch-arrow">&#8645; Secure OData V4 / REST Endpoints &#8645;</div>
+    
+    <div class="arch-layer">
+        <div class="arch-title">2. OPERATIONAL CORE PLATFORM (Node.js &amp; SAP CAP Framework)</div>
+        <div class="arch-items">
+            <div class="arch-node">Automated 3-Way Matching Engine</div>
+            <div class="arch-node">KPI Aggregation Service</div>
+            <div class="arch-node">Exception Workflow Manager</div>
+            <div class="arch-node">S21 API Sync Connector</div>
+        </div>
+    </div>
+    <div class="arch-arrow">&#8645; OData V2 Basic Auth Proxy &#8645;</div>
+    
+    <div class="arch-layer">
+        <div class="arch-title">1. ENTERPRISE SYSTEM OF RECORD (SAP ECC / S/4HANA S21)</div>
+        <div class="arch-items">
+            <div class="arch-node">Procurement (MM)</div>
+            <div class="arch-node">Inventory Mgmt (MIGO)</div>
+            <div class="arch-node">Financial Acct (FI)</div>
+            <div class="arch-node">Vendor Master Data</div>
+        </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+        <div class="box">
+            <h4>Backend Engineering</h4>
+            <ul>
+                <li><b>Framework:</b> Node.js with SAP Cloud Application Programming (CAP) Model v4.</li>
+                <li><b>Database:</b> High-performance transactional SQLite (Local) engineered for seamless transition to SAP HANA Cloud.</li>
+                <li><b>Service Definitions:</b> Domain-driven CDS (Core Data Services) schemas modeling MatchResults, Exceptions, and VendorLedgers.</li>
+            </ul>
+        </div>
+        <div class="box">
+            <h4>Frontend Engineering</h4>
+            <ul>
+                <li><b>UI Framework:</b> SAP UI5 / Fiori Elements.</li>
+                <li><b>Data Binding:</b> Dynamic JSON and OData models mapping directly to backend endpoints.</li>
+                <li><b>Analytics:</b> Microcharts, dynamic formatters, and KPI visualizers natively rendering real-time matching outcomes.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">Vendor Reconcile &bull; Detailed Enterprise Blueprint &bull; Page 1 of 3</div>
+    
+    <!-- PAGE 2 -->
+    <div class="page-break"></div>
+    <div class="header">
+        <div>
+            <h1 class="title">VENDOR <span>RECONCILE</span> &mdash; Detailed Enterprise Blueprint</h1>
+        </div>
+        <div style="text-align: right;">
+            <div class="badge">PAGE 2</div>
+        </div>
+    </div>
+
+    <div class="section-title">3. LIVE SAP INTEGRATION MAPPING (S21 DATA FLOW)</div>
+    <div class="text-block">
+        The application is rigorously connected to the live SAP S21 ERP system. The custom <code>s21-connector.js</code> orchestrates synchronization, guaranteeing that local data precisely mirrors SAP business reality.
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th width="15%">SAP Module</th>
+                <th width="35%">Integration Endpoint</th>
+                <th width="50%">Engineered Implementation Details</th>
+            </tr>
+            <tr>
+                <td><strong>Purchase Orders (ME23N)</strong></td>
+                <td><code>API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrder</code></td>
+                <td>Extracts expected pricing, delivery terms, and PO line items. <b>Recent Upgrade:</b> Dynamically parses the PO payload to extract the true <code>AddressName</code> for suppliers, replacing numeric ID fallbacks.</td>
+            </tr>
+            <tr>
+                <td><strong>Supplier Invoices (MIRO)</strong></td>
+                <td><code>API_SUPPLIERINVOICE_PROCESS_SRV/A_SupplierInvoice</code></td>
+                <td>Ingests supplier billing data. <b>Recent Upgrade:</b> Since the SAP invoice item endpoint lacks material codes, the engine now actively cross-references the PO database to map true material IDs (e.g., 10314) to invoice lines.</td>
+            </tr>
+            <tr>
+                <td><strong>Goods Receipts (MIGO)</strong></td>
+                <td><code>API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentItem</code></td>
+                <td>Extracts physical warehouse intake quantities, allowing the engine to calculate whether a vendor is billing for unreceived freight (Uninvoiced GR tracking).</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section-title">4. THE AUTOMATED 3-WAY MATCHING ENGINE</div>
+    <div class="text-block">
+        At the heart of the platform is the custom Node.js verification engine (<code>matching-engine.js</code>). It evaluates aggregated SAP data against vendor uploads to determine financial clearance.
+    </div>
+
+    <div class="grid-2">
+        <div class="box" style="border-left: 4px solid #28a745;">
+            <h4><span class="status-badge status-green">&#10003; CLEARED</span> MATCHED / 3-WAY-CLEAR</h4>
+            <p><b>Logic:</b> The system successfully locates the PO in SAP, verifies the invoiced price is within 2% tolerance of the expected PO rate, and ensures the invoiced quantity does not exceed the warehouse GR logged quantity.</p>
+            <p style="margin-top:8px; font-size:10px; color:#666;"><b>Action:</b> Approved for automated MIRO processing and UTR payment generation.</p>
+        </div>
+        <div class="box" style="border-left: 4px solid #dc3545;">
+            <h4><span class="status-badge status-red">&#9888; DISPUTE</span> UNMATCHED / PRICE-DIFF</h4>
+            <p><b>Logic:</b> The expected PO price differs from the Vendor's billed amount by more than the strict organizational threshold.</p>
+            <p style="margin-top:8px; font-size:10px; color:#666;"><b>Action:</b> Automatically generates an Exception ticket allocated to the Finance Exec queue.</p>
+        </div>
+        <div class="box" style="border-left: 4px solid #ffc107;">
+            <h4><span class="status-badge status-orange">&#9888; DISPUTE</span> UNMATCHED / QTY-EXCEEDS-GR</h4>
+            <p><b>Logic:</b> The vendor is attempting to bill for a higher volume of material than what was physically received and scanned by the GR Specialist.</p>
+            <p style="margin-top:8px; font-size:10px; color:#666;"><b>Action:</b> Routed to Procurement for vendor credit-note requests.</p>
+        </div>
+        <div class="box" style="border-left: 4px solid #dc3545;">
+            <h4><span class="status-badge status-red">&#10006; CRITICAL</span> UNMATCHED / PO-NOT-FOUND</h4>
+            <p><b>Logic:</b> A vendor invoice was uploaded, but the engine cannot locate any active Purchase Order reference within the synced SAP database.</p>
+            <p style="margin-top:8px; font-size:10px; color:#666;"><b>Action:</b> Immediate AP Manager intervention required to block fraudulent billing.</p>
+        </div>
+    </div>
+
+    <div class="section-title">5. EXECUTIVE DASHBOARD &amp; KPI INTELLIGENCE</div>
+    <div class="text-block">
+        The dashboard (<code>Cockpit.controller.js</code> &amp; <code>kpi-handler.js</code>) mathematically aggregates the outcomes of the matching engine in real-time, yielding critical operational insights.
+    </div>
+
+    <div class="grid-4">
+        <div class="box">
+            <h4 style="font-size:11px;">Missing in File</h4>
+            <p style="font-size:10px;">Actively queries the <code>GrirSnapshot</code> to locate open SAP Goods Receipts that have no corresponding vendor invoice attached to them yet.</p>
+        </div>
+        <div class="box">
+            <h4 style="font-size:11px;">Duplicates</h4>
+            <p style="font-size:10px;">Scans <code>VendorInvoiceHeaders</code> dynamically to catch overlapping, identical invoice submissions from a single vendor to prevent double-billing.</p>
+        </div>
+        <div class="box">
+            <h4 style="font-size:11px;">High-Value Exceptions</h4>
+            <p style="font-size:10px;">Continuously monitors <code>MatchResults</code> to flag any singular invoice dispute where the financial variance exceeds &#8377;50,000.</p>
+        </div>
+        <div class="box">
+            <h4 style="font-size:11px;">Vendor Risk Mapping</h4>
+            <p style="font-size:10px;">Compiles a live ledger ranking vendors by the volume of their active disputes (e.g., Endurance Components, Stark Industry).</p>
+        </div>
+    </div>
+
+    <div class="footer">Vendor Reconcile &bull; Detailed Enterprise Blueprint &bull; Page 2 of 3</div>
+
+    <!-- PAGE 3 -->
+    <div class="page-break"></div>
+    <div class="header">
+        <div>
+            <h1 class="title">VENDOR <span>RECONCILE</span> &mdash; Detailed Enterprise Blueprint</h1>
+        </div>
+        <div style="text-align: right;">
+            <div class="badge">PAGE 3</div>
+        </div>
+    </div>
+
+    <div class="section-title">6. ROLE-BASED OPERATIONAL WORKFLOWS</div>
+    <div class="text-block">
+        The system enforces strict RBAC (Role-Based Access Control) to govern the reconciliation journey. Distinct personas operate within their isolated UI scopes.
+    </div>
+
+    <div class="grid-5">
+        <div class="role-box">
+            <div class="role-icon">PR</div>
+            <div class="role-title">PR Indenter</div>
+            <div class="role-desc">Initiates the procurement cycle by raising Purchase Requisitions for required raw materials or services within SAP.</div>
+        </div>
+        <div class="role-box">
+            <div class="role-icon">PO</div>
+            <div class="role-title">PO Officer</div>
+            <div class="role-desc">Audits requisitions, approves pricing, converts PRs to official Purchase Orders, and dispatches them to external suppliers.</div>
+        </div>
+        <div class="role-box">
+            <div class="role-icon">VEN</div>
+            <div class="role-title">Vendor</div>
+            <div class="role-desc">Logs into a restricted self-service portal to view awarded POs, mark dispatch statuses, and upload digital invoice copies.</div>
+        </div>
+        <div class="role-box">
+            <div class="role-icon">GR</div>
+            <div class="role-title">GR Specialist</div>
+            <div class="role-desc">Manages physical logistics, recording MIGO goods receipts directly reflecting actual warehouse intake.</div>
+        </div>
+        <div class="role-box">
+            <div class="role-icon">FIN</div>
+            <div class="role-title">Finance Exec</div>
+            <div class="role-desc">Reviews matching engine exceptions, negotiates disputes, overrides tolerances, and clears invoices for UTR execution.</div>
+        </div>
+    </div>
+
+    <div class="section-title">7. DATA GOVERNANCE &amp; SCHEMA ARCHITECTURE</div>
+    <div class="text-block">
+        To isolate transactional telemetry without polluting the SAP Master Data environment, the CAP Application utilizes a structured internal database schema comprising over 10 interconnected entities.
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th width="20%">Core Entity (DB)</th>
+                <th width="80%">Purpose &amp; Relational Mapping</th>
+            </tr>
+            <tr>
+                <td><code>VendorMaster</code></td>
+                <td>Stores normalized supplier profiles. Synced dynamically via SAP PO endpoints to capture accurate <code>businessPartnerName</code>, avoiding raw numeric ID leakage in UI displays.</td>
+            </tr>
+            <tr>
+                <td><code>PurchaseOrders</code></td>
+                <td>Mirrors active SAP ME23N records. Contains granular line-item details (Qty, Amount, Material ID) serving as the baseline truth for the Matching Engine.</td>
+            </tr>
+            <tr>
+                <td><code>VendorInvoiceHeaders</code> &amp; <code>Items</code></td>
+                <td>Houses ingested supplier billing documents (either synced from SAP MIRO or uploaded via portal). Line items cross-reference <code>PurchaseOrders</code> to derive true expected materials.</td>
+            </tr>
+            <tr>
+                <td><code>MatchResults</code></td>
+                <td>The immutable audit ledger written exclusively by the Matching Engine. Links an Invoice Item to a PO Item and statically records the evaluated <code>outcomeCode</code>, absolute <code>amountDelta</code>, and rule applied.</td>
+            </tr>
+            <tr>
+                <td><code>Exceptions</code></td>
+                <td>Spawns conditionally when a <code>MatchResult</code> fails verification (e.g. <code>PRICE-DIFF</code>). Tracks resolution status (OPEN/RESOLVED), SLA aging, and assigns priority (P1/P2/P3) for Finance AP queues.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section-title">8. STRATEGIC ROADMAP &amp; NEXT PHASES</div>
+    <div class="grid-2">
+        <div class="box">
+            <h4>1. Native OCR Ingestion Pipeline</h4>
+            <p>Integration with Microsoft/Grok optical character recognition to fully automate the Data Intake process. Unstructured vendor email PDFs will be autonomously scraped, validated, and inserted into the <code>VendorInvoiceHeaders</code> table without human keystrokes.</p>
+        </div>
+        <div class="box">
+            <h4>2. Automated UTR Settlement (Outbound)</h4>
+            <p>Enhancing the outbound proxy connectors to actively push <code>MATCHED/3-WAY-CLEAR</code> invoices back into SAP F110 (Automatic Payment Run). This will close the loop, automatically clearing payables and echoing the final Bank UTR numbers back to the Vendor UI.</p>
+        </div>
+    </div>
+
+    <div class="footer">Vendor Reconcile &bull; Detailed Enterprise Blueprint &bull; Page 3 of 3</div>
+
+</body>
+</html>

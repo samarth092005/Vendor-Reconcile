@@ -1,0 +1,89 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:uf="sap.ui.unified">
+    <VBox class="sapUiSmallMargin">
+        <!-- Top Toolbar for Uploading -->
+        <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+            <Label text="Select Invoice File:" design="Bold" class="sapUiTinyMarginEnd"/>
+            <uf:FileUploader id="ocrImageUploader" width="300px" placeholder="Select Invoice (JPG, PNG, PDF)..." change=".onOcrFileChange" class="sapUiTinyMarginEnd"/>
+            <Button text="Start Smart Scan" press=".onStartSmartScan" type="Emphasized" icon="sap-icon://document-text"/>
+        </HBox>
+
+        <!-- Progress Indicator -->
+        <VBox id="ocrProgressContainer" visible="false" class="sapUiSmallMarginBottom">
+            <Label id="ocrStatusText" text="Initializing..." design="Bold"/>
+            <ProgressIndicator id="ocrProgress" percentValue="0" displayValue="0%" showValue="true" state="Success" width="100%"/>
+        </VBox>
+
+        <!-- Splitter for Viewer and Extracted Data -->
+        <l:Splitter height="500px" width="100%">
+            <!-- Left Side: Document Viewer with Scanner Animation -->
+            <Panel headerText="Document Viewer" height="100%">
+                <layoutData>
+                    <l:SplitterLayoutData size="50%" />
+                </layoutData>
+                <VBox id="ocrImageContainer" class="vrOcrContainer" width="100%" height="100%" justifyContent="Center" alignItems="Center">
+                    <Text id="ocrImagePlaceholder" text="Upload a file to view it here."/>
+                    <Image id="ocrImage" class="vrOcrImage"/>
+                    <core:HTML id="ocrPdfViewer" content="&lt;iframe id='pdfIframe' width='100%' height='100%' frameborder='0'&gt;&lt;/iframe&gt;" visible="false" />
+                    <VBox class="vrOcrScannerLine"></VBox>
+                </VBox>
+            </Panel>
+
+            <!-- Right Side: Extracted Fields -->
+            <Panel headerText="Extracted Data" height="100%">
+                <layoutData>
+                    <l:SplitterLayoutData size="50%" />
+                </layoutData>
+                <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+                    <f:content>
+                        <Label text="Invoice / PO Number" />
+                        <Input value="{ocrData>/invoiceNumber}" placeholder="Auto-populated"/>
+                        
+                        <Label text="Document Date" />
+                        <Input value="{ocrData>/invoiceDate}" placeholder="Auto-populated"/>
+                        
+                        <Label text="Vendor Name" />
+                        <Input value="{ocrData>/vendorName}" placeholder="Auto-populated"/>
+                        
+                        <Label text="Vendor GSTIN" />
+                        <Input value="{ocrData>/vendorGstin}" placeholder="Auto-populated"/>
+
+                        <Label text="Buyer Name" />
+                        <Input value="{ocrData>/buyerName}" placeholder="Auto-populated"/>
+
+                        <Label text="Buyer GSTIN" />
+                        <Input value="{ocrData>/buyerGstin}" placeholder="Auto-populated"/>
+                        
+                        <Label text="Total Amount" />
+                        <Input value="{ocrData>/totalAmount}" placeholder="Auto-populated"/>
+                        
+                        <Label text="PO Number" />
+                        <Input value="{ocrData>/poNumber}" placeholder="Auto-populated"/>
+                        
+                        <Label text="Tax / GST (Total)" />
+                        <Input value="{ocrData>/tax}" placeholder="Auto-populated"/>
+
+                        <Label text="CGST" />
+                        <Input value="{ocrData>/cgst}" placeholder="Auto-populated"/>
+
+                        <Label text="SGST" />
+                        <Input value="{ocrData>/sgst}" placeholder="Auto-populated"/>
+
+                        <Label text="IGST" />
+                        <Input value="{ocrData>/igst}" placeholder="Auto-populated"/>
+                        
+                        <Label text="Raw Extraction Logs" />
+                        <TextArea value="{ocrData>/rawText}" rows="5" editable="false" placeholder="Raw output will appear here..."/>
+                        
+                        <Label />
+                        <Button text="Submit to Reconly Database" press=".onSubmitScannedInvoice" type="Accept" icon="sap-icon://save"/>
+                    </f:content>
+                </f:SimpleForm>
+            </Panel>
+        </l:Splitter>
+    </VBox>
+</core:FragmentDefinition>

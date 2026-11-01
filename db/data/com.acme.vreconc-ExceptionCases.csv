@@ -1,0 +1,9 @@
+ID;result_ID;openedAt;assignedTo;resolution;notes;createdAt;createdBy;modifiedAt;modifiedBy
+EC-003;RR-003;2026-07-14T08:32:33Z;J. Dupont;Open;Vendor confirmed pricing change - awaiting approval;2026-07-14T08:32:33Z;system;2026-07-14T08:50:00Z;j.dupont
+EC-004;RR-004;2026-07-14T08:32:33Z;;Open;Chase vendor for S/4 posting;2026-07-14T08:32:33Z;system;2026-07-14T08:52:00Z;system
+EC-005;RR-005;2026-07-14T08:32:33Z;;Open;Requested source file from Honeywell;2026-07-14T08:32:33Z;system;2026-07-14T08:52:30Z;system
+EC-006;RR-006;2026-07-14T08:32:33Z;R. Ortega;InReview;Cross-check with invoice 3345601;2026-07-14T08:32:33Z;system;2026-07-14T08:53:00Z;r.ortega
+EC-007;RR-007;2026-07-14T08:32:33Z;S. Nguyen;Escalated;Escalated to AP Manager for payment block review;2026-07-14T08:32:33Z;system;2026-07-14T08:53:30Z;s.nguyen
+EC-009;RR-009;2026-07-14T08:32:33Z;S. Nguyen;Open;Post parked invoice or return to vendor;2026-07-14T08:32:33Z;system;2026-07-14T08:54:30Z;s.nguyen
+EC-010;RR-010;2026-07-14T08:32:33Z;J. Dupont;Open;Request PO reference from Legrand;2026-07-14T08:32:33Z;system;2026-07-14T08:55:00Z;j.dupont
+EC-012;RR-012;2026-07-14T08:32:33Z;M. Klein;Open;Verify unit price with Bosch;2026-07-14T08:32:33Z;system;2026-07-14T08:56:00Z;m.klein

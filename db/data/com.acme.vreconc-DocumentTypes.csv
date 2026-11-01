@@ -1,0 +1,5 @@
+code;name;descr
+RE;Invoice;Standard vendor invoice
+KR;Credit Memo;Vendor credit memo
+KG;Vendor Credit;Vendor credit
+RV;Invoice - RV;Invoice referencing goods receipt

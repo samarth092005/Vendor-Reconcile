@@ -1,0 +1,28 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+  <Dialog title="MIRO Document Details" contentWidth="500px">
+    <f:SimpleForm editable="false" layout="ResponsiveGridLayout">
+      <f:content>
+        <Label text="MIRO Document No" design="Bold"/>
+        <Text text="{miro>miroDoc}" class="vrCode"/>
+        
+        <Label text="Vendor" design="Bold"/>
+        <Text text="{miro>vendor}" />
+        
+        <Label text="Invoice Reference" design="Bold"/>
+        <Text text="{miro>invoiceNo}" class="vrCode"/>
+        
+        <Label text="Amount" design="Bold"/>
+        <Text text="{miro>amount}" class="vrBold"/>
+        
+        <Label text="Posted Date" design="Bold"/>
+        <Text text="{path: 'miro>postedAt', formatter: '.formatDate'}" />
+        
+        <Label text="Clearing Status" design="Bold"/>
+        <ObjectStatus text="{miro>cleared}" state="{miro>clearedState}" />
+      </f:content>
+    </f:SimpleForm>
+    <beginButton>
+      <Button text="Close" press="onCloseDialog" type="Emphasized"/>
+    </beginButton>
+  </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,66 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified"
+    xmlns:l="sap.ui.layout">
+    <Dialog title="Post Goods Receipt (MIGO) &amp; QA32" contentWidth="500px">
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <Title text="1. Material Document Data" level="H4" class="sapUiTinyMarginBottom"/>
+                <l:Grid defaultSpan="L6 M6 S12" class="sapUiSmallMarginBottom">
+                    <VBox>
+                        <Label text="Quantity Received" required="true"/>
+                        <Input id="grQty" type="Number"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Plant" required="true"/>
+                        <Input id="grPlant" value="1010"/>
+                    </VBox>
+                </l:Grid>
+
+                <Title text="2. Quality Inspection (SAP QM)" level="H4" class="sapUiTinyMarginTop sapUiTinyMarginBottom"/>
+                
+                <Label text="Stock Posting Type" required="true"/>
+                <Select id="grStockType" width="100%" class="sapUiSmallMarginBottom">
+                    <core:Item key="Unrestricted Use" text="Unrestricted Use (Available)"/>
+                    <core:Item key="Quality Inspection" text="Quality Inspection (Q)"/>
+                    <core:Item key="Blocked Stock" text="Blocked Stock (Restricted)"/>
+                </Select>
+
+                <Label text="Usage Decision (Quality Status)" required="true"/>
+                <Select id="grQualityStatus" width="100%" class="sapUiSmallMarginBottom" change=".onQualityStatusChange">
+                    <core:Item key="Accepted" text="Accepted (Pass)"/>
+                    <core:Item key="Rejected" text="Rejected (Fail)"/>
+                    <core:Item key="Pending" text="Pending Analysis"/>
+                </Select>
+
+                <VBox id="defectBox" visible="false" class="sapUiSmallMarginBottom">
+                    <Label text="Defect Code" required="true"/>
+                    <Select id="grDefectCode" width="100%" class="sapUiTinyMarginBottom">
+                        <core:Item key="" text="Select Defect..."/>
+                        <core:Item key="QM-01" text="QM-01: Damaged Packaging"/>
+                        <core:Item key="QM-02" text="QM-02: Substandard Material"/>
+                        <core:Item key="QM-03" text="QM-03: Quantity Shortage"/>
+                    </Select>
+                </VBox>
+
+                <Label text="Inspector Remarks"/>
+                <TextArea id="grRemarks" width="100%" rows="2" class="sapUiSmallMarginBottom"/>
+
+                <Label text="Upload Product Image (QA Evidence)"/>
+                <u:FileUploader
+                    id="grImageUploader"
+                    width="100%"
+                    fileType="jpg,jpeg,png"
+                    change=".onImageUpload"
+                    placeholder="Snap/Upload delivery image..."/>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button text="Post Document" type="Emphasized" icon="sap-icon://accept" press=".onConfirmGR"/>
+        </beginButton>
+        <endButton>
+            <Button text="Cancel" press=".onCancelGR"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

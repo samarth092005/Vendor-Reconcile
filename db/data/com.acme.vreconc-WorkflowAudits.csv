@@ -1,0 +1,18 @@
+ID;result_ID;actor;actedAt;action;note
+WA-001-1;RR-001;System;2026-07-14T08:32:00Z;Auto-matched with tolerance;Confidence 94.2%
+WA-001-2;RR-001;M. Klein;2026-07-14T08:35:00Z;Reviewed exception;Assigned to self
+WA-001-3;RR-001;M. Klein;2026-07-14T09:10:00Z;Approved variance;Within 1% tolerance threshold
+WA-002-1;RR-002;System;2026-07-14T08:32:33Z;Auto-matched with tolerance;Confidence 92.1%
+WA-002-2;RR-002;M. Klein;2026-07-14T08:45:00Z;Reviewed exception;Approved
+WA-003-1;RR-003;System;2026-07-14T08:32:33Z;Flagged for review;Confidence 68.3%
+WA-003-2;RR-003;J. Dupont;2026-07-14T08:50:00Z;Assigned to self;Investigating vendor pricing
+WA-004-1;RR-004;System;2026-07-14T08:32:33Z;Flagged missing S/4 posting;Confidence 45.1%
+WA-005-1;RR-005;System;2026-07-14T08:32:33Z;Flagged missing source file;Awaiting vendor upload
+WA-006-1;RR-006;System;2026-07-14T08:32:33Z;Flagged as duplicate suspect;Prior invoice 3345601 matches
+WA-007-1;RR-007;System;2026-07-14T08:32:33Z;Blocked for payment;Payment block active
+WA-007-2;RR-007;S. Nguyen;2026-07-14T08:53:30Z;Reviewed block;Escalated to manager
+WA-008-1;RR-008;System;2026-07-14T08:32:33Z;Auto-matched with tolerance;Tax within tolerance
+WA-009-1;RR-009;System;2026-07-14T08:32:33Z;Flagged parked invoice;Not yet posted in S/4
+WA-010-1;RR-010;System;2026-07-14T08:32:33Z;Flagged manual review;PO number missing in file
+WA-011-1;RR-011;System;2026-07-14T08:32:33Z;Auto-matched with tolerance;Quantity variance
+WA-012-1;RR-012;System;2026-07-14T08:32:33Z;Flagged manual review;Unit price mismatch

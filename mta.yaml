@@ -1,0 +1,94 @@
+_schema-version: 3.3.0
+ID: vendor_reconcile
+version: 1.0.0
+description: "Vendor Reconciliation &amp; Match Exception Engine"
+parameters:
+  enable-parallel-deployments: true
+  deploy_mode: html5-repo
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: vendor_reconcile-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: vendor_reconcile-auth
+      - name: vendor_reconcile-db
+
+  - name: vendor_reconcile-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: vendor_reconcile-db
+
+  - name: vendor_reconcile-app-deployer
+    type: com.sap.application.content
+    path: gen
+    build-parameters:
+      build-result: app/
+      requires:
+        - name: vendor_reconcilevendordoclines
+          artifacts:
+            - vendordoclines.zip
+          target-path: app/
+    requires:
+      - name: vendor_reconcile-auth
+      - name: srv-api
+      - name: vendor_reconcile-html5-repo-host
+        parameters:
+          content-target: true
+          config:
+            HTML5Runtime_enabled: true
+
+  - name: vendor_reconcilevendordoclines
+    type: html5
+    path: app/vendordoclines
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
+
+resources:
+  - name: vendor_reconcile-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: vendor_reconcile-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
+  - name: vendor_reconcile-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  - name: vendor_reconcile-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host

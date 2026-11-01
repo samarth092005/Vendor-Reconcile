@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reconly — Enterprise Vendor Reconciliation</title>
+<link rel="icon" href="landing-assets/logo-icon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ========================================================================
+   RECONLY LANDING PAGE — Design Tokens & Full Stylesheet
+   ======================================================================== */
+:root{
+  --rc-blue-deep:#2563EB;--rc-blue-sky:#38BDF8;--rc-violet:#7C5CFF;
+  --rc-mint:#34D399;--rc-navy:#0B1B4D;--rc-surface: #EEF2FF;
+  --rc-white:#FFFFFF;--rc-border:#E3E9FA;--rc-text:#0B1B4D;
+  --rc-text-muted:#5B6396;--rc-text-light:rgba(255,255,255,.7);
+  --rc-gradient:linear-gradient(135deg,#38BDF8,#2563EB,#7C5CFF);
+  --rc-gradient-btn:linear-gradient(135deg,#2563EB,#38BDF8);
+  --rc-radius:16px;--rc-radius-sm:12px;--rc-radius-lg:20px;
+  --rc-shadow:0 4px 6px -1px rgba(0,0,0,.04),0 10px 20px -4px rgba(11,27,77,.08);
+  --rc-shadow-lg:0 8px 30px -4px rgba(11,27,77,.14);
+  --rc-font:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--rc-font);color:var(--rc-text);background:var(--rc-surface);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.6}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ── Focus Ring ────────────────────────────────────────────────────────── */
+:focus-visible{outline:2px solid var(--rc-blue-deep);outline-offset:2px;border-radius:4px}
+
+/* ── Scroll Reveal (progressive enhancement: visible by default) ──── */
+.sr-init{opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.sr-init.visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){
+  .sr-init{opacity:1!important;transform:none!important;transition:none!important}
+  .hero-preview{animation:none!important}
+  .hero-float-badge{animation:none!important}
+}
+
+/* ── Container ────────────────────────────────────────────────────────── */
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ── NAVBAR ───────────────────────────────────────────────────────────── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--rc-border);transition:box-shadow .3s ease}
+.navbar.scrolled{box-shadow:0 2px 20px rgba(11,27,77,.06)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-brand img{height:36px;width:auto}
+.nav-brand span{font-weight:800;font-size:1.4rem;
+  background:var(--rc-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:.9rem;font-weight:600;color:var(--rc-text-muted);transition:color .2s}
+.nav-links a:hover{color:var(--rc-blue-deep)}
+.nav-ctas{display:flex;gap:12px;align-items:center}
+.btn-ghost{padding:10px 22px;border-radius:var(--rc-radius-sm);font-weight:600;font-size:.875rem;
+  color:var(--rc-text);border:1.5px solid var(--rc-border);transition:all .2s}
+.btn-ghost:hover{border-color:var(--rc-blue-deep);color:var(--rc-blue-deep);background:rgba(37,99,235,.04)}
+.btn-primary{padding:10px 24px;border-radius:var(--rc-radius-sm);font-weight:700;font-size:.875rem;
+  color:#fff;background:var(--rc-gradient-btn);box-shadow:0 4px 14px rgba(37,99,235,.3);transition:all .2s}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.4)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary-lg{padding:14px 32px;border-radius:var(--rc-radius);font-size:1rem}
+.btn-outline-lg{padding:14px 32px;border-radius:var(--rc-radius);font-size:1rem;
+  font-weight:700;border:2px solid var(--rc-border);color:var(--rc-text);transition:all .2s}
+.btn-outline-lg:hover{border-color:var(--rc-blue-deep);color:var(--rc-blue-deep);background:rgba(37,99,235,.04)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer}
+.hamburger span{width:22px;height:2px;background:var(--rc-text);border-radius:2px;transition:all .3s}
+.mobile-menu{display:none;position:absolute;top:72px;left:0;right:0;background:var(--rc-white);
+  border-bottom:1px solid var(--rc-border);padding:16px 24px;box-shadow:var(--rc-shadow)}
+.mobile-menu.open{display:flex;flex-direction:column;gap:12px}
+.mobile-menu a{font-weight:600;font-size:.95rem;padding:8px 0;color:var(--rc-text-muted)}
+
+/* ── HERO ─────────────────────────────────────────────────────────────── */
+.hero{padding:140px 0 80px;position:relative;overflow:hidden;min-height:100vh;
+  display:flex;align-items:center;background:var(--rc-surface)}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;opacity:.45}
+.hero-orb-1{width:600px;height:600px;background:var(--rc-blue-sky);top:-20%;right:-10%}
+.hero-orb-2{width:400px;height:400px;background:var(--rc-violet);bottom:-10%;left:-5%}
+.hero-orb-3{width:300px;height:300px;background:var(--rc-mint);bottom:20%;right:30%;opacity:.2}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(37,99,235,.08);
+  border:1px solid rgba(37,99,235,.15);border-radius:999px;padding:6px 16px;font-size:.8rem;
+  font-weight:600;color:var(--rc-blue-deep);margin-bottom:24px}
+.hero-badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--rc-blue-deep);
+  box-shadow:0 0 0 0 rgba(37,99,235,.5);animation:pulse-ring 2s infinite}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(37,99,235,.5)}70%{box-shadow:0 0 0 8px rgba(37,99,235,0)}100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}}
+.hero h1{font-size:clamp(2.5rem,5vw,3.75rem);font-weight:800;line-height:1.1;
+  letter-spacing:-.03em;margin-bottom:20px;color:var(--rc-navy)}
+.hero h1 em{font-style:normal;background:var(--rc-gradient);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.125rem;color:var(--rc-text-muted);max-width:480px;margin-bottom:32px;line-height:1.7}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap}
+.hero-social{display:flex;align-items:center;gap:12px;margin-top:40px}
+.hero-social .avatars{display:flex}
+.hero-social .avatars span{width:32px;height:32px;border-radius:50%;border:2px solid #fff;
+  display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;margin-left:-8px}
+.hero-social .avatars span:first-child{margin-left:0}
+.hero-social p{font-size:.85rem;color:var(--rc-text-muted);font-weight:500}
+
+/* ── Hero Preview Card (Glassmorphism) ────────────────────────────────── */
+.hero-preview{position:relative}
+.hero-preview-card{background:rgba(255,255,255,.92);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-radius:var(--rc-radius-lg);
+  border:1px solid rgba(255,255,255,.8);box-shadow:var(--rc-shadow-lg);
+  padding:28px;animation:float-card 6s ease-in-out infinite}
+@keyframes float-card{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.preview-header h3{font-size:.95rem;font-weight:700;color:var(--rc-navy)}
+.preview-header .dots{display:flex;gap:4px}
+.preview-header .dots span{width:6px;height:6px;border-radius:50%;background:var(--rc-border)}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.kpi-tile{background:var(--rc-surface);border-radius:var(--rc-radius-sm);padding:14px;text-align:center}
+.kpi-tile .kpi-val{font-size:1.25rem;font-weight:800;color:var(--rc-navy)}
+.kpi-tile .kpi-lbl{font-size:.65rem;color:var(--rc-text-muted);text-transform:uppercase;
+  letter-spacing:.06em;font-weight:600;margin-top:2px}
+.mini-bars{display:flex;align-items:flex-end;gap:8px;height:64px;margin-bottom:20px;padding:0 4px}
+.mini-bars .bar{flex:1;border-radius:6px 6px 0 0;transition:height .6s ease}
+.bar-1{height:80%;background:var(--rc-blue-deep)}
+.bar-2{height:55%;background:var(--rc-blue-sky)}
+.bar-3{height:70%;background:var(--rc-violet)}
+.bar-4{height:40%;background:var(--rc-mint)}
+.invoice-list{display:flex;flex-direction:column;gap:8px}
+.inv-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;
+  border-radius:var(--rc-radius-sm);background:var(--rc-white);border:1px solid var(--rc-border);font-size:.78rem}
+.inv-row .inv-left{display:flex;align-items:center;gap:8px}
+.inv-row .dot{width:8px;height:8px;border-radius:50%}
+.dot-green{background:var(--rc-mint)}.dot-red{background:#F43F5E}.dot-amber{background:#F59E0B}
+.inv-row .inv-id{font-weight:600;color:var(--rc-navy)}
+.inv-row .inv-status{font-size:.7rem;color:var(--rc-text-muted)}
+.inv-row .inv-amt{font-weight:700;color:var(--rc-navy)}
+
+/* Floating badge */
+.hero-float-badge{position:absolute;bottom:-16px;left:-24px;background:var(--rc-white);
+  border-radius:var(--rc-radius);padding:14px 20px;box-shadow:var(--rc-shadow-lg);
+  border:1px solid var(--rc-border);display:flex;align-items:center;gap:14px;
+  animation:float-badge 4s ease-in-out infinite .5s}
+@keyframes float-badge{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.hero-float-badge .badge-icon{width:44px;height:44px;border-radius:50%;
+  background:var(--rc-gradient-btn);display:flex;align-items:center;justify-content:center}
+.hero-float-badge .badge-icon svg{width:20px;height:20px;color:#fff}
+.hero-float-badge .badge-lbl{font-size:.7rem;color:var(--rc-text-muted);font-weight:500}
+.hero-float-badge .badge-val{font-size:1.3rem;font-weight:800;color:var(--rc-navy)}
+
+/* ── TRUST STRIP ──────────────────────────────────────────────────────── */
+.trust-strip{border-top:1px solid var(--rc-border);border-bottom:1px solid var(--rc-border);
+  padding:32px 0;background:var(--rc-white)}
+.trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.trust-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+.trust-item svg{width:28px;height:28px;color:var(--rc-blue-deep)}
+.trust-item .trust-val{font-size:1rem;font-weight:700;color:var(--rc-navy)}
+.trust-item .trust-lbl{font-size:.78rem;color:var(--rc-text-muted);font-weight:500}
+
+/* ── FEATURES ─────────────────────────────────────────────────────────── */
+.features{padding:100px 0;background:var(--rc-surface)}
+.section-header{text-align:center;max-width:640px;margin:0 auto 64px}
+.section-header h2{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;
+  letter-spacing:-.02em;margin-bottom:16px;color:var(--rc-navy)}
+.section-header p{font-size:1.05rem;color:var(--rc-text-muted);line-height:1.7}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.feature-card{background:var(--rc-white);border:1px solid var(--rc-border);
+  border-radius:var(--rc-radius);padding:32px;transition:all .3s ease}
+.feature-card:hover{transform:translateY(-4px);box-shadow:var(--rc-shadow-lg)}
+.feature-icon{width:56px;height:56px;border-radius:var(--rc-radius-sm);
+  display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.feature-icon svg{width:26px;height:26px}
+.fi-blue{background:rgba(37,99,235,.1);color:var(--rc-blue-deep)}
+.fi-sky{background:rgba(56,189,248,.12);color:var(--rc-blue-sky)}
+.fi-violet{background:rgba(124,92,255,.1);color:var(--rc-violet)}
+.fi-mint{background:rgba(52,211,153,.1);color:var(--rc-mint)}
+.fi-navy{background:rgba(11,27,77,.08);color:var(--rc-navy)}
+.fi-rose{background:rgba(244,63,94,.08);color:#F43F5E}
+.feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--rc-navy)}
+.feature-card p{font-size:.9rem;color:var(--rc-text-muted);line-height:1.6}
+
+/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */
+.how-it-works{padding:100px 0;background:var(--rc-white)}
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.step{text-align:center;padding:0 24px;position:relative}
+.step-num{width:52px;height:52px;border-radius:50%;background:var(--rc-gradient-btn);
+  color:#fff;font-weight:800;font-size:1.1rem;display:flex;align-items:center;
+  justify-content:center;margin:0 auto 20px;position:relative;z-index:2;
+  box-shadow:0 4px 14px rgba(37,99,235,.25)}
+.step h3{font-size:1rem;font-weight:700;color:var(--rc-navy);margin-bottom:8px}
+.step p{font-size:.85rem;color:var(--rc-text-muted);line-height:1.6}
+/* Connecting line */
+.steps-row::before{content:'';position:absolute;top:26px;left:calc(12.5% + 26px);
+  right:calc(12.5% + 26px);height:2px;background:var(--rc-border);z-index:1}
+
+/* ── PERSONAS ─────────────────────────────────────────────────────────── */
+.persona-section{padding:90px 0;background:var(--rc-white)}
+.persona-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.persona-card{background:var(--rc-surface);border:1.5px solid var(--rc-border);
+  border-radius:var(--rc-radius);padding:28px 24px;display:flex;flex-direction:column;
+  justify-content:space-between;transition:all .25s ease}
+.persona-card:hover{transform:translateY(-4px);border-color:var(--rc-blue-deep);
+  box-shadow:var(--rc-shadow-lg);background:#fff}
+.persona-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.persona-icon{width:46px;height:46px;border-radius:var(--rc-radius-sm);
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.persona-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--rc-blue-deep)}
+.persona-title{font-size:1.05rem;font-weight:800;color:var(--rc-navy);margin-top:2px}
+.persona-desc{font-size:.85rem;color:var(--rc-text-muted);line-height:1.6;margin-bottom:20px;flex:1}
+.persona-launch-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:10px 16px;border-radius:var(--rc-radius-sm);font-size:.82rem;font-weight:700;
+  color:var(--rc-blue-deep);background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);
+  transition:all .2s ease;text-decoration:none}
+.persona-card:hover .persona-launch-btn{background:var(--rc-blue-deep);color:#fff;border-color:var(--rc-blue-deep)}
+
+/* ── SECURITY BAND ────────────────────────────────────────────────────── */
+.security{padding:80px 0;background:var(--rc-navy);color:#fff}
+.security h2{font-size:clamp(1.75rem,3vw,2.25rem);font-weight:800;text-align:center;margin-bottom:48px}
+.security-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.sec-item{text-align:center;padding:24px}
+.sec-item .sec-icon{width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,.08);display:flex;align-items:center;
+  justify-content:center;margin:0 auto 16px}
+.sec-item .sec-icon svg{width:24px;height:24px;color:var(--rc-blue-sky)}
+.sec-item h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.sec-item p{font-size:.85rem;color:var(--rc-text-light);line-height:1.6}
+
+/* ── CTA BANNER ───────────────────────────────────────────────────────── */
+.cta-banner{padding:80px 0;background:var(--rc-gradient);text-align:center}
+.cta-banner h2{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;color:#fff;margin-bottom:16px}
+.cta-banner p{color:rgba(255,255,255,.8);font-size:1.05rem;margin-bottom:32px}
+.btn-white{padding:14px 36px;border-radius:var(--rc-radius);font-weight:700;font-size:1rem;
+  background:#fff;color:var(--rc-blue-deep);box-shadow:0 4px 14px rgba(0,0,0,.15);transition:all .2s}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+
+/* ── FOOTER ───────────────────────────────────────────────────────────── */
+.footer{padding:48px 0 32px;background:var(--rc-navy);color:rgba(255,255,255,.6)}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;
+  padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.footer-brand img{height:28px;filter:brightness(1.2)}
+.footer-brand span{font-weight:800;font-size:1.2rem;color:#fff}
+.footer-desc{max-width:320px;font-size:.85rem;line-height:1.6}
+.footer-links{display:flex;gap:32px;list-style:none}
+.footer-links a{font-size:.85rem;font-weight:500;transition:color .2s}
+.footer-links a:hover{color:var(--rc-blue-sky)}
+.footer-bottom{text-align:center;padding-top:24px;font-size:.8rem}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────────────── */
+@media(max-width:1024px){
+  .nav-links,.nav-ctas .btn-ghost{display:none}
+  .hamburger{display:flex}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-preview{max-width:480px;margin:0 auto}
+  .feature-grid{grid-template-columns:repeat(2,1fr)}
+  .persona-grid{grid-template-columns:repeat(2,1fr)}
+  .steps-row{grid-template-columns:repeat(2,1fr);gap:40px}
+  .steps-row::before{display:none}
+  .security-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .container{padding:0 16px}
+  .feature-grid,.security-grid{grid-template-columns:1fr}
+  .persona-grid{grid-template-columns:1fr}
+  .trust-row{grid-template-columns:repeat(2,1fr);gap:16px}
+  .steps-row{grid-template-columns:1fr;gap:32px}
+  .kpi-row{grid-template-columns:1fr}
+  .hero-float-badge{left:0;bottom:-28px}
+  .footer-inner{flex-direction:column;align-items:center;text-align:center}
+  .footer-links{flex-direction:column;gap:12px;align-items:center}
+  .hero-ctas{flex-direction:column}
+  .hero-ctas a{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ NAVBAR ══════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="/" class="nav-brand" aria-label="Reconly Home">
+      <img src="landing-assets/logo-icon.png" alt="Reconly logo icon" width="36" height="36">
+      <span>Reconly</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#personas">Personas</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#security">Security</a></li>
+    </ul>
+    <div class="nav-ctas">
+      <a href="/vendordoclines/webapp/index.html#/login" class="btn-ghost">Login</a>
+      <a href="/vendordoclines/webapp/index.html#/login" class="btn-primary">Explore Live Demo</a>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features">Features</a>
+    <a href="#personas">Personas</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#security">Security</a>
+    <a href="/vendordoclines/webapp/index.html#/login">Login</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════ HERO ════════════════════════════ -->
+<main>
+<section class="hero" id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="container hero-grid">
+    <!-- Left: Text -->
+    <div class="sr">
+      <div class="hero-badge"><span class="pulse"></span> S/4HANA &amp; S21 Reconciliation 2.0</div>
+      <h1>Autonomous 3-Way Invoice Matching.<br>Zero Financial <em>Leakage.</em></h1>
+      <p>Deterministic verification bridging Vendor Statements, SAP S/4HANA General Ledgers, and Warehouse Goods Receipts in real time.</p>
+      <div class="hero-ctas">
+        <a href="/vendordoclines/webapp/index.html#/login" class="btn-primary btn-primary-lg">Launch Reconly Cockpit &rarr;</a>
+        <a href="#personas" class="btn-outline-lg">Explore Personas</a>
+      </div>
+      <div class="hero-social">
+        <div class="avatars">
+          <span style="background:#2563EB">AP</span>
+          <span style="background:#7C5CFF">PO</span>
+          <span style="background:#34D399">GR</span>
+        </div>
+        <p>Built for SAP AP Teams, Procurement Buyers &amp; Suppliers</p>
+      </div>
+    </div>
+    <!-- Right: Preview Card -->
+    <div class="hero-preview sr" style="transition-delay:.15s">
+      <div class="hero-preview-card">
+        <div class="preview-header">
+          <div>
+            <h3>3-Way Reconciliation Ledger</h3>
+            <span style="font-size:0.75rem; color:var(--rc-text-muted);">Live Sync: S21 &bull; FY 2026-27</span>
+          </div>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-tile"><div class="kpi-val">₹4.28 Cr</div><div class="kpi-lbl">Processed</div></div>
+          <div class="kpi-tile"><div class="kpi-val" style="color:var(--rc-mint)">98.2%</div><div class="kpi-lbl">Match Rate</div></div>
+          <div class="kpi-tile"><div class="kpi-val" style="color:#F59E0B">18</div><div class="kpi-lbl">Exceptions</div></div>
+        </div>
+        <div class="mini-bars">
+          <div class="bar bar-1" title="PO Matched: 85%"></div><div class="bar bar-2" title="GR Confirmed: 70%"></div>
+          <div class="bar bar-3" title="GSTR-2B Verified: 90%"></div><div class="bar bar-4" title="MIRO Ready: 65%"></div>
+        </div>
+        <div class="invoice-list">
+          <div class="inv-row">
+            <div class="inv-left">
+              <span class="dot dot-green"></span>
+              <div><span class="inv-id">5105601054</span> <span style="font-size:0.7rem; color:var(--rc-text-muted);">&bull; PO #4500001893</span></div>
+            </div>
+            <div style="text-align:right">
+              <span class="inv-amt">₹10,000.00</span>
+              <div style="font-size:0.68rem; color:#059669; font-weight:700;">3-Way Match Clear</div>
+            </div>
+          </div>
+          <div class="inv-row">
+            <div class="inv-left">
+              <span class="dot dot-red"></span>
+              <div><span class="inv-id">5105601047</span> <span style="font-size:0.7rem; color:var(--rc-text-muted);">&bull; PO #3010000020</span></div>
+            </div>
+            <div style="text-align:right">
+              <span class="inv-amt">₹2,200.00</span>
+              <div style="font-size:0.68rem; color:#DC2626; font-weight:700;">Price Variance (+₹200)</div>
+            </div>
+          </div>
+          <div class="inv-row">
+            <div class="inv-left">
+              <span class="dot dot-amber"></span>
+              <div><span class="inv-id">5105601052</span> <span style="font-size:0.7rem; color:var(--rc-text-muted);">&bull; PO #4500001892</span></div>
+            </div>
+            <div style="text-align:right">
+              <span class="inv-amt">₹200.00</span>
+              <div style="font-size:0.68rem; color:#D97706; font-weight:700;">GR Missing (Hold)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating badge -->
+      <div class="hero-float-badge">
+        <div class="badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div><div class="badge-lbl">Direct S/4HANA Settlement</div><div class="badge-val">1-Click MIRO Posting</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ TRUST STRIP ═════════════════════ -->
+<section class="trust-strip">
+  <div class="container">
+    <div class="trust-row sr">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="trust-val">98.2%</div><div class="trust-lbl">Match Accuracy</div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="trust-val">&lt; 3.5s</div><div class="trust-lbl">Avg Processing</div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/><rect x="2" y="3" width="20" height="4" rx="1"/></svg>
+        <div class="trust-val">PO • GR • Inv</div><div class="trust-lbl">Deterministic 3-Way</div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="trust-val">SOX &bull; SOC-2</div><div class="trust-lbl">Audit Trail Ready</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ PERSONAS LAUNCHER ═════════════ -->
+<section class="persona-section" id="personas">
+  <div class="container">
+    <div class="section-header sr">
+      <div class="hero-badge" style="margin-bottom:12px;"><span class="pulse"></span> Role-Tailored Workflows</div>
+      <h2>Experience Reconly by Persona</h2>
+      <p>Role-segregated environments engineered for accounts payable, procurement buyers, warehouse clerks, and suppliers.</p>
+    </div>
+    <div class="persona-grid">
+      
+      <!-- Persona 1: AP Finance Manager -->
+      <article class="persona-card sr" style="transition-delay:.05s">
+        <div>
+          <div class="persona-header">
+            <div class="persona-icon" style="background:rgba(37,99,235,.12); color:#2563EB;">👨‍💼</div>
+            <div>
+              <div class="persona-tag">Finance &amp; Audit</div>
+              <div class="persona-title">AP Finance Lead</div>
+            </div>
+          </div>
+          <p class="persona-desc">Inspect multi-rule match executions, triage price/GR exceptions, and post MIRO clearings directly to SAP S/4HANA.</p>
+        </div>
+      </article>
+
+      <!-- Persona 2: PO Buyer -->
+      <article class="persona-card sr" style="transition-delay:.1s">
+        <div>
+          <div class="persona-header">
+            <div class="persona-icon" style="background:rgba(124,92,255,.12); color:#7C5CFF;">🛒</div>
+            <div>
+              <div class="persona-tag">Procurement</div>
+              <div class="persona-title">PO Buyer</div>
+            </div>
+          </div>
+          <p class="persona-desc">Audit purchase order tolerances, approve rate variances, issue contract amendments, and resolve buyer blocks.</p>
+        </div>
+      </article>
+
+      <!-- Persona 3: GR Clerk -->
+      <article class="persona-card sr" style="transition-delay:.15s">
+        <div>
+          <div class="persona-header">
+            <div class="persona-icon" style="background:rgba(52,211,153,.14); color:#059669;">📦</div>
+            <div>
+              <div class="persona-tag">Warehouse</div>
+              <div class="persona-title">Store &amp; GR Clerk</div>
+            </div>
+          </div>
+          <p class="persona-desc">Verify inbound physical deliveries, record quantity shortages, attach inspection evidence, and post MIGO receipts.</p>
+        </div>
+      </article>
+
+      <!-- Persona 4: Vendor Partner -->
+      <article class="persona-card sr" style="transition-delay:.2s">
+        <div>
+          <div class="persona-header">
+            <div class="persona-icon" style="background:rgba(245,158,11,.14); color:#D97706;">🏢</div>
+            <div>
+              <div class="persona-tag">Supplier Portal</div>
+              <div class="persona-title">Vendor Partner</div>
+            </div>
+          </div>
+          <p class="persona-desc">Track real-time payment settlement, inspect automated deduction reasons, and verify GST 2B reconciliation status.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ FEATURES ════════════════════════ -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header sr">
+      <h2>Everything you need to streamline AP</h2>
+      <p>Say goodbye to manual matching and endless email threads. Reconly brings your entire reconciliation workflow into one intelligent platform.</p>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card sr" style="transition-delay:.05s">
+        <div class="feature-icon fi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>3-Way Match Verification</h3>
+        <p>Automatically cross-reference POs, GRs, and invoices in real time to catch discrepancies before payment.</p>
+      </article>
+      <article class="feature-card sr" style="transition-delay:.1s">
+        <div class="feature-icon fi-sky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg></div>
+        <h3>Automated Exception Routing</h3>
+        <p>Route price and quantity blocks to the right buyer or receiver instantly for quick resolution.</p>
+      </article>
+      <article class="feature-card sr" style="transition-delay:.15s">
+        <div class="feature-icon fi-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Immutable Audit Trails</h3>
+        <p>Every action logged with timestamps, users, and FI clearing references for complete compliance.</p>
+      </article>
+      <article class="feature-card sr" style="transition-delay:.2s">
+        <div class="feature-icon fi-mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <h3>FI Clearing &amp; Settlement</h3>
+        <p>One-click clearing posts directly to your general ledger with full document trails.</p>
+      </article>
+      <article class="feature-card sr" style="transition-delay:.25s">
+        <div class="feature-icon fi-rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Duplicate &amp; Mismatch Detection</h3>
+        <p>AI-powered detection flags duplicate invoices and price variances before payment runs.</p>
+      </article>
+      <article class="feature-card sr" style="transition-delay:.3s">
+        <div class="feature-icon fi-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3>Real-Time Analytics</h3>
+        <p>Live dashboards with KPIs, aging trends, and exception drill-downs for instant visibility.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ HOW IT WORKS ════════════════════ -->
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="section-header sr"><h2>How Reconly Works</h2><p>Four steps from invoice ingestion to cleared books.</p></div>
+    <div class="steps-row">
+      <div class="step sr" style="transition-delay:.05s"><div class="step-num">1</div><h3>Ingest</h3><p>Upload vendor statements, SAP ledger exports, or connect to live ERP feeds.</p></div>
+      <div class="step sr" style="transition-delay:.15s"><div class="step-num">2</div><h3>Match</h3><p>Automated 3-way matching against POs, GRs, and invoices in seconds.</p></div>
+      <div class="step sr" style="transition-delay:.25s"><div class="step-num">3</div><h3>Resolve</h3><p>Exception workbench routes mismatches to the right team for action.</p></div>
+      <div class="step sr" style="transition-delay:.35s"><div class="step-num">4</div><h3>Clear &amp; Audit</h3><p>Post FI clearing entries with an immutable, auditable trail.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ SECURITY ════════════════════════ -->
+<section class="security" id="security">
+  <div class="container">
+    <h2 class="sr">Enterprise-Grade Security</h2>
+    <div class="security-grid">
+      <div class="sec-item sr" style="transition-delay:.05s">
+        <div class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Immutable Audit Trail</h3>
+        <p>Every change, approval, and clearance is permanently logged with user, timestamp, and document reference.</p>
+      </div>
+      <div class="sec-item sr" style="transition-delay:.15s">
+        <div class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h3>Role-Based Access Control</h3>
+        <p>Fine-grained permissions per persona — AP Manager, Buyer, Vendor, GR Clerk — with full segregation of duties.</p>
+      </div>
+      <div class="sec-item sr" style="transition-delay:.25s">
+        <div class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
+        <h3>End-to-End Encryption</h3>
+        <p>Data encrypted in transit and at rest. Secure session management with automatic timeout policies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ CTA BANNER ══════════════════════ -->
+<section class="cta-banner">
+  <div class="container sr">
+    <h2>Ready to streamline your reconciliation?</h2>
+    <p>Join leading enterprises saving thousands of hours in AP processing every month.</p>
+    <a href="/vendordoclines/webapp/index.html#/login" class="btn-white">Login to Reconly &rarr;</a>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════════════════════════════ FOOTER ══════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">
+          <img src="landing-assets/logo-icon.png" alt="Reconly" width="28" height="28">
+          <span>Reconly</span>
+        </div>
+        <p class="footer-desc">A unified, finance-grade platform for enterprise vendor reconciliation, 3-way match verification, and AP exception management.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#personas">Personas</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="/vendordoclines/webapp/index.html#/login">Login</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Reconly. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+/* ── Scroll-reveal (progressive enhancement) ─────────────────────────── */
+(function(){
+  const mq=window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(mq.matches) return;
+  const els=document.querySelectorAll('.sr');
+  // Add sr-init to hide elements, then reveal via IntersectionObserver
+  els.forEach(el=>el.classList.add('sr-init'));
+  // Small delay to let the browser paint the hidden state before observing
+  requestAnimationFrame(()=>{
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:0.08,rootMargin:'0px 0px -20px 0px'});
+    els.forEach(el=>obs.observe(el));
+  });
+})();
+
+/* ── Navbar scroll shadow ─────────────────────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+},{passive:true});
+
+/* ── Hamburger menu ───────────────────────────────────────────────────── */
+document.getElementById('hamburgerBtn').addEventListener('click',function(){
+  const m=document.getElementById('mobileMenu');
+  const open=m.classList.toggle('open');
+  this.setAttribute('aria-expanded',open);
+});
+document.querySelectorAll('#mobileMenu a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('hamburgerBtn').setAttribute('aria-expanded','false');
+  });
+});
+
+/* ── WorkZone / Iframe integration ──────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  const loginLinks = document.querySelectorAll('a[href*="vendordoclines"]');
+  loginLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      if (window.self !== window.top) {
+        e.preventDefault();
+        window.parent.postMessage({ action: 'reconly_navigate', target: 'login' }, '*');
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

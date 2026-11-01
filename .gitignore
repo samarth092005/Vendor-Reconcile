@@ -1,0 +1,45 @@
+node_modules/
+target/
+_out/
+gen/
+
+.cdsrc-private.json
+default-*.json
+*.sqlite*
+
+# MTA
+mta_archives/
+*_mta_build_tmp
+*.mtar
+
+# Other
+.DS_Store
+
+# @cap-js/cds-typer
+@cds-models
+
+# Excel temp files
+~$*
+.env
+VendorReconSept/
+.env
+.env.*
+!.env.example
+sqlite.db
+sqlite.db-shm
+sqlite.db-wal
+.env
+.env.*
+!.env.example
+sqlite.db
+sqlite.db-shm
+sqlite.db-wal
+.vscode/
+scratch/
+make.zip
+*.png
+*.db
+*.db-*
+*.backup.*
+update_data.js
+verify_all.js

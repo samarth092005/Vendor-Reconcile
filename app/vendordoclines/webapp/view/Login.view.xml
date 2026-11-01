@@ -1,0 +1,154 @@
+<mvc:View
+  controllerName="vendordoclines.controller.Login"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+
+  <Page showHeader="false" enableScrolling="true" class="sapUiNoContentPadding rcLoginPage">
+    <HBox class="rcLoginWrapper" width="100%" height="100%" alignItems="Stretch">
+
+      <!-- ================================================================= -->
+      <!-- LEFT PANEL: Enterprise Reconly Branding & 4 Core Pillars          -->
+      <!-- ================================================================= -->
+      <VBox class="rcLoginLeftPanel" width="50%" justifyContent="Center">
+        
+        <VBox class="rcLeftTopSection">
+          
+          <!-- Top Back to Overview Button -->
+          <HBox alignItems="Center" class="rcTopBackContainer sapUiSmallMarginBottom">
+            <Button icon="sap-icon://nav-back" text="Back to Product Overview" type="Transparent" press="onBackToLanding" class="rcTopBackBtn"/>
+          </HBox>
+
+          <!-- Logo & Brand Name -->
+          <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+            <Image src="images/reconly_logo.png" height="46px" alt="Reconly Mark" class="rcBrandLogo sapUiTinyMarginEnd"/>
+            <Title text="Reconly" level="H1" class="rcBrandTitleText"/>
+          </HBox>
+
+          <!-- Category Pill -->
+          <HBox class="rcPillBadge sapUiSmallMarginBottom">
+            <core:Icon src="sap-icon://shield" size="0.8rem" color="#38BDF8" class="sapUiTinyMarginEnd"/>
+            <Text text="FINANCIAL CONTROL &amp; AUDIT INTELLIGENCE" class="rcPillBadgeText"/>
+          </HBox>
+
+          <!-- Headline -->
+          <Title text="Enterprise Vendor Reconciliation &amp; 3-Way Audit" level="H1" wrapping="true" class="rcLeftHeading sapUiSmallMarginBottom"/>
+          <Text text="Deterministic verification bridging Vendor Statements, SAP S/4HANA General Ledgers, and Warehouse Receipts with zero financial leakage." class="rcLeftSubText sapUiMediumMarginBottom"/>
+
+          <!-- 4 Core Enterprise Pillars -->
+          <VBox class="rcPillarList">
+            
+            <!-- Pillar 1 -->
+            <HBox alignItems="Start" class="rcPillarItem sapUiSmallMarginBottom">
+              <VBox class="rcPillarIconBox sapUiSmallMarginEnd">
+                <core:Icon src="sap-icon://sys-enter-2" size="1.15rem" color="#38BDF8"/>
+              </VBox>
+              <VBox>
+                <Text text="Deterministic 3-Way Line Matching" class="rcPillarTitle"/>
+                <Text text="Continuous verification across Purchase Order, Goods Receipt, and Invoice lines." class="rcPillarDesc"/>
+              </VBox>
+            </HBox>
+
+            <!-- Pillar 2 -->
+            <HBox alignItems="Start" class="rcPillarItem sapUiSmallMarginBottom">
+              <VBox class="rcPillarIconBox sapUiSmallMarginEnd">
+                <core:Icon src="sap-icon://synchronize" size="1.15rem" color="#38BDF8"/>
+              </VBox>
+              <VBox>
+                <Text text="Bi-Directional S/4HANA &amp; S21 Sync" class="rcPillarTitle"/>
+                <Text text="Live ERP data streaming with automated clearing and MIRO posting readiness." class="rcPillarDesc"/>
+              </VBox>
+            </HBox>
+
+            <!-- Pillar 3 -->
+            <HBox alignItems="Start" class="rcPillarItem sapUiSmallMarginBottom">
+              <VBox class="rcPillarIconBox sapUiSmallMarginEnd">
+                <core:Icon src="sap-icon://alert" size="1.15rem" color="#38BDF8"/>
+              </VBox>
+              <VBox>
+                <Text text="Automated Exception Triage" class="rcPillarTitle"/>
+                <Text text="Instant variance flagging for price differences, quantity mismatches, and tax variances." class="rcPillarDesc"/>
+              </VBox>
+            </HBox>
+
+            <!-- Pillar 4 -->
+            <HBox alignItems="Start" class="rcPillarItem">
+              <VBox class="rcPillarIconBox sapUiSmallMarginEnd">
+                <core:Icon src="sap-icon://history" size="1.15rem" color="#38BDF8"/>
+              </VBox>
+              <VBox>
+                <Text text="Immutable Compliance Audit Trail" class="rcPillarTitle"/>
+                <Text text="Full SOX/SOC-2 ready event logs for dispute settlement and financial audits." class="rcPillarDesc"/>
+              </VBox>
+            </HBox>
+
+          </VBox>
+        </VBox>
+
+      </VBox>
+
+      <!-- ================================================================= -->
+      <!-- RIGHT PANEL: Clean, High-End Login Card                           -->
+      <!-- ================================================================= -->
+      <VBox class="rcLoginRightPanel" width="50%" justifyContent="Center" alignItems="Center">
+
+        <VBox class="rcLoginCard" width="100%">
+
+          <!-- Card Header (Right Logo Hidden) -->
+          <VBox class="sapUiSmallMarginBottom">
+            <Title text="Sign In to Reconly" level="H2" class="rcCardHeading"/>
+            <Text text="Select a persona to sign in instantly or enter your credentials" class="rcCardSub"/>
+          </VBox>
+
+          <!-- Quick Admin Persona Selector -->
+          <VBox class="rcPersonaContainer sapUiSmallMarginBottom">
+            <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+              <Label text="ONE-CLICK PERSONA LOGIN" class="rcPersonaHeaderLabel"/>
+              <ObjectStatus id="selectedRoleBadge" text="Admin" state="Success" visible="false" class="rcActiveRoleTag"/>
+            </HBox>
+
+            <!-- Single Persona: Admin -->
+            <HBox width="100%" class="rcPersonaRow" justifyContent="Center">
+              <Button id="btnPersonaAdmin" text="Admin — AP Finance Manager" icon="sap-icon://manager" class="rcPersonaTile" press="onPersonaClick"
+                      app:key="admin" app:role="AP Manager" width="100%"/>
+            </HBox>
+
+            <!-- Fallback Hidden Select -->
+            <Select id="quickLoginSelect" width="100%" visible="false" change="onQuickLoginSelect">
+              <core:Item key="" text="--- Select Persona ---" />
+              <core:Item key="admin" text="Admin" />
+            </Select>
+          </VBox>
+
+          <!-- Clean Divider -->
+          <HBox class="rcCardDivider sapUiSmallMarginBottom" alignItems="Center">
+            <HBox class="rcLine"/>
+            <Text text="OR SIGN IN MANUALLY" class="rcDividerLabel"/>
+            <HBox class="rcLine"/>
+          </HBox>
+
+          <!-- Username Input -->
+          <VBox class="rcInputGroup sapUiSmallMarginBottom">
+            <Label text="Username or Vendor Code" class="rcInputLabel" required="true"/>
+            <Input id="loginUsername" placeholder="Enter username (e.g. admin or V-1001)" width="100%" class="rcSleekInput"/>
+          </VBox>
+
+          <!-- Password Input -->
+          <VBox class="rcInputGroup sapUiMediumMarginBottom">
+            <Label text="Password" class="rcInputLabel" required="true"/>
+            <Input id="loginPassword" type="Password" placeholder="Enter your password" width="100%" class="rcSleekInput"/>
+          </VBox>
+
+          <!-- Action Buttons -->
+          <Button id="btnLogin" text="Sign In" icon="sap-icon://log" type="Emphasized" press="onLogin" width="100%" class="rcSubmitBtn sapUiSmallMarginBottom"/>
+          
+          <Button text="Vendor Partner Registration" icon="sap-icon://add-contact" type="Default" press="onGoRegister" width="100%" class="rcRegisterBtn sapUiSmallMarginBottom"/>
+
+        </VBox>
+
+      </VBox>
+
+    </HBox>
+  </Page>
+</mvc:View>

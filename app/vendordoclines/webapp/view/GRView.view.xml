@@ -1,0 +1,59 @@
+<mvc:View controllerName="vendordoclines.controller.GRView" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core">
+  <VBox class="sapUiLargeMargin">
+    
+    <Title text="Pending Goods Receipts (Open POs)" level="H2" class="sapUiSmallMarginBottom"/>
+    <Table class="sapMListTbl sapUiMediumMarginBottom" items="{ path: '/PurchaseOrders', parameters: { $$operationMode: 'Server', $select: 'ID,purchaseOrder,poItem,supplier,material,poQty,receivedQty' } }">
+      <columns>
+        <Column><Text text="PO Number"/></Column>
+        <Column><Text text="Item"/></Column>
+        <Column><Text text="Supplier"/></Column>
+        <Column><Text text="Material"/></Column>
+        <Column><Text text="Pending Qty"/></Column>
+        
+      </columns>
+      <items>
+        <ColumnListItem>
+          <cells>
+            <Text text="{purchaseOrder}" class="vrCode"/>
+            <Text text="{poItem}"/>
+            <Text text="{supplier}"/>
+            <Text text="{material}"/>
+            <Text text="{ parts: [{path:'poQty', targetType:'any'}, {path:'receivedQty', targetType:'any'}], formatter: '.formatPendingQty' }"/>
+            
+          </cells>
+        </ColumnListItem>
+      </items>
+    </Table>
+
+    <Title text="Goods Receipts History" level="H2" class="sapUiSmallMarginBottom"/>
+    <Table class="sapMListTbl" items="{ path: '/GrirSnapshot', parameters: { $$operationMode: 'Server' }, sorter: { path: 'createdAt', descending: true } }">
+      <columns>
+        <Column><Text text="GR Number"/></Column>
+        <Column><Text text="PO Number"/></Column>
+        <Column><Text text="PO Item"/></Column>
+        <Column><Text text="Supplier"/></Column>
+        <Column><Text text="Received Qty"/></Column>
+        <Column><Text text="GR/IR Amount"/></Column>
+        <Column><Text text="Plant"/></Column>
+        <Column><Text text="Quality"/></Column>
+        <Column><Text text="Inspection Evidence"/></Column>
+      </columns>
+      <items>
+        <ColumnListItem>
+          <cells>
+            <Text text="{grNumber}" class="vrCode"/>
+            <Text text="{purchaseOrder}"/>
+            <Text text="{purchaseOrderItem}"/>
+            <Text text="{supplier}"/>
+            <Text text="{goodsReceiptQty}"/>
+            <Text text="{grirAmount}"/>
+            <Text text="{plant}"/>
+            <ObjectStatus text="{qualityStatus}" state="{ path: 'qualityStatus', targetType: 'any', formatter: '.formatQualityState' }" class="vrBold"/>
+            <Button icon="sap-icon://attachment-photo" press=".onViewImage" enabled="{ path: 'productImage', targetType: 'any', formatter: '.formatHasImage' }"/>
+          </cells>
+        </ColumnListItem>
+      </items>
+    </Table>
+
+  </VBox>
+</mvc:View>

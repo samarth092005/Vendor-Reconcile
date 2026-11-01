@@ -1,0 +1,12 @@
+specVersion: "3.0"
+metadata:
+  name: vendordoclines
+type: application
+builder:
+  customTasks:
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
+      configuration:
+        archiveName: vendordoclines
+        additionalFiles:
+          - xs-app.json

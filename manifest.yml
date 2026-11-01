@@ -1,0 +1,15 @@
+---
+applications:
+  - name: vendor-reconcile
+    memory: 512M
+    disk_quota: 1024M
+    buildpacks:
+      - nodejs_buildpack
+    path: .
+    routes:
+      - route: vendor-reconcile-resplendent-wolverine-ri.cfapps.eu30.hana.ondemand.com
+    env:
+      NODE_ENV: development
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+    services:
+      - vendor_reconcile-auth

@@ -1,0 +1,471 @@
+<mvc:View
+  controllerName="vendordoclines.controller.ObjectPage"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:l="sap.ui.layout"
+  xmlns:uxap="sap.uxap"
+  height="100%">
+
+  <uxap:ObjectPageLayout
+    id="opLayout"
+    upperCaseAnchorBar="false"
+    showTitleInHeaderContent="false"
+    showAnchorBar="true"
+    isChildPage="true"
+    class="vrOpHeader">
+
+    <!-- ============ HEADER TITLE & TOP ACTIONS ============ -->
+    <uxap:headerTitle>
+      <uxap:ObjectPageHeader
+        id="opHeader"
+        objectTitle="Invoice #{recon>invNumberFile}"
+        objectSubtitle="{recon>vendorDisplayName} • PO #{recon>poNumber}"
+        objectImageURI="sap-icon://document-text"
+        objectImageShape="Square"
+        isObjectIconAlwaysVisible="true"
+        showMarkers="false">
+        
+        <uxap:navigationBar>
+          <Bar>
+            <contentLeft>
+              <Button
+                id="btnNavBack"
+                icon="sap-icon://nav-back"
+                text="{ui>/backButtonText}"
+                press=".onBack"
+                type="Transparent"
+                tooltip="Back to previous queue"/>
+            </contentLeft>
+          </Bar>
+        </uxap:navigationBar>
+
+        <uxap:actions>
+          <Button
+            text="Approve Invoice"
+            icon="sap-icon://accept"
+            type="Emphasized"
+            press=".onApproveMiro"
+            tooltip="Approve invoice and post receipt to SAP S/4HANA"
+            visible="{ui>/canPostMiro}"/>
+          <Button
+            text="Raise Dispute"
+            icon="sap-icon://alert"
+            type="Transparent"
+            press=".onDispute"
+            visible="{ui>/hasVariance}"
+            tooltip="Flag discrepancy to vendor"/>
+        </uxap:actions>
+
+      </uxap:ObjectPageHeader>
+    </uxap:headerTitle>
+
+    <!-- ============ STRUCTURED HEADER METRIC CARDS (UNIFIED COHESIVE PALETTE) ============ -->
+    <uxap:headerContent>
+      <l:Grid defaultSpan="XL3 L3 M6 S12" hSpacing="1" vSpacing="1" class="sapUiTinyMarginTop sapUiTinyMarginBottom vrHeaderContentGrid" containerQuery="true">
+        
+        <!-- Card 1: 3-Way Reconciliation Verdict -->
+        <VBox class="vrHeaderCard vrBorderBlue">
+          <Label text="Reconciliation Verdict" design="Bold" class="sapUiTinyMarginBottom"/>
+          <ObjectStatus
+            text="{ path: 'recon>status_code', formatter: '.formatter.statusLabel' }"
+            state="{ path: 'recon>status_code', formatter: '.formatter.statusState' }"
+            icon="{ path: 'recon>status_code', formatter: '.formatter.statusIcon' }"
+            inverted="true"
+            class="sapUiTinyMarginBottom"/>
+          <Label text="Verification Method" design="Bold" class="sapUiTinyMarginTop"/>
+          <Text text="Automated 3-Way Audit" class="vrTextMuted"/>
+        </VBox>
+
+        <!-- Card 2: Financial Comparison -->
+        <VBox class="vrHeaderCard vrBorderBlue">
+          <Label text="Invoiced Amount (Vendor)" design="Bold" class="sapUiTinyMarginBottom"/>
+          <ObjectNumber
+            number="{ path: 'recon>fileGross', formatter: '.formatter.currencyFmt' }"
+            emphasized="true"
+            class="sapUiTinyMarginBottom"/>
+          <Label text="Expected PO Amount (ERP)" design="Bold" class="sapUiTinyMarginTop"/>
+          <ObjectNumber
+            number="{ path: 'recon>s4Gross', formatter: '.formatter.currencyFmt' }"
+            emphasized="true"/>
+        </VBox>
+
+        <!-- Card 3: Net Variance (Self-Explanatory Status) -->
+        <VBox class="vrHeaderCard vrBorderGreen">
+          <Label text="Variance / Difference" design="Bold" class="sapUiTinyMarginBottom"/>
+          <ObjectNumber
+            number="{ path: 'recon>varianceAmount', formatter: '.formatter.currencyFmt' }"
+            state="{ path: 'recon>varianceAmount', formatter: '.formatter.varianceState' }"
+            emphasized="true"
+            class="sapUiTinyMarginBottom"/>
+          <Label text="Discrepancy Status" design="Bold" class="sapUiTinyMarginTop"/>
+          <ObjectStatus
+            text="{path: 'recon>varianceAmount', formatter: '.formatDeltaText'}"
+            state="{path: 'recon>varianceAmount', formatter: '.formatDeltaState'}"
+            icon="{path: 'recon>varianceAmount', formatter: '.formatDeltaIcon'}"
+            class="vrBold"/>
+        </VBox>
+
+        <!-- Card 4: Document Dates & Compliance -->
+        <VBox class="vrHeaderCard vrBorderBlue">
+          <Label text="Document Reference &amp; Dates" design="Bold" class="sapUiTinyMarginBottom"/>
+          <Text text="Inv: { path: 'recon>invDate', formatter: '.formatter.fmtDate' } • Post: { path: 'recon>postDate', formatter: '.formatter.fmtDate' }" class="sapUiTinyMarginBottom"/>
+          <Label text="Tax &amp; Regulatory Status" design="Bold" class="sapUiTinyMarginTop"/>
+          <HBox alignItems="Center" wrap="NoWrap">
+            <ObjectStatus text="GSTR-2B Verified" state="Success" class="sapUiTinyMarginEnd vrBold"/>
+            <ObjectStatus text="GST Compliant" state="Information" class="vrBold"/>
+          </HBox>
+        </VBox>
+
+      </l:Grid>
+    </uxap:headerContent>
+
+    <uxap:sections>
+
+      <!-- ============ SECTION 1: 3-WAY VERIFICATION JOURNEY (HIGH-IMPACT STEPPER) ============ -->
+      <uxap:ObjectPageSection title="3-Way Match Verification Flow" id="secWorkflow">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <uxap:blocks>
+              <VBox class="vrStepperContainer sapUiSmallMarginBottom">
+                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                  <HBox alignItems="Center">
+                    <core:Icon src="sap-icon://process" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                    <Title text="3-Way Verification Pipeline" level="H4" class="vrStepperTitle"/>
+                  </HBox>
+                  <ObjectStatus text="3-Way Audit Trail" state="Success" class="vrBold"/>
+                </HBox>
+                
+                <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrStepperFlowRow">
+                  
+                  <!-- Step 1: PO -->
+                  <VBox class="vrStepCard vrStepCardActive">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center">
+                      <Text text="STAGE 1" class="vrStepNumber"/>
+                      <core:Icon src="sap-icon://sales-order" size="1.25rem" color="#0A6ED1"/>
+                    </HBox>
+                    <Text text="Purchase Order" class="vrStepName"/>
+                    <Text text="PO #{recon>poNumber}" class="vrCode sapMTextBold"/>
+                    <Text text="Ordered: {path: 'recon>s4Gross', formatter: '.formatter.currencyFmt'}" class="vrStepDetail sapUiTinyMarginTop"/>
+                    <ObjectStatus text="Approved in SAP" state="Success" class="sapUiTinyMarginTop vrStepBadge"/>
+                  </VBox>
+
+                  <!-- Connector 1 -->
+                  <VBox alignItems="Center" class="vrStepArrow">
+                    <core:Icon src="sap-icon://navigation-right-arrow" size="1.35rem" color="#0A6ED1"/>
+                    <Text text="GRN Verified" class="vrStepConnectorText"/>
+                  </VBox>
+
+                  <!-- Step 2: GRN -->
+                  <VBox class="vrStepCard vrStepCardActive">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center">
+                      <Text text="STAGE 2" class="vrStepNumber"/>
+                      <core:Icon src="sap-icon://shipping-status" size="1.25rem" color="#107E3E"/>
+                    </HBox>
+                    <Text text="Goods Receipt (GRN)" class="vrStepName"/>
+                    <Text text="GRN #{recon>grNumber}" class="vrCode sapMTextBold"/>
+                    <Text text="Received: {recon>grTotalQty} / {recon>poTotalQty} {recon>primaryUom}" class="vrStepDetail sapUiTinyMarginTop"/>
+                    <ObjectStatus text="{recon>grStatusBadge/text}" state="{recon>grStatusBadge/state}" class="sapUiTinyMarginTop vrStepBadge"/>
+                  </VBox>
+
+                  <!-- Connector 2 -->
+                  <VBox alignItems="Center" class="vrStepArrow">
+                    <core:Icon src="sap-icon://navigation-right-arrow" size="1.35rem" color="#0A6ED1"/>
+                    <Text text="Rate Matched" class="vrStepConnectorText"/>
+                  </VBox>
+
+                  <!-- Step 3: Invoice -->
+                  <VBox class="vrStepCard vrStepCardActive">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center">
+                      <Text text="STAGE 3" class="vrStepNumber"/>
+                      <core:Icon src="sap-icon://document-text" size="1.25rem" color="#0854A0"/>
+                    </HBox>
+                    <Text text="Vendor Invoice" class="vrStepName"/>
+                    <Text text="Inv #{recon>invNumberFile}" class="vrCode sapMTextBold"/>
+                    <Text text="Billed: {path: 'recon>fileGross', formatter: '.formatter.currencyFmt'}" class="vrStepDetail sapUiTinyMarginTop"/>
+                    <ObjectStatus text="{ path: 'recon>status_code', formatter: '.formatter.statusLabel' }" state="{ path: 'recon>status_code', formatter: '.formatter.statusState' }" class="sapUiTinyMarginTop vrStepBadge"/>
+                  </VBox>
+
+                </HBox>
+              </VBox>
+            </uxap:blocks>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+      <!-- ============ SECTION 2: 3-WAY SIDE-BY-SIDE COMPARISON (PO VS. GRN VS. INVOICE) ============ -->
+      <uxap:ObjectPageSection title="3-Way Side-by-Side Comparison (PO vs. GRN vs. Invoice)" id="secHeaderComp">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <uxap:blocks>
+              <VBox class="sapUiTinyMarginBottom">
+
+                <!-- 3-Way Reconciliation Verdict & Explanatory Banner -->
+                <VBox class="{recon>compAlert/bannerClass} sapUiSmallMarginBottom">
+                  <HBox alignItems="Center">
+                    <core:Icon src="{recon>compAlert/icon}" size="1.5rem" color="{recon>compAlert/iconColor}" class="sapUiSmallMarginEnd"/>
+                    <VBox>
+                      <Title text="{recon>compAlert/title}" level="H4" class="vrCompareAlertTitle"/>
+                      <Text text="{recon>compAlert/message}" class="vrCompareAlertText"/>
+                    </VBox>
+                  </HBox>
+                </VBox>
+
+                <!-- 3 Side-by-Side Cards (PO vs. GRN vs. Invoice) -->
+                <l:Grid defaultSpan="XL4 L4 M12 S12" hSpacing="1" vSpacing="1" containerQuery="true" class="vrSideBySideGrid">
+
+                  <!-- CARD 1: 1. SAP PURCHASE ORDER -->
+                  <VBox class="vrCompareCard vrCompareCardPo">
+                    <Toolbar class="vrCompareHeaderToolbar">
+                      <core:Icon src="sap-icon://sales-order" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                      <Title text="1. SAP Purchase Order (PO)" level="H5" class="vrCompareHeaderTitle"/>
+                      <ToolbarSpacer/>
+                      <ObjectStatus text="Approved in SAP" state="Success" class="vrBold"/>
+                    </Toolbar>
+                    <VBox class="vrCompareBody">
+                      <l:Grid defaultSpan="XL6 L6 M6 S6" hSpacing="1" vSpacing="1">
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="SAP PO Reference" class="vrCompareLabel"/>
+                          <Text text="PO #{recon>poNumber}" class="vrCompareValue vrCode sapMTextBold"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Company / Plant" class="vrCompareLabel"/>
+                          <Text text="{recon>companyCode} • Plant 1000" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Ordered Quantity" class="vrCompareLabel"/>
+                          <Text text="{recon>poTotalQty} {recon>primaryUom}" class="vrCompareValue sapMTextBold"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="PO Creation Date" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>poDate', formatter: '.formatter.fmtDate' }" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="PO Unit Contract Rate" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>primaryPoRate', formatter: '.formatter.currencyFmt' }" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="PO Tax Code / Rate" class="vrCompareLabel"/>
+                          <Text text="{recon>primaryPoTaxCode}" class="vrCompareValue sapMTextBold" color="#0A6ED1"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Total Approved PO Gross" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>poGross', formatter: '.formatter.currencyFmt' }" class="vrCompareValue sapMTextBold"/>
+                        </VBox>
+                      </l:Grid>
+                    </VBox>
+                  </VBox>
+
+                  <!-- CARD 2: 2. GOODS RECEIPT (MIGO GRN) -->
+                  <VBox class="vrCompareCard vrCompareCardGrn">
+                    <Toolbar class="vrCompareHeaderToolbar">
+                      <core:Icon src="sap-icon://shipping-status" color="#107E3E" class="sapUiTinyMarginEnd"/>
+                      <Title text="2. Goods Receipt (MIGO GRN)" level="H5" class="vrCompareHeaderTitle"/>
+                      <ToolbarSpacer/>
+                      <ObjectStatus text="{recon>grStatusBadge/text}" state="{recon>grStatusBadge/state}" class="vrBold"/>
+                    </Toolbar>
+                    <VBox class="vrCompareBody">
+                      <l:Grid defaultSpan="XL6 L6 M6 S6" hSpacing="1" vSpacing="1">
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Warehouse GRN #" class="vrCompareLabel"/>
+                          <Text text="{recon>grNumber}" class="vrCompareValue vrCode sapMTextBold"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Storage Location" class="vrCompareLabel"/>
+                          <Text text="Loc: {recon>grStorageLoc}" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Received Quantity" class="vrCompareLabel"/>
+                          <HBox alignItems="Center">
+                            <Text text="{recon>grTotalQty} {recon>primaryUom}" class="vrCompareValue sapMTextBold sapUiTinyMarginEnd"/>
+                            <core:Icon src="{= ${recon>grTotalQty} &lt; ${recon>fileTotalQty} ? 'sap-icon://alert' : 'sap-icon://sys-enter-2' }" color="{= ${recon>grTotalQty} &lt; ${recon>fileTotalQty} ? '#B00020' : '#107E3E' }" size="0.9rem"/>
+                          </HBox>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Inspection Status" class="vrCompareLabel"/>
+                          <Text text="{recon>grQualityStatus}" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Warehouse Rec. Rate" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>primaryPoRate', formatter: '.formatter.currencyFmt' }" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Received Stock Value" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>grGross', formatter: '.formatter.currencyFmt' }" class="vrCompareValue sapMTextBold"/>
+                        </VBox>
+                      </l:Grid>
+                    </VBox>
+                  </VBox>
+
+                  <!-- CARD 3: 3. VENDOR INVOICE (CLAIM) -->
+                  <VBox class="vrCompareCard vrCompareCardVendor">
+                    <Toolbar class="vrCompareHeaderToolbar">
+                      <core:Icon src="sap-icon://document-text" color="#0854A0" class="sapUiTinyMarginEnd"/>
+                      <Title text="3. Vendor Invoice (Claim)" level="H5" class="vrCompareHeaderTitle"/>
+                      <ToolbarSpacer/>
+                      <ObjectStatus text="{recon>invStatusBadge/text}" state="{recon>invStatusBadge/state}" class="vrBold"/>
+                    </Toolbar>
+                    <VBox class="vrCompareBody">
+                      <l:Grid defaultSpan="XL6 L6 M6 S6" hSpacing="1" vSpacing="1">
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Supplier Invoice #" class="vrCompareLabel"/>
+                          <Text text="Inv #{recon>invNumberFile}" class="vrCompareValue vrCode sapMTextBold"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Vendor Code / Name" class="vrCompareLabel"/>
+                          <Text text="{recon>vendorName}" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Invoiced Quantity" class="vrCompareLabel"/>
+                          <Text text="{recon>fileTotalQty} {recon>primaryUom}" class="vrCompareValue sapMTextBold"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Invoice Billing Date" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>invDate', formatter: '.formatter.fmtDate' }" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="GST / Tax Amount" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>taxAmount', formatter: '.formatter.currencyFmt' }" class="vrCompareValue"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Gross Billed Amount" class="vrCompareLabel"/>
+                          <Text text="{ path: 'recon>fileGross', formatter: '.formatter.currencyFmt' }" class="vrCompareValue sapMTextBold"/>
+                        </VBox>
+                        <VBox class="vrCompareFieldBox">
+                          <Text text="Billed Tax Code / Rate" class="vrCompareLabel"/>
+                          <HBox alignItems="Center">
+                            <Text text="{recon>primaryInvTaxCode}" class="vrCompareValue sapMTextBold sapUiTinyMarginEnd" color="{= ${recon>hasTaxMismatch} ? '#B00020' : '#0854A0' }"/>
+                            <core:Icon src="{= ${recon>hasTaxMismatch} ? 'sap-icon://alert' : 'sap-icon://sys-enter-2' }" color="{= ${recon>hasTaxMismatch} ? '#B00020' : '#107E3E' }" size="0.9rem"/>
+                          </HBox>
+                        </VBox>
+                      </l:Grid>
+                    </VBox>
+                  </VBox>
+
+                </l:Grid>
+              </VBox>
+            </uxap:blocks>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+      <!-- ============ SECTION 3: LINE ITEMS COMPARISON ============ -->
+      <uxap:ObjectPageSection title="Line Items Comparison" id="secLines">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <uxap:blocks>
+              <VBox class="vrTableCard">
+                <Table id="linesTable" inset="false" fixedLayout="false" class="sapMListTbl vrModernTable"
+                       items="{ path: 'recon>lineComparisons', templateShareable: false }">
+                  <columns>
+                    <Column width="3.5rem" hAlign="Center"><Text text="Line" class="vrColHeader"/></Column>
+                    <Column width="11rem" hAlign="Begin"><Text text="Material &amp; Description" class="vrColHeader"/></Column>
+                    <Column width="6rem" hAlign="End"><Text text="PO Qty" class="vrColHeader"/></Column>
+                    <Column width="6rem" hAlign="End"><Text text="GRN Qty" class="vrColHeader"/></Column>
+                    <Column width="6rem" hAlign="End"><Text text="Inv Qty" class="vrColHeader"/></Column>
+                    <Column width="7rem" hAlign="End"><Text text="PO Price" class="vrColHeader"/></Column>
+                    <Column width="7rem" hAlign="End"><Text text="Inv Price" class="vrColHeader"/></Column>
+                    <Column width="6.5rem" hAlign="Center"><Text text="PO Tax" class="vrColHeader"/></Column>
+                    <Column width="6.5rem" hAlign="Center"><Text text="Inv Tax" class="vrColHeader"/></Column>
+                    <Column width="8rem" hAlign="End"><Text text="Expected PO" class="vrColHeader"/></Column>
+                    <Column width="8rem" hAlign="End"><Text text="Inv Amount" class="vrColHeader"/></Column>
+                    <Column width="7.5rem" hAlign="End"><Text text="Variance" class="vrColHeader"/></Column>
+                    <Column width="8.5rem" hAlign="Center"><Text text="3-Way Match" class="vrColHeader"/></Column>
+                  </columns>
+                  <items>
+                    <ColumnListItem highlight="{ path: 'recon>criticality', formatter: '.formatter.criticalityToState' }" class="vrTableRow">
+                      <cells>
+                        <Text text="{recon>lineNumber}" class="vrCode"/>
+                        <VBox>
+                          <Text text="{recon>materialCode}" class="vrCode sapMTextBold"/>
+                          <Text text="{recon>materialDescription}" class="vrVendorSubtext"/>
+                        </VBox>
+                        <Text text="{recon>poQuantity} {recon>uom}"/>
+                        <Text text="{recon>grQuantity} {recon>uom}" class="{= ${recon>grQuantity} &lt; ${recon>fileQuantity} ? 'vrTextError vrBold' : '' }"/>
+                        <Text text="{recon>fileQuantity} {recon>uom}" class="sapMTextBold"/>
+                        <Text text="{ path: 'recon>s4Price', formatter: '.formatter.currencyFmt' }"/>
+                        <Text text="{ path: 'recon>filePrice', formatter: '.formatter.currencyFmt' }"/>
+                        <Text text="{recon>poTaxCode}" class="vrCode"/>
+                        <Text text="{recon>invTaxCode}" class="vrCode sapMTextBold" color="{= ${recon>poTaxCode} !== ${recon>invTaxCode} ? '#B00020' : '' }"/>
+                        <Text text="{ path: 'recon>s4Amount', formatter: '.formatter.currencyFmt' }" class="sapMTextBold"/>
+                        <Text text="{ path: 'recon>fileAmount', formatter: '.formatter.currencyFmt' }" class="sapMTextBold"/>
+                        <ObjectNumber
+                          number="{ path: 'recon>varianceAmount', formatter: '.formatter.currencyFmt' }"
+                          state="{ path: 'recon>criticality', formatter: '.formatter.criticalityToState' }"
+                          emphasized="true"/>
+                        <HBox justifyContent="Center">
+                          <ObjectStatus
+                            text="{recon>lineStatus/name}"
+                            state="{ path: 'recon>criticality', formatter: '.formatter.criticalityToState' }"
+                            inverted="true"
+                            class="vrBold"/>
+                        </HBox>
+                      </cells>
+                    </ColumnListItem>
+                  </items>
+                </Table>
+              </VBox>
+            </uxap:blocks>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+      <!-- ============ SECTION 4: VARIANCE BREAKDOWN & AUDIT ============ -->
+      <uxap:ObjectPageSection title="Variance Breakdown" id="secVar">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <uxap:blocks>
+              <VBox class="vrTableCard">
+                <Table id="varianceTable" inset="false" class="sapMListTbl vrModernTable"
+                       items="{ path: 'recon>varianceDetails', templateShareable: false }">
+                  <columns>
+                    <Column width="18rem"><Text text="Variance Type" class="vrColHeader"/></Column>
+                    <Column width="8rem"><Text text="Severity" class="vrColHeader"/></Column>
+                    <Column hAlign="End" width="6rem"><Text text="Count" class="vrColHeader"/></Column>
+                    <Column><Text text="Detailed Explanation &amp; Resolution Recommendation" class="vrColHeader"/></Column>
+                  </columns>
+                  <items>
+                    <ColumnListItem class="vrTableRow">
+                      <cells>
+                        <Text text="{recon>type/name}" class="sapMTextBold"/>
+                        <ObjectStatus
+                          text="{recon>severity}"
+                          state="{= ${recon>severity} === 'High' ? 'Error' : (${recon>severity} === 'Medium' ? 'Warning' : 'Success') }"
+                          inverted="true"
+                          class="vrBold"/>
+                        <Text text="{recon>count}"/>
+                        <Text text="{recon>note}"/>
+                      </cells>
+                    </ColumnListItem>
+                  </items>
+                </Table>
+              </VBox>
+            </uxap:blocks>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+      <!-- ============ SECTION 5: AUDIT TRAIL ============ -->
+      <uxap:ObjectPageSection title="Audit Trail &amp; History" id="secAudit">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <uxap:blocks>
+              <VBox class="vrTableCard sapUiSmallMarginBottom">
+                <List id="auditList" items="{ path: 'recon>audit', templateShareable: false }" class="sapUiSmallMargin">
+                  <FeedListItem
+                    sender="{recon>actor}"
+                    icon="sap-icon://person-placeholder"
+                    timestamp="{ path: 'recon>actedAt', formatter: '.formatter.fmtDateTime' }"
+                    info="{recon>action}"
+                    text="{recon>note}"/>
+                </List>
+              </VBox>
+            </uxap:blocks>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+    </uxap:sections>
+  </uxap:ObjectPageLayout>
+
+</mvc:View>

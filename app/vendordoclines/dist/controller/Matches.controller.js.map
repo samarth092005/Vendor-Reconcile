@@ -1,0 +1,1 @@
+{"version":3,"file":"Matches.controller.js","names":["sap","ui","define","Controller","extend","onInit"],"sources":["Matches-dbg.controller.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CAAC,8BAA+B,SAAUC,GACtD,OAAOA,EAAWC,OAAO,oCAAqC,CAC5DC,OAAQ,WAAa,GAEzB","ignoreList":[]}

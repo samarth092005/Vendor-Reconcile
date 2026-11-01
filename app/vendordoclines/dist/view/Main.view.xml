@@ -1,0 +1,573 @@
+<mvc:View controllerName="vendordoclines.controller.Main" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:tnt="sap.tnt" xmlns:core="sap.ui.core" xmlns:uf="sap.ui.unified" xmlns:l="sap.ui.layout">
+  <tnt:ToolPage id="toolPage">
+    <tnt:header>
+      <tnt:ToolHeader class="rcToolHeader">
+        <Button icon="sap-icon://menu2" type="Transparent" press="onSideNavButtonPress" />
+        <Image src="images/reconly_logo.png" height="38px" class="sapUiTinyMarginEnd vrLogo" />
+        <Title text="Reconly | Automated Invoice Reconciliation" class="rcHeaderBrandTitle"/>
+        <ToolbarSpacer />
+
+        <!-- Current User / Persona Tag -->
+        <HBox alignItems="Center" class="rcUserPersonaBadge sapUiSmallMarginEnd">
+          <core:Icon src="sap-icon://customer-and-supplier" size="0.85rem" color="#2563EB" class="sapUiTinyMarginEnd"/>
+          <Text id="headerUserBadge" text="AP Finance Lead • Admin" class="rcUserPersonaText"/>
+        </HBox>
+
+        <Button icon="sap-icon://log" text="Logout" type="Transparent" press="onLogout" />
+      </tnt:ToolHeader>
+    </tnt:header>
+    
+    <tnt:sideContent>
+      <tnt:SideNavigation id="sideNavigation" selectedKey="intake" itemSelect="onItemSelect">
+        <tnt:NavigationList items="{ui>/navItems}">
+          <tnt:NavigationListItem text="{ui>text}" icon="{ui>icon}" key="{ui>key}" />
+        </tnt:NavigationList>
+      </tnt:SideNavigation>
+    </tnt:sideContent>
+    
+    <tnt:mainContents>
+      <NavContainer id="pageContainer">
+        
+        <!-- Page: PR -->
+        <Page id="pr" showHeader="false">
+          <mvc:XMLView id="prView" viewName="vendordoclines.view.PRView"/>
+        </Page>
+
+        <!-- Page: PO -->
+        <Page id="po" showHeader="false">
+          <mvc:XMLView id="poView" viewName="vendordoclines.view.POView"/>
+        </Page>
+
+        <!-- Page: GR -->
+        <Page id="gr" showHeader="false">
+          <mvc:XMLView id="grView" viewName="vendordoclines.view.GRView"/>
+        </Page>
+        <mvc:XMLView id="gr_workbench" viewName="vendordoclines.view.GRWorkbench"/>
+        <Page id="gr_objectPage" showHeader="false">
+          <mvc:XMLView id="grObjectPageView" viewName="vendordoclines.view.GRObjectPage"/>
+        </Page>
+
+        <!-- Page: Vendor -->
+        <Page id="vendor" showHeader="false">
+          <mvc:XMLView id="vendorView" viewName="vendordoclines.view.VendorView"/>
+        </Page>
+        
+        <!-- Page: Vendor OCR -->
+        <Page id="vendorScanning" showHeader="false">
+          <core:Fragment fragmentName="vendordoclines.view.OcrScanner" type="XML" />
+        </Page>
+
+        <!-- Page: Intake & Lines -->
+        <Page id="intake" showHeader="false">
+          <VBox class="sapUiMediumMargin">
+            
+            <!-- 1. HERO HEADER WITH LIVE STATUS -->
+            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrIntakeHero">
+              <VBox>
+                <Title text="Data Ingestion &amp; Intake Center" level="H2" class="vrHeroTitle"/>
+                <Text text="Multi-channel invoice repository: SAP S/4HANA live delta sync, intelligent OCR scanner, and vendor statement batch uploads" class="vrHeroSubtitle"/>
+              </VBox>
+              <HBox alignItems="Center" class="sapUiTinyMarginTopBottom">
+                <Button text="Quick Refresh" icon="sap-icon://refresh" type="Transparent" press="onRefreshIntake"/>
+              </HBox>
+            </HBox>
+
+            <!-- 2. TOP METRIC KPI RIBBON (3 Core KPIs) -->
+            <l:Grid defaultSpan="XL4 L4 M12 S12" hSpacing="1" vSpacing="1" class="vrKpiRibbon">
+              
+              <!-- Metric 1: Invoices Ingested -->
+              <VBox class="vrKpiTile vrBorderBlue">
+                <HBox justifyContent="SpaceBetween" alignItems="Center">
+                  <Text text="TOTAL INGESTED INVOICES" class="vrKpiTileLabel"/>
+                  <core:Icon src="sap-icon://documents" size="1.2rem" color="#0A6ED1"/>
+                </HBox>
+                <Text text="{intakeStats>/totalInvoices}" class="vrKpiTileNumber"/>
+                <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                  <ObjectStatus text="Staged for Reconciliation" state="Success" class="vrKpiStatus"/>
+                </HBox>
+              </VBox>
+
+              <!-- Metric 2: Gross Reconciliation Value -->
+              <VBox class="vrKpiTile vrBorderGreen">
+                <HBox justifyContent="SpaceBetween" alignItems="Center">
+                  <Text text="TOTAL INVOICE VALUE" class="vrKpiTileLabel"/>
+                  <core:Icon src="sap-icon://lead" size="1.2rem" color="#059669"/>
+                </HBox>
+                <Text text="{intakeStats>/totalAmountFormatted}" class="vrKpiTileNumber"/>
+                <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                  <ObjectStatus text="Gross Line Value" state="Information" class="vrKpiStatus"/>
+                </HBox>
+              </VBox>
+
+              <!-- Metric 3: Active Vendors -->
+              <VBox class="vrKpiTile vrBorderPurple">
+                <HBox justifyContent="SpaceBetween" alignItems="Center">
+                  <Text text="ACTIVE VENDORS DETECTED" class="vrKpiTileLabel"/>
+                  <core:Icon src="sap-icon://supplier" size="1.2rem" color="#8B5CF6"/>
+                </HBox>
+                <Text text="{intakeStats>/activeVendors}" class="vrKpiTileNumber"/>
+                <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                  <ObjectStatus text="Master Mapped" state="Success" class="vrKpiStatus"/>
+                </HBox>
+              </VBox>
+
+            </l:Grid>
+
+            <!-- 3. THREE-CHANNEL INTAKE HUBCARDS (UNIFORM DIMENSIONS) -->
+            <l:Grid defaultSpan="XL4 L4 M12 S12" hSpacing="1" vSpacing="1" class="sapUiSmallMarginBottom vrHubCardsGrid">
+              
+              <!-- CARD 1: S21 ERP SYNC -->
+              <VBox class="vrIntakeCard vrCardErp">
+                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                  <HBox alignItems="Center">
+                    <HBox class="vrCardIconBox vrBgBlue">
+                      <core:Icon src="sap-icon://synchronize" size="1.25rem" color="#0A6ED1"/>
+                    </HBox>
+                    <VBox class="sapUiSmallMarginBegin">
+                      <Title text="SAP HANA ERP Live Sync" level="H4" class="vrCardTitle"/>
+                      <Text text="Live Delta Sync: Ingests active unreconciled ERP invoices from SAP S/4HANA (15-min delta polling)" class="vrCardSubtitle"/>
+                    </VBox>
+                  </HBox>
+                  <ObjectStatus text="CONNECTED" state="Success" class="vrPulseBadge"/>
+                </HBox>
+
+                <VBox class="vrCardBodyContent sapUiTinyMarginBottom">
+                  <VBox class="sapUiTinyMarginBottom vrUploaderContainer">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                      <Label text="Gateway Interface:" design="Bold" class="vrUploadLabel"/>
+                      <ObjectStatus text="RFC / BAPI Active" state="Success" class="vrMiniStatus"/>
+                    </HBox>
+                    <HBox alignItems="Center">
+                      <core:Icon src="sap-icon://sys-enter-2" size="0.85rem" color="#059669" class="sapUiTinyMarginEnd"/>
+                      <Text text="Automated live feed for POs, GR items, and invoices" class="vrCardSubText"/>
+                    </HBox>
+                  </VBox>
+                  <VBox class="vrUploaderContainer">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                      <Label text="Scheduled Sync Frequency:" design="Bold" class="vrUploadLabel"/>
+                      <ObjectStatus text="Every 15 min" state="Information" class="vrMiniStatus"/>
+                    </HBox>
+                    <HBox alignItems="Center">
+                      <core:Icon src="sap-icon://history" size="0.85rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                      <Text text="Auto-syncs ledger documents directly into staging" class="vrCardSubText"/>
+                    </HBox>
+                  </VBox>
+                </VBox>
+
+                <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginTop vrCardFooter">
+                  <Text text="Auto-sync interval: 15 min" class="vrCardHint"/>
+                  <Button text="Sync S21 ERP Data" icon="sap-icon://synchronize" type="Emphasized" press="onSyncS21"/>
+                </HBox>
+              </VBox>
+
+              <!-- CARD 2: SMART AI OCR SCANNER -->
+              <VBox class="vrIntakeCard vrCardOcr">
+                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                  <HBox alignItems="Center">
+                    <HBox class="vrCardIconBox vrBgPurple">
+                      <core:Icon src="sap-icon://document-text" size="1.25rem" color="#7C3AED"/>
+                    </HBox>
+                    <VBox class="sapUiSmallMarginBegin">
+                      <Title text="Smart OCR Scanner" level="H4" class="vrCardTitle"/>
+                      <Text text="Computer Vision Ingestion" class="vrCardSubtitle"/>
+                    </VBox>
+                  </HBox>
+                  <ObjectStatus text="AI READY" state="Information" class="vrAiBadge"/>
+                </HBox>
+
+                <VBox class="vrCardBodyContent sapUiTinyMarginBottom">
+                  <VBox class="sapUiTinyMarginBottom vrUploaderContainer">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                      <Label text="Supported Document Formats:" design="Bold" class="vrUploadLabel"/>
+                      <ObjectStatus text="PDF, PNG, JPG, TIFF" state="Information" class="vrMiniStatus"/>
+                    </HBox>
+                    <HBox alignItems="Center">
+                      <core:Icon src="sap-icon://attachment" size="0.85rem" color="#7C3AED" class="sapUiTinyMarginEnd"/>
+                      <Text text="Scan paper invoices, scanned receipts &amp; bills" class="vrCardSubText"/>
+                    </HBox>
+                  </VBox>
+                  <VBox class="vrUploaderContainer">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                      <Label text="Data Extraction Engine:" design="Bold" class="vrUploadLabel"/>
+                      <ObjectStatus text="98.4% Accuracy" state="Success" class="vrMiniStatus"/>
+                    </HBox>
+                    <HBox alignItems="Center">
+                      <core:Icon src="sap-icon://accelerated" size="0.85rem" color="#059669" class="sapUiTinyMarginEnd"/>
+                      <Text text="Auto-extracts line items, taxes, GSTIN, and POs" class="vrCardSubText"/>
+                    </HBox>
+                  </VBox>
+                </VBox>
+
+                <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginTop vrCardFooter">
+                  <Text text="Zero manual data entry" class="vrCardHint"/>
+                  <Button text="Launch OCR Scanner" icon="sap-icon://camera" type="Emphasized" press="onOpenOcrDialog"/>
+                </HBox>
+              </VBox>
+
+              <!-- CARD 3: BATCH STATEMENT & LEDGER UPLOAD -->
+              <VBox class="vrIntakeCard vrCardUpload">
+                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                  <HBox alignItems="Center">
+                    <HBox class="vrCardIconBox vrBgGreen">
+                      <core:Icon src="sap-icon://excel-attachment" size="1.25rem" color="#059669"/>
+                    </HBox>
+                    <VBox class="sapUiSmallMarginBegin">
+                      <Title text="Batch File Intake" level="H4" class="vrCardTitle"/>
+                      <Text text="Vendor Statements &amp; Excel" class="vrCardSubtitle"/>
+                    </VBox>
+                  </HBox>
+                  <ObjectStatus text="XLSX / CSV" state="None" class="vrFormatBadge"/>
+                </HBox>
+                
+                <!-- Upload Rows -->
+                <VBox class="vrUploadRows vrCardBodyContent sapUiTinyMarginBottom">
+                  <!-- Vendor Statement -->
+                  <VBox class="sapUiTinyMarginBottom vrUploaderContainer">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                      <Label text="Vendor Statement (.xlsx):" design="Bold" class="vrUploadLabel"/>
+                      <Button text="Upload" press="onUploadStatement" type="Emphasized" icon="sap-icon://upload" class="vrSmallUploadBtn"/>
+                    </HBox>
+                    <uf:FileUploader id="statementUploader" width="100%" placeholder="Choose Vendor_Statement.xlsx..." class="vrModernUploader"/>
+                  </VBox>
+                  
+                  <!-- SAP Ledger -->
+                  <VBox class="vrUploaderContainer">
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                      <Label text="SAP Ledger File:" design="Bold" class="vrUploadLabel"/>
+                      <Button text="Upload" press="onUploadSapLedger" type="Ghost" icon="sap-icon://upload" class="vrSmallUploadBtn"/>
+                    </HBox>
+                    <uf:FileUploader id="sapLedgerUploader" width="100%" placeholder="Choose SAP_Ledger.xlsx..." class="vrModernUploader"/>
+                  </VBox>
+                </VBox>
+
+                <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginTop vrCardFooter">
+                  <HBox alignItems="Center">
+                    <core:Icon src="sap-icon://excel-attachment" size="0.85rem" color="#059669" class="sapUiTinyMarginEnd"/>
+                    <Text text="Multi-format Excel &amp; CSV" class="vrCardHint"/>
+                  </HBox>
+                  <ObjectStatus text="Dual Batch Ready" state="Success" class="vrMiniStatus"/>
+                </HBox>
+              </VBox>
+
+            </l:Grid>
+
+            <!-- 4. RECONCILIATION MATCHING TRIGGER BANNER (MINIMAL & MATCHING) -->
+            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrReconBanner sapUiMediumMarginBottom">
+              <HBox alignItems="Center" class="sapUiTinyMarginTopBottom">
+                <HBox class="vrReconIconPulse sapUiSmallMarginEnd">
+                  <core:Icon src="sap-icon://process" size="1.35rem" color="#2563EB"/>
+                </HBox>
+                <VBox>
+                  <HBox alignItems="Center">
+                    <Title text="Automated 3-Way Matching Engine" level="H4" class="vrReconBannerTitle"/>
+                    <Text text="READY TO EXECUTE" class="vrBannerStatusPill sapUiTinyMarginBegin"/>
+                  </HBox>
+                  <Text text="Execute multi-rule reconciliation across POs, invoices, goods receipts, and GST 2B ledger tolerances." class="vrReconBannerDesc"/>
+                </VBox>
+              </HBox>
+              <HBox alignItems="Center" class="sapUiTinyMarginTopBottom">
+                <Button text="Run Matching Engine" press="onRunMatching" type="Emphasized" icon="sap-icon://play" class="vrRunMatchingBtn"/>
+              </HBox>
+            </HBox>
+
+            <!-- 5. INGESTED DOCUMENT LINES DATA TABLE -->
+            <VBox class="vrTableCard">
+              <!-- Table Header Toolbar -->
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://database" size="1.1rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                  <Title text="Ingested Lines" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <SegmentedButton id="intakeFilterSource" selectedKey="ALL" select="onFilterSourceSelect" selectionChange="onFilterSourceSelect" class="sapUiSmallMarginBeginEnd vrSegmentedBtn">
+                  <items>
+                    <SegmentedButtonItem key="ALL" text="All ({intakeStats>/countAll})"/>
+                    <SegmentedButtonItem key="S21" text="HANA ({intakeStats>/countS21})"/>
+                    <SegmentedButtonItem key="OCR" text="OCR ({intakeStats>/countOcr})"/>
+                    <SegmentedButtonItem key="UPLOAD" text="Statements ({intakeStats>/countUpload})"/>
+                  </items>
+                </SegmentedButton>
+                <ToolbarSpacer/>
+                <SearchField id="intakeSearchField" width="220px" placeholder="Search Invoice, PO..." search="onSearchIntake" liveChange="onSearchIntake" class="vrSearchInput sapUiSmallMarginEnd"/>
+                <Button icon="sap-icon://refresh" text="Refresh" tooltip="Reload Ingested Lines" press="onRefreshIntake" class="vrRefreshBtn"/>
+              </Toolbar>
+
+              <!-- Responsive Items Table -->
+              <Table id="intakeTable" class="sapMListTbl vrModernTable" growing="true" growingThreshold="25" growingScrollToLoad="true"
+                     items="{ path: '/VendorDocLines', parameters: { $$operationMode: 'Server' }, sorter: { path: 'createdAt', descending: true } }">
+                <columns>
+                  <Column width="14%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="14%"><Text text="PO Number" class="vrColHeader"/></Column>
+                  <Column width="22%"><Text text="Vendor &amp; Code" class="vrColHeader"/></Column>
+                  <Column width="12%"><Text text="Invoice Date" class="vrColHeader"/></Column>
+                  <Column width="14%" hAlign="End"><Text text="Amount" class="vrColHeader"/></Column>
+                  <Column width="14%"><Text text="Ingestion Source" class="vrColHeader"/></Column>
+                  <Column width="10%"><Text text="Uploaded" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center" wrap="Wrap">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{vendorInvoiceNo}" class="vrCode vrInvoiceLink" press="onInvoicePress"/>
+                      </HBox>
+                      <HBox alignItems="Center">
+                        <Text text="{poReference}" class="vrCode vrPoPill"/>
+                      </HBox>
+                      <VBox>
+                        <Text text="{vendorName}" class="vrBold vrVendorTitle"/>
+                        <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                          <core:Icon src="sap-icon://supplier" size="0.75rem" color="#94A3B8" class="sapUiTinyMarginEnd"/>
+                          <Text text="Code: {sourceVendorCode}" class="vrVendorSubtext"/>
+                        </HBox>
+                      </VBox>
+                      <HBox alignItems="Center">
+                        <core:Icon src="sap-icon://calendar" size="0.85rem" color="#94A3B8" class="sapUiTinyMarginEnd"/>
+                        <Text text="{path: 'invoiceDate', formatter: '.formatDate', targetType: 'any'}" class="vrDateText"/>
+                      </HBox>
+                      <VBox alignItems="End">
+                        <Text text="{path: 'invoiceAmount', type: 'sap.ui.model.type.Float', formatOptions: {groupingEnabled: true, minFractionDigits: 2, maxFractionDigits: 2}}" class="vr-tabular-num vrAmountValue"/>
+                        <Text text="{path: 'currency', formatter: '.formatCurrencyFallback'}" class="vrCurrencySubtext"/>
+                      </VBox>
+                      <ObjectStatus
+                        text="{parts: [{path: 'ingestionSource'}, {path: 'paymentReference'}, {path: 'vendorInvoiceNo'}], formatter: '.formatIntakeSourceText'}"
+                        state="{parts: [{path: 'ingestionSource'}, {path: 'paymentReference'}, {path: 'vendorInvoiceNo'}], formatter: '.formatIntakeSourceState'}"
+                        class="vrBold vrSourcePill"/>
+                      <Text text="{path: 'createdAt', formatter: '.formatDate', targetType: 'any'}" class="vrTextMuted"/>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+
+          </VBox>
+        </Page>
+
+        <!-- Page: Match Results -->
+        <Page id="results" showHeader="false">
+          <VBox class="sapUiMediumMargin">
+            
+            <!-- HERO HEADER & RUN AUDIT SUMMARY -->
+            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrIntakeHero sapUiSmallMarginBottom">
+              <VBox>
+                <Title text="Reconciliation Audit Ledger" level="H2" class="vrHeroTitle"/>
+                <Text text="Comprehensive 3-way matching execution log across Purchase Orders, Goods Receipts, and Vendor Invoices" class="vrHeroSubtitle"/>
+              </VBox>
+            </HBox>
+
+            <!-- COMPACT RUN SUMMARY STRIP (NO CLUTTER) -->
+            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrRunSummaryStrip sapUiSmallMarginBottom">
+              <HBox alignItems="Center" wrap="Wrap">
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://documents" size="1rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                  <Text text="Total Evaluated: " class="vrSummaryStatLabel"/>
+                  <Text text="{matchStats>/total} Invoices" class="vrSummaryStatValue"/>
+                </HBox>
+                <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://sys-enter-2" size="1rem" color="#059669" class="sapUiTinyMarginEnd"/>
+                  <Text text="Clean Matches: " class="vrSummaryStatLabel"/>
+                  <Text text="{matchStats>/cleanMatched}" class="vrSummaryStatValue vrColorSuccess"/>
+                </HBox>
+                <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://error" size="1rem" color="#DC2626" class="sapUiTinyMarginEnd"/>
+                  <Text text="Flagged Exceptions: " class="vrSummaryStatLabel"/>
+                  <Text text="{matchStats>/exceptions}" class="vrSummaryStatValue vrColorError"/>
+                </HBox>
+              </HBox>
+            </HBox>
+
+            <!-- MATCH RESULTS TABLE CARD -->
+            <VBox class="vrTableCard">
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://compare" size="1.1rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                  <Title text="Matching Engine Ledger" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <SegmentedButton id="matchFilterStatus" selectedKey="ALL" select="onFilterMatchStatus" selectionChange="onFilterMatchStatus" class="sapUiSmallMarginBeginEnd vrSegmentedBtn">
+                  <items>
+                    <SegmentedButtonItem key="ALL" text="All ({matchStats>/total})"/>
+                    <SegmentedButtonItem key="MATCHED" text="Clean Matches ({matchStats>/cleanMatched})"/>
+                    <SegmentedButtonItem key="UNMATCHED" text="Exceptions ({matchStats>/exceptions})"/>
+                  </items>
+                </SegmentedButton>
+                <ToolbarSpacer/>
+                <SearchField id="matchSearchField" width="220px" placeholder="Search Invoice, PO..." search="onSearchMatchResults" liveChange="onSearchMatchResults" class="vrSearchInput sapUiSmallMarginEnd"/>
+                <Button icon="sap-icon://refresh" text="Refresh" press="onRefreshMatchResults" class="vrRefreshBtn"/>
+              </Toolbar>
+
+              <Table id="matchResultsTable" class="sapMListTbl vrModernTable" growing="true" growingThreshold="25" growingScrollToLoad="true"
+                     items="{ path: '/MatchResults', parameters: { $$operationMode: 'Server', $expand: 'vendorDocLine,invoiceItem' }, sorter: { path: 'createdAt', descending: true } }">
+                <columns>
+                  <Column width="16%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="16%"><Text text="PO Number" class="vrColHeader"/></Column>
+                  <Column width="16%"><Text text="GR Number" class="vrColHeader"/></Column>
+                  <Column width="18%" hAlign="End"><Text text="Amount" class="vrColHeader"/></Column>
+                  <Column width="16%"><Text text="Outcome" class="vrColHeader"/></Column>
+                  <Column width="18%" hAlign="Center"><Text text="Audit Info" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center" wrap="Wrap">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{invoiceNo}" class="vrCode vrInvoiceLink" press="onInvoicePress"/>
+                      </HBox>
+                      <HBox alignItems="Center">
+                        <Text text="{vendorDocLine/poReference}" class="vrCode vrPoPill"/>
+                      </HBox>
+                      <HBox alignItems="Center">
+                        <core:Icon src="sap-icon://shipping-status" size="0.85rem" color="#64748B" class="sapUiTinyMarginEnd"/>
+                        <Text text="{parts: [{path: 'grNumber'}], formatter: '.formatGrDisplay'}" class="vrCode"/>
+                      </HBox>
+                      <VBox alignItems="End">
+                        <Text text="{path: 'vendorDocLine/invoiceGrossAmount', type: 'sap.ui.model.type.Float', formatOptions: {groupingEnabled: true, minFractionDigits: 2, maxFractionDigits: 2}}" class="vr-tabular-num vrAmountValue"/>
+                        <Text text="{vendorDocLine/currency}" class="vrCurrencySubtext"/>
+                      </VBox>
+                      <HBox alignItems="Center">
+                        <ObjectStatus text="{path: 'outcomeCode', formatter: '.formatCleanOutcomeText'}" state="{path: 'outcomeCode', formatter: '.formatOutcomeStatusState'}" class="vrBold"/>
+                      </HBox>
+                      <HBox justifyContent="Center" alignItems="Center">
+                        <Button text="Audit Info" icon="sap-icon://hint" type="Transparent" press="onShowMatchInfo" class="vrActionCompactBtn" tooltip="Quick audit breakdown"/>
+                      </HBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+
+          </VBox>
+        </Page>
+
+        <!-- Page: Exceptions -->
+        <Page id="exceptions" showHeader="false">
+          <VBox class="sapUiMediumMargin">
+            
+            <!-- 1. HERO HEADER WITH LIVE STATUS -->
+            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrIntakeHero sapUiSmallMarginBottom">
+              <VBox>
+                <Title text="Discrepancy Triage &amp; Action Queue" level="H2" class="vrHeroTitle"/>
+                <Text text="Prioritized queue of reconciliation exceptions requiring investigation, supplier query, or AP Workbench resolution" class="vrHeroSubtitle"/>
+              </VBox>
+              <HBox alignItems="Center" class="sapUiTinyMarginTopBottom">
+                <Button text="Open AP Workbench" icon="sap-icon://task" type="Emphasized" press="onNavToWorkbench"/>
+              </HBox>
+            </HBox>
+
+            <!-- 2. COMPACT DISCREPANCY SUMMARY STRIP -->
+            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrRunSummaryStrip sapUiSmallMarginBottom">
+              <HBox alignItems="Center" wrap="Wrap">
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://alert" size="1rem" color="#DC2626" class="sapUiTinyMarginEnd"/>
+                  <Text text="Open Discrepancies: " class="vrSummaryStatLabel"/>
+                  <Text text="{exceptionStats>/openCount} Invoices" class="vrSummaryStatValue vrColorError"/>
+                </HBox>
+                <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://money-bills" size="1rem" color="#D97706" class="sapUiTinyMarginEnd"/>
+                  <Text text="Blocked Value: " class="vrSummaryStatLabel"/>
+                  <Text text="{exceptionStats>/blockedValueFormatted}" class="vrSummaryStatValue"/>
+                </HBox>
+                <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://tag" size="1rem" color="#2563EB" class="sapUiTinyMarginEnd"/>
+                  <Text text="Price Variances: " class="vrSummaryStatLabel"/>
+                  <Text text="{exceptionStats>/priceCount}" class="vrSummaryStatValue"/>
+                </HBox>
+                <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+                <HBox alignItems="Center" class="vrSummaryStatItem">
+                  <core:Icon src="sap-icon://shipping-status" size="1rem" color="#8B5CF6" class="sapUiTinyMarginEnd"/>
+                  <Text text="Missing GR: " class="vrSummaryStatLabel"/>
+                  <Text text="{exceptionStats>/grCount}" class="vrSummaryStatValue"/>
+                </HBox>
+              </HBox>
+            </HBox>
+
+            <!-- 3. EXCEPTIONS ACTION TABLE CARD -->
+            <VBox class="vrTableCard">
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://warning2" size="1.1rem" color="#D97706" class="sapUiTinyMarginEnd"/>
+                  <Title text="Open Exceptions" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <SegmentedButton id="exceptionCategoryFilter" selectedKey="ALL" select="onFilterExceptionCategory" selectionChange="onFilterExceptionCategory" class="sapUiSmallMarginBeginEnd vrSegmentedBtn">
+                  <items>
+                    <SegmentedButtonItem key="ALL" text="All Open ({exceptionStats>/openCount})"/>
+                    <SegmentedButtonItem key="PRICE" text="Price Variance ({exceptionStats>/priceCount})"/>
+                    <SegmentedButtonItem key="GR" text="Missing GR ({exceptionStats>/grCount})"/>
+                    <SegmentedButtonItem key="QTY" text="Qty Mismatch ({exceptionStats>/qtyCount})"/>
+                    <SegmentedButtonItem key="RESOLVED" text="Resolved ({exceptionStats>/resolvedCount})"/>
+                  </items>
+                </SegmentedButton>
+                <ToolbarSpacer/>
+                <SearchField id="exceptionSearchField" width="220px" placeholder="Search Invoice, PO..." search="onSearchExceptions" liveChange="onSearchExceptions" class="vrSearchInput sapUiSmallMarginEnd"/>
+                <Button icon="sap-icon://refresh" text="Refresh" press="onRefreshExceptions" class="vrRefreshBtn"/>
+              </Toolbar>
+
+              <Table id="exceptionsTable" class="sapMListTbl vrModernTable" growing="true" growingThreshold="25" growingScrollToLoad="true"
+                     items="{ path: '/Exceptions', parameters: { $$operationMode: 'Server', $expand: 'matchResult($expand=vendorDocLine,invoiceItem)' }, sorter: { path: 'createdAt', descending: true } }">
+                <columns>
+                  <Column width="13%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="12%"><Text text="PO Number" class="vrColHeader"/></Column>
+                  <Column width="16%"><Text text="Discrepancy Type" class="vrColHeader"/></Column>
+                  <Column width="20%"><Text text="Accounting Reason" class="vrColHeader"/></Column>
+                  <Column width="8%" hAlign="Center"><Text text="AI Score" class="vrColHeader"/></Column>
+                  <Column width="8%" hAlign="Center"><Text text="Status" class="vrColHeader"/></Column>
+                  <Column width="23%" hAlign="Center"><Text text="Action / Resolution" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center" wrap="Wrap">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{invoiceNo}" class="vrCode vrInvoiceLink" press="onInvoicePress"/>
+                      </HBox>
+                      <HBox alignItems="Center">
+                        <Text text="{path: 'poReference', formatter: '.formatPoFallback'}" class="vrCode vrPoPill"/>
+                      </HBox>
+                      <VBox>
+                        <ObjectStatus text="{outcomeCode}" state="{path: 'outcomeCode', formatter: '.formatOutcomeStatusState'}" class="vrBold"/>
+                        <Text text="{path: 'outcomeCode', formatter: '.formatDiscrepancyCategory'}" class="vrVendorSubtext sapUiTinyMarginTop"/>
+                      </VBox>
+                      <Text text="{matchResult/reason}" class="vrTextMuted"/>
+                      <HBox justifyContent="Center" alignItems="Center">
+                        <Text text="{parts: [{path: 'outcomeCode'}, {path: 'matchResult/amountDelta'}], formatter: '.formatAiScoreForException'}" class="vrAiScoreBadge"/>
+                      </HBox>
+                      <ObjectStatus text="{status}" state="{path: 'status', formatter: '.formatStatusState'}" class="vrBold"/>
+                      <HBox justifyContent="Center" alignItems="Center" class="vrActionBox">
+                        <Button icon="sap-icon://hint" text="Info" type="Transparent" press="onShowExceptionReason" class="vrActionCompactBtn sapUiTinyMarginEnd" tooltip="View Exception Diagnosis &amp; Accounting Reason"/>
+                        <Button text="Fix in Workbench" icon="sap-icon://wrench" type="Emphasized" press="onResolveInWorkbench" class="vrActionCompactBtn" tooltip="Open and settle invoice in AP Workbench"/>
+                      </HBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+
+          </VBox>
+        </Page>
+
+        <!-- Page: MIRO Workbench -->
+        <Page id="miro" showHeader="false">
+          <mvc:XMLView id="miroView" viewName="vendordoclines.view.MIROWorkbench"/>
+        </Page>
+        
+        <!-- Page: Dashboard -->
+        <Page id="dashboard" showHeader="false">
+          <mvc:XMLView id="dashboardView" viewName="vendordoclines.view.Dashboard"/>
+        </Page>
+
+        <!-- Page: AP Cockpit -->
+        <Page id="cockpit" showHeader="false">
+          <mvc:XMLView id="cockpitView" viewName="vendordoclines.view.Cockpit"/>
+        </Page>
+
+        <!-- Page: AP Payment Run -->
+        <Page id="appayment" showHeader="false">
+          <mvc:XMLView id="appaymentView" viewName="vendordoclines.view.APPayment"/>
+        </Page>
+
+      </NavContainer>
+    </tnt:mainContents>
+  </tnt:ToolPage>
+</mvc:View>

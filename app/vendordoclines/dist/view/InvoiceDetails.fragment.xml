@@ -1,0 +1,36 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+  <Dialog title="Invoice Details &amp; History" contentWidth="600px" verticalScrolling="true">
+    <f:SimpleForm editable="false" layout="ResponsiveGridLayout" title="Invoice Summary">
+      <f:content>
+        <Label text="Invoice Number" design="Bold"/>
+        <Text text="{details>/invoiceNo}" class="vrCode"/>
+        
+        <Label text="Date / Time" design="Bold"/>
+        <Text text="{path: 'details>/createdAt', formatter: '.formatDate'}" />
+        
+        <Label text="Gross Amount" design="Bold"/>
+        <Text text="{details>/grossAmount} {details>/currency}" class="vrBold" />
+        
+        <Label text="Vendor" design="Bold"/>
+        <Text text="{details>/vendor}"/>
+
+        <core:Title text="3-Way Match Data" visible="{details>/showMatchData}" />
+        
+        <Label text="PO Reference" design="Bold" />
+        <Text text="{details>/poReference}" class="vrCode" />
+        
+        <Label text="GR Reference" design="Bold" />
+        <Text text="{details>/grReference}" class="vrCode" />
+        
+        <Label text="Match Outcome" design="Bold" visible="{details>/showMatchData}" />
+        <Text text="{details>/outcomeCode}" visible="{details>/showMatchData}" />
+        
+        <Label text="Rule Applied" design="Bold" visible="{details>/showMatchData}" />
+        <Text text="{details>/ruleApplied}" visible="{details>/showMatchData}" />
+      </f:content>
+    </f:SimpleForm>
+    <beginButton>
+      <Button text="Close" press="onCloseDialog" type="Emphasized"/>
+    </beginButton>
+  </Dialog>
+</core:FragmentDefinition>

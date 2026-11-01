@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Open Sans', sans-serif; color: #333; margin: 0; padding: 40px; font-size: 11px; line-height: 1.5; }
+        .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #003366; padding-bottom: 10px; margin-bottom: 20px; }
+        .title { font-size: 28px; font-weight: 800; color: #003366; margin: 0; }
+        .title span { color: #ff6600; }
+        .subtitle { font-size: 14px; color: #0078d4; margin-top: 5px; }
+        .version { font-size: 10px; color: #666; }
+        .badge { background: #f0f8ff; border: 1px solid #b3d4ff; color: #0056b3; padding: 4px 12px; border-radius: 4px; font-weight: 700; font-size: 10px; }
+        
+        .exec-summary { border: 1px solid #b3d4ff; border-radius: 4px; padding: 15px; margin-bottom: 30px; background: #fafcff; }
+        .exec-summary strong { color: #003366; }
+
+        .section-title { display: flex; align-items: center; font-size: 16px; font-weight: 800; color: #003366; margin: 30px 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .section-title::before { content: ''; display: block; width: 6px; height: 18px; background: #ff6600; margin-right: 10px; }
+
+        .text-block { border: 1px solid #ddd; padding: 15px; border-radius: 4px; margin-bottom: 20px; color: #555; }
+        
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        
+        .box { border: 1px solid #b3d4ff; background: #fafcff; border-radius: 4px; padding: 15px; }
+        .box h4 { margin: 0 0 10px 0; color: #003366; font-size: 12px; }
+        .box p { margin: 0; color: #555; }
+
+        .role-box { border: 1px solid #ddd; background: #fdfdfd; border-radius: 8px; padding: 15px; text-align: center; }
+        .role-icon { background: #0056b3; color: white; border-radius: 4px; width: 40px; height: 30px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-weight: 700; }
+        .role-title { font-weight: 700; color: #333; margin-bottom: 10px; font-size: 12px; }
+        .role-desc { font-size: 10px; color: #666; }
+
+        .table-container { border: 1px solid #003366; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #003366; color: white; text-align: left; padding: 10px 15px; font-size: 11px; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; border-right: 1px solid #eee; vertical-align: top; }
+        td:last-child { border-right: none; }
+        tr:last-child td { border-bottom: none; }
+        
+        .arch-box { border: 1px solid #b3d4ff; background: #fdfdfd; border-radius: 4px; padding: 15px; text-align: center; margin-bottom: 10px; font-weight: 600; color: #003366; }
+        .arch-sub { display: flex; justify-content: space-around; margin-top: 10px; }
+        .arch-pill { border: 1px solid #ddd; padding: 6px 15px; border-radius: 4px; font-size: 10px; font-weight: normal; background: white; }
+        .arch-arrow { text-align: center; color: #0078d4; font-weight: bold; margin: 10px 0; }
+        
+        .footer { font-size: 9px; color: #999; margin-top: 40px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1 class="title">VENDOR <span>RECONCILE</span> � Current State Blueprint</h1>
+            <div class="subtitle">Live SAP S21-Connected Vendor Reconciliation & Engine</div>
+        </div>
+        <div style="text-align: right;">
+            <div class="badge">LIVE INTEGRATION UPDATE</div>
+            <div class="version" style="margin-top: 5px;">Version 2.0 � September 2026</div>
+        </div>
+    </div>
+
+    <div class="exec-summary">
+        <strong>Executive Summary:</strong> The Vendor Reconcile platform has successfully achieved live data integration with the SAP S21 ERP system. The Executive Analytics Dashboard, dynamic 3-way matching engine, and vendor exception workflows are now powered by 100% real-time data, completely replacing legacy mock placeholders. It accurately tracks P2P lifecycle discrepancies natively via OData endpoints.
+    </div>
+
+    <div class="section-title">SECTION 1 � LIVE SAP INTEGRATION CAPABILITIES</div>
+    <div class="text-block">
+        The Node.js (SAP CAP) backend securely interfaces with the SAP S21 System to automatically synchronize and process operational Procurement & AP data. We have implemented robust API handling for live Master Data retrieval, ensuring the Executive Dashboard reflects genuine transactional reality rather than simulated environments.
+    </div>
+    
+    <div class="grid-3">
+        <div class="box">
+            <h4>? True Material Overrides</h4>
+            <p>Invoice line items accurately cross-reference active SAP Purchase Orders to fetch genuine material codes (e.g., 10314, PA30PALL) instead of static fallbacks.</p>
+        </div>
+        <div class="box">
+            <h4>? Real-Time Vendor Names</h4>
+            <p>Dynamically queries the S21 Purchase Order API (A_PurchaseOrder) to extract true Supplier Address Names to instantly overwrite legacy DB numeric codes.</p>
+        </div>
+        <div class="box">
+            <h4>? Persistent Synchronization</h4>
+            <p>Migrated backend to a highly durable local SQLite transactional database. All synced SAP records and user attachments now comfortably survive server restarts.</p>
+        </div>
+    </div>
+
+    <div class="section-title">SECTION 2 � EXECUTIVE DASHBOARD AUTOMATION</div>
+    
+    <div class="grid-2">
+        <div class="box">
+            <h4>? Missing in File (Uninvoiced GRs)</h4>
+            <p>Actively scans the live SAP <strong>GrirSnapshot</strong> table to mathematically highlight open Goods Receipts that have not yet been billed by suppliers.</p>
+        </div>
+        <div class="box">
+            <h4>? Missing in S/4HANA</h4>
+            <p>The matching engine precisely flags imported vendor invoices where no corresponding SAP PO can be located (UNMATCHED/PO-NOT-FOUND).</p>
+        </div>
+        <div class="box">
+            <h4>? High-Value Exception Engine</h4>
+            <p>Automatically filters and escalates systemic price or quantity mismatches exceeding the critical ?50,000 internal tolerance threshold.</p>
+        </div>
+        <div class="box">
+            <h4>? Dynamic Vendor Exceptions</h4>
+            <p>Accurately sorts and maps specific real vendor names responsible for active discrepancies directly against the live matching engine rule violations.</p>
+        </div>
+    </div>
+
+    <div class="section-title">SECTION 3 � CURRENT TECHNOLOGY OVERVIEW</div>
+    <div class="grid-4" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
+        <div class="box">
+            <h4>FRONTEND</h4>
+            <p style="font-size: 10px; font-weight:bold;">SAP Fiori Elements</p>
+            <p style="font-size: 10px;">HTML5, UI5 Responsive UX</p>
+        </div>
+        <div class="box">
+            <h4>BACKEND</h4>
+            <p style="font-size: 10px; font-weight:bold;">Node.js � SAP CAP</p>
+            <p style="font-size: 10px;">Cloud Application Programming</p>
+        </div>
+        <div class="box">
+            <h4>SAP S21 INTEGRATION</h4>
+            <p style="font-size: 10px; font-weight:bold;">OData / REST</p>
+            <p style="font-size: 10px;">Basic Auth, API Proxy</p>
+        </div>
+        <div class="box">
+            <h4>DATA STORE</h4>
+            <p style="font-size: 10px; font-weight:bold;">SQLite / HANA-Ready</p>
+            <p style="font-size: 10px;">Full Transactional Durability</p>
+        </div>
+    </div>
+    
+    <div style="page-break-before: always;"></div>
+    
+    <div class="header">
+        <div>
+            <h1 class="title">VENDOR <span>RECONCILE</span> � Current State Blueprint</h1>
+        </div>
+        <div style="text-align: right;">
+            <div class="badge">PAGE 2</div>
+        </div>
+    </div>
+
+    <div class="section-title">SECTION 4 � END-TO-END MATCHING ENGINE WORKFLOW</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; text-align:center;">
+        <div class="box" style="flex:1; margin: 0 5px;">
+            <strong style="color: #003366; font-size:11px;">STEP 1</strong><br/>
+            SAP PO & GR Sync<br/>
+            <span style="font-size:9px; color:#666;">Extracts Live Data</span>
+        </div>
+        <div style="color: #ff6600; font-weight:bold;">?</div>
+        <div class="box" style="flex:1; margin: 0 5px;">
+            <strong style="color: #003366; font-size:11px;">STEP 2</strong><br/>
+            Vendor Upload<br/>
+            <span style="font-size:9px; color:#666;">Extracts Invoice</span>
+        </div>
+        <div style="color: #ff6600; font-weight:bold;">?</div>
+        <div class="box" style="flex:1; margin: 0 5px;">
+            <strong style="color: #003366; font-size:11px;">STEP 3</strong><br/>
+            3-Way Verification<br/>
+            <span style="font-size:9px; color:#666;">Applies Thresholds</span>
+        </div>
+        <div style="color: #ff6600; font-weight:bold;">?</div>
+        <div class="box" style="flex:1; margin: 0 5px;">
+            <strong style="color: #003366; font-size:11px;">STEP 4</strong><br/>
+            Exception Flagging<br/>
+            <span style="font-size:9px; color:#666;">Triggers Workflows</span>
+        </div>
+    </div>
+
+    <div class="section-title">SECTION 5 � SAP API MAPPING (S21)</div>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th width="25%">Functional Area</th>
+                <th width="40%">SAP S21 Endpoints Integrated</th>
+                <th width="35%">Data Governance</th>
+            </tr>
+            <tr>
+                <td><strong>Purchase Orders (ME23N)</strong></td>
+                <td><code style="font-size:10px;">API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrder</code></td>
+                <td>Source of truth for expected vendor, material, and agreed pricing.</td>
+            </tr>
+            <tr>
+                <td><strong>Supplier Invoices (MIRO)</strong></td>
+                <td><code style="font-size:10px;">API_SUPPLIERINVOICE_PROCESS_SRV/A_SupplierInvoice</code></td>
+                <td>Source of truth for submitted billing amounts and vendor identification.</td>
+            </tr>
+            <tr>
+                <td><strong>Goods Receipts (MIGO)</strong></td>
+                <td><code style="font-size:10px;">API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentItem</code></td>
+                <td>Source of truth for physical warehouse delivery quantities.</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section-title">SECTION 6 � AUTOMATED VERIFICATION OUTCOMES</div>
+    <div class="grid-2">
+        <div class="box" style="border-left: 4px solid #28a745;">
+            <h4>? MATCHED / 3-WAY-CLEAR</h4>
+            <p>Invoice successfully matched against Purchase Order and Goods Receipt within acceptable price/qty tolerances. Ready for payment clearing.</p>
+        </div>
+        <div class="box" style="border-left: 4px solid #dc3545;">
+            <h4>? UNMATCHED / PRICE-DIFF</h4>
+            <p>Invoiced Amount drastically exceeds the expected Purchase Order rate beyond the configured 2% organizational tolerance.</p>
+        </div>
+        <div class="box" style="border-left: 4px solid #ffc107;">
+            <h4>?? UNMATCHED / QTY-EXCEEDS-GR</h4>
+            <p>The vendor is billing for a higher quantity than what was physically received and logged by the GR specialist in the warehouse.</p>
+        </div>
+        <div class="box" style="border-left: 4px solid #dc3545;">
+            <h4>? UNMATCHED / PO-NOT-FOUND</h4>
+            <p>The vendor invoice was successfully uploaded, but no active Purchase Order reference exists within the SAP S21 integration layer.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        Vendor Reconcile � Current State Blueprint v2.0 � Auto-Generated Documentation
+    </div>
+
+</body>
+</html>

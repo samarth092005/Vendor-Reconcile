@@ -1,0 +1,327 @@
+const fs = require('fs');
+const puppeteer = require('puppeteer');
+
+const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; font-size: 10px; color: #1a1a1a; margin: 0; padding: 30px 40px; box-sizing: border-box; }
+        .page-break { page-break-before: always; }
+        
+        .header-top { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #0056b3; padding-bottom: 8px; margin-bottom: 15px; }
+        .logo-area { display: flex; align-items: baseline; gap: 10px; }
+        .logo-text { font-size: 24px; font-weight: 800; color: #0056b3; letter-spacing: -0.5px; }
+        .logo-sub { font-size: 18px; font-weight: 600; color: #333; }
+        .tagline { font-size: 11px; font-weight: 600; color: #0056b3; margin-top: 2px; }
+        .meta-right { text-align: right; font-size: 9px; color: #555; line-height: 1.4; }
+        .meta-right strong { color: #0056b3; font-size: 10px; }
+        
+        .exec-summary { background: #f8f9fa; border-left: 3px solid #0056b3; padding: 10px 15px; font-size: 10px; line-height: 1.4; margin-bottom: 15px; }
+        .exec-summary strong { color: #0056b3; }
+        
+        .section-header { display: flex; align-items: center; gap: 10px; background: #f0f4f8; margin: 15px 0 8px 0; padding: 4px 0; }
+        .section-bar { width: 8px; height: 16px; background: #f26522; }
+        .section-title { font-size: 12px; font-weight: 700; color: #0056b3; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .grid-1 { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        
+        .box { border: 1px solid #dce4ec; background: #fafbfc; padding: 10px; }
+        .box-title { font-size: 10px; font-weight: 700; color: #0056b3; margin-bottom: 4px; }
+        .box-title-blue { font-size: 10px; font-weight: 700; color: #0056b3; }
+        
+        .text-block { font-size: 10px; line-height: 1.4; margin-bottom: 10px; }
+        .bullet { margin-left: 15px; padding-left: 5px; margin-bottom: 2px; }
+        .bullet::before { content: "\\25C6"; color: #0056b3; display: inline-block; width: 1em; margin-left: -1em; }
+        .bullet-tick::before { content: "\\2713"; color: #28a745; display: inline-block; width: 1em; margin-left: -1em; font-weight: bold; }
+        
+        .workflow-step { text-align: center; border: 1px solid #dce4ec; padding: 8px 4px; background: #fff; }
+        .wf-num { font-size: 9px; font-weight: 700; color: #0056b3; text-transform: uppercase; }
+        .wf-title { font-size: 10px; font-weight: 700; margin: 4px 0; }
+        .wf-sub { font-size: 9px; color: #555; }
+        .wf-note { font-size: 9px; background: #f8f9fa; border: 1px solid #dce4ec; padding: 6px; margin-top: 4px; color: #555; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 9px; }
+        th { background: #0056b3; color: white; text-align: left; padding: 6px 8px; font-weight: 600; border: 1px solid #0056b3; }
+        td { padding: 6px 8px; border: 1px solid #dce4ec; vertical-align: top; }
+        
+        .tech-box { background: #f8f9fa; border: 1px solid #dce4ec; padding: 8px; }
+        
+        .footer { position: fixed; bottom: 20px; left: 40px; right: 40px; font-size: 8px; color: #777; display: flex; justify-content: space-between; border-top: 1px solid #dce4ec; padding-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 -->
+    <div class="header-top">
+        <div>
+            <div class="logo-area">
+                <div class="logo-text">VENDOR RECONCILIATION</div>
+                <div class="logo-sub">&mdash; Technical Blueprint</div>
+            </div>
+            <div class="tagline">SAP CAP &amp; UI5 Accounts Payable Analytics Platform</div>
+        </div>
+        <div class="meta-right">
+            <strong>PROJECT BLUEPRINT</strong><br>
+            Version 1.1 &bull; October 2026
+        </div>
+    </div>
+
+    <div class="exec-summary">
+        <strong>Executive Summary:</strong> The Vendor Reconciliation Platform is an Accounts Payable (AP) analytics and matching engine built on SAP CAP (Node.js) and SAP UI5. It automatically compares incoming vendor invoices against corresponding Purchase Orders, mathematically detecting price and quantity variances at the line-item level, and surfaces the results through an Executive Dashboard and a detailed Object Page.
+    </div>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 1 &mdash; CURRENT IMPLEMENTATION</div>
+    </div>
+    <div class="box" style="padding: 10px 15px;">
+        Accounts Payable teams often struggle to manually verify line-item quantities and gross amounts across hundreds of vendor invoices. <strong>Our Build:</strong> We have constructed an automated backend Matching Engine that links Invoices to POs, calculates discrepancies, and flags exceptions. This data is visualized via an SAP UI5 Executive Dashboard, providing real-time KPIs and the ability to drill down into a specific invoice's line items for variance breakdown.
+    </div>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 2 &mdash; CORE ARCHITECTURE</div>
+    </div>
+    <div class="box" style="padding: 0;">
+        <div style="padding: 10px 15px; border-bottom: 1px solid #dce4ec;">
+            <strong>Data Flow &amp; Evaluation:</strong> The system ingests real, live ERP data directly from the SAP S21 system (via the S21 Connector module) and runs it through the matching algorithm before exposing it to the UI.
+        </div>
+        <div class="grid-4" style="margin: 0; gap: 0;">
+            <div style="padding: 10px; border-right: 1px solid #dce4ec;">
+                <div class="box-title-blue">1. S21 Connector</div>
+                Node.js module (<code>s21-connector.js</code>) configured to fetch POs and Invoices from SAP.
+            </div>
+            <div style="padding: 10px; border-right: 1px solid #dce4ec;">
+                <div class="box-title-blue">2. Matching Engine</div>
+                (<code>matching-engine.js</code>) iterates through Line Items, comparing File Qty vs S/4 Qty.
+            </div>
+            <div style="padding: 10px; border-right: 1px solid #dce4ec;">
+                <div class="box-title-blue">3. CAP OData Services</div>
+                Exposes the resulting <code>MatchResults</code> and aggregated KPIs via OData V4 endpoints.
+            </div>
+            <div style="padding: 10px;">
+                <div class="box-title-blue">4. UI5 Frontend</div>
+                Consumes the OData services to render the Dashboard and Object Page views.
+            </div>
+        </div>
+
+    <div style="margin-top: 15px; background: #eef4fb; border: 1px solid #cfe0f4; padding: 15px; border-radius: 4px; text-align: center;">
+        <div style="font-size: 10px; font-weight: bold; color: #0056b3; margin-bottom: 10px;">HIGH-LEVEL ARCHITECTURE DIAGRAM</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 80%; margin: 0 auto;">
+            <div style="background: #fff; border: 2px solid #0056b3; padding: 10px; border-radius: 6px; width: 22%;">
+                <strong style="color: #0056b3;">SAP S/4HANA</strong><br><span style="font-size: 8px;">(Live S21 ERP Data)</span>
+            </div>
+            <div style="color: #0056b3; font-weight: bold; font-size: 14px;">&rarr;</div>
+            <div style="background: #0056b3; border: 2px solid #0056b3; color: white; padding: 10px; border-radius: 6px; width: 35%;">
+                <strong>SAP CAP ENGINE</strong><br><span style="font-size: 8px; color: #eef4fb;">Matching &amp; AI Intelligence</span>
+            </div>
+            <div style="color: #0056b3; font-weight: bold; font-size: 14px;">&rarr;</div>
+            <div style="background: #fff; border: 2px solid #f26522; padding: 10px; border-radius: 6px; width: 22%;">
+                <strong style="color: #f26522;">SAP UI5</strong><br><span style="font-size: 8px;">(Executive Dashboard)</span>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 3 &mdash; IMPLEMENTED CAPABILITIES</div>
+    </div>
+    <div class="grid-2">
+        <div class="box" style="border:none; border-bottom: 1px solid #dce4ec; background: transparent; padding: 5px 0;">
+            <div class="bullet"></div> <strong style="color:#0056b3">Executive Dashboard (Cockpit)</strong><br>
+            A high-level Fiori page displaying 4 critical KPIs (Processed, Exception Rate, Critical Variances, Match Rate) powered by a live backend KPI handler.
+        </div>
+        <div class="box" style="border:none; border-bottom: 1px solid #dce4ec; background: transparent; padding: 5px 0;">
+            <div class="bullet"></div> <strong style="color:#0056b3">Client-Side PDF Export</strong><br>
+            A functional "Export PDF" button on the Dashboard utilizing <code>html2canvas</code> and <code>jspdf</code> to take a pixel-perfect snapshot of the analytics UI.
+        </div>
+        <div class="box" style="border:none; background: transparent; padding: 5px 0;">
+            <div class="bullet"></div> <strong style="color:#0056b3">Variance Identification</strong><br>
+            The backend engine dynamically identifies if a discrepancy is a "Qty Mismatch" or "Price Mismatch" and calculates the exact <code>amountDelta</code>.
+        </div>
+        <div class="box" style="border:none; border-bottom: 1px solid #dce4ec; background: transparent; padding: 5px 0;">
+            <div class="bullet"></div> <strong style="color:#0056b3">Detailed Object Page</strong><br>
+            A deep-dive view comparing the Vendor File header values against the SAP S/4 records side-by-side, complete with a Line Item variance table.
+        </div>
+        <div class="box" style="border:none; border-bottom: 1px solid #dce4ec; background: transparent; padding: 5px 0;">
+            <div class="bullet"></div> <strong style="color:#0056b3">AI Intelligence &amp; Scoring</strong><br>
+            The workbench provides intelligent <strong>AI Suggestions</strong> and computes a holistic <strong>AI Score</strong> for each matched invoice, assisting the AP team in determining the safest course of action.
+        </div>
+        <div class="box" style="border:none; background: transparent; padding: 5px 0;">
+            <div class="bullet"></div> <strong style="color:#0056b3">Actionable Invoice States</strong><br>
+            Empowers AP to set invoice statuses directly in the workbench:<br>
+            <span style="color:#555">&bull; <strong>Approved:</strong> Ready to proceed for payment.<br>
+            &bull; <strong>Blocked:</strong> Payment stopped due to critical blockages.<br>
+            &bull; <strong>Parked:</strong> Held for unresolved issues. (Not posted to SAP, but provides AP a centralized actionable view).</span>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 4 &mdash; FRONTEND UI COMPONENTS</div>
+    </div>
+    <div class="text-block">
+        The user interface is built entirely on <strong>SAP UI5</strong> (XML Views and JavaScript Controllers), ensuring a modern enterprise look and feel.
+    </div>
+    <table>
+        <tr>
+            <th width="30%">Component</th>
+            <th width="70%">Implementation Details</th>
+        </tr>
+        <tr>
+            <td><strong>Cockpit.view.xml</strong></td>
+            <td>Uses <code>sap.m.Page</code> and <code>sap.m.Toolbar</code>. Renders KPI cards mathematically computed by the backend, along with a recent Match Results table.</td>
+        </tr>
+        <tr>
+            <td><strong>ObjectPage.view.xml</strong></td>
+            <td>Utilizes <code>sap.uxap.ObjectPageLayout</code>. Stripped of OCR elements per requirements, focusing strictly on ERP data comparison (Company Code, Vendor Code, Tax Amounts).</td>
+        </tr>
+        <tr>
+            <td><strong>style.css</strong></td>
+            <td>Custom CSS file defining the Light Theme (Slate-50 background, Indigo typography, and rounded 12px card elevations).</td>
+        </tr>
+        <tr>
+            <td><strong>Formatter (formatter.js)</strong></td>
+            <td>Client-side logic handling currency formatting and converting S/4HANA date strings (YYYY-MM-DD) into readable UI formats.</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <div>VENDOR RECONCILIATION &bull; Technical Blueprint &bull; Confidential</div>
+        <div>Page 1 of 2</div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page-break"></div>
+    <div class="header-top">
+        <div>
+            <div class="logo-area">
+                <div class="logo-text">VENDOR RECONCILIATION</div>
+                <div class="logo-sub">&mdash; Data Model &amp; Technology</div>
+            </div>
+            <div class="tagline">SAP CAP &amp; UI5 Accounts Payable Analytics Platform</div>
+        </div>
+        <div class="meta-right">
+            <strong>PROJECT BLUEPRINT</strong><br>
+            Page 2 of 2
+        </div>
+    </div>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 5 &mdash; BACKEND DATA MODEL (schema.cds)</div>
+    </div>
+    <div class="text-block">
+        The CAP Application uses a relational database schema designed to hold ingested ERP documents and the results of the matching engine.
+    </div>
+    <table>
+        <tr>
+            <th width="25%">Entity Name</th>
+            <th width="75%">Purpose &amp; Attributes</th>
+        </tr>
+        <tr>
+            <td><strong>VendorInvoiceHeaders</strong></td>
+            <td>Stores the high-level invoice data (Invoice Number, Gross Amount, <code>invoiceDate</code>, Tax Amount).</td>
+        </tr>
+        <tr>
+            <td><strong>VendorDocLine</strong></td>
+            <td>Stores line-level details of the invoice (File Qty, File Price, Material Code).</td>
+        </tr>
+        <tr>
+            <td><strong>PurchaseOrders</strong></td>
+            <td>Stores the ERP source-of-truth (PO Number, Target Qty, Expected Price).</td>
+        </tr>
+        <tr>
+            <td><strong>MatchResults</strong></td>
+            <td>The output ledger of the matching engine. Contains <code>varianceAmount</code>, <code>status</code> (Matched/Warning), and arrays of Line Comparisons.</td>
+        </tr>
+    </table>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 6 &mdash; DATA BINDING &amp; ROUTING</div>
+    </div>
+    <div class="box" style="padding: 10px 15px;">
+        <strong>UI5 Routing Engine:</strong> The application utilizes the standard UI5 <code>sap.m.routing.Router</code>. The primary route (<code>main</code>) points to the Executive Dashboard. Clicking an Invoice Number in the Dashboard's table triggers a deep-link route (<code>#/invoice/{resultId}</code>) which loads the <code>ObjectPage.view.xml</code>.<br><br>
+        <strong>OData V4 Orchestration:</strong> In <code>ObjectPage.controller.js</code>, the view executes dynamic OData V4 <code>$expand</code> queries to fetch <code>MatchResults</code>, expanding into the related <code>vendorDocLine</code>, <code>invoiceItems</code>, and <code>purchaseOrders</code> to construct the complete context for the UI.
+    </div>
+
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 7 &mdash; TECHNOLOGY STACK</div>
+    </div>
+    <div class="grid-3">
+        <div class="tech-box">
+            <strong style="color:#0056b3">FRONTEND UI</strong><br>
+            SAP UI5 Framework<br>XML Views, JS Controllers<br>Custom CSS Customizations
+        </div>
+        <div class="tech-box">
+            <strong style="color:#0056b3">BACKEND CORE</strong><br>
+            Node.js &amp; Express<br>SAP Cloud Application Programming (CAP)
+        </div>
+        <div class="tech-box">
+            <strong style="color:#0056b3">DATABASE</strong><br>
+            SQLite (Local persistence)<br>Core Data Services (CDS) Definitions
+        </div>
+    </div>
+
+    
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <div class="section-title">SECTION 8 &mdash; BUSINESS KEY SELLING POINTS</div>
+    </div>
+    <div class="grid-2">
+        <div class="box" style="border-left: 3px solid #28a745;">
+            <strong style="color:#0056b3; font-size: 11px;">1. Eradication of Manual Effort</strong><br>
+            Completely automates the grueling line-by-line comparison of invoices against purchase orders and goods receipts, saving thousands of AP labor hours monthly.
+        </div>
+        <div class="box" style="border-left: 3px solid #0056b3;">
+            <strong style="color:#0056b3; font-size: 11px;">2. Zero Tolerance for Overbilling</strong><br>
+            The mathematical matching engine catches identical invoice duplicates and micro-variances in pricing and quantity before they are paid, directly preventing revenue leakage.
+        </div>
+        <div class="box" style="border-left: 3px solid #f26522;">
+            <strong style="color:#0056b3; font-size: 11px;">3. AI-Driven Decision Support</strong><br>
+            Instead of raw data dumps, the platform provides actionable AI Suggestions and a holistic AI Score, empowering AP clerks to process complex discrepancies with confidence.
+        </div>
+        <div class="box" style="border-left: 3px solid #6f42c1;">
+            <strong style="color:#0056b3; font-size: 11px;">4. Single Pane of Glass</strong><br>
+            Unifies Parked, Blocked, and Approved invoices into one centralized dashboard. Financial controllers gain immediate, real-time visibility into the entire AP pipeline without needing native SAP GUI access.
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>VENDOR RECONCILIATION &bull; Technical Blueprint &bull; Confidential</div>
+        <div>Page 2 of 2</div>
+    </div>
+</body>
+</html>
+`;
+
+fs.writeFileSync('reconly_plan_accurate.html', htmlContent);
+
+(async () => {
+    try {
+        const browser = await puppeteer.launch({ headless: 'new' });
+        const page = await browser.newPage();
+        await page.goto('file://' + __dirname + '/reconly_plan_accurate.html', { waitUntil: 'networkidle0' });
+        await page.pdf({ 
+            path: 'Vendor_Reconcile_Project_Plan.pdf', 
+            format: 'A4',
+            printBackground: true,
+            margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' }
+        });
+        await browser.close();
+        console.log("ACCURATE PDF generated successfully!");
+    } catch (e) {
+        console.error(e);
+    }
+})();

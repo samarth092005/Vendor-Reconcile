@@ -1,0 +1,8 @@
+code;name;descr;criticality
+FileIngestion;File Ingestion;File picked from shared drive;3
+OCRExtraction;OCR Extraction;Header + line items extracted;3
+DataValidation;Data Validation;Vendor and tax IDs validated;3
+MatchingEngine;Matching Engine;Matched on Vendor + Invoice + PO;3
+VarianceCheck;Variance Check;Amount/qty/price variance evaluated;2
+S4Integration;S/4 Integration;S/4HANA invoice fetched;3
+ResultPersisted;Result Persisted;ReconciliationResult stored;3

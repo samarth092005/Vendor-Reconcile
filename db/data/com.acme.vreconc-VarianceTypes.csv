@@ -1,0 +1,6 @@
+code;name;descr
+Amount;Amount;Net/Gross amount variance
+Quantity;Quantity;Quantity variance
+Tax;Tax;Tax amount variance
+Date;Date;Invoice / posting date variance
+PONumber;PO Mismatch;Purchase order number mismatch

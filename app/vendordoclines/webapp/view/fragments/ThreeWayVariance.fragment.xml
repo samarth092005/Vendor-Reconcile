@@ -1,0 +1,43 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout">
+	<Dialog
+		title="3-Way Match Variance Details"
+		contentWidth="800px"
+		class="sapUiPopupWithPadding">
+		
+		<content>
+			<MessageStrip text="Review the discrepancy between PO, GR, and Invoice before approving." type="Warning" showIcon="true" class="sapUiSmallMarginBottom"/>
+			
+			<Table items="{miro>/selectedLineItems}">
+				<columns>
+					<Column width="4em"><Text text="Item"/></Column>
+					<Column><Text text="Material"/></Column>
+					<Column hAlign="Right"><Text text="PO (Qty / Price)"/></Column>
+					<Column hAlign="Right"><Text text="GR (Qty)"/></Column>
+					<Column hAlign="Right"><Text text="Invoice (Qty / Price)"/></Column>
+					<Column hAlign="Center"><Text text="Match Status"/></Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{miro>itemNo}" class="vr-tabular-num" />
+							<Text text="{miro>material}" />
+							<Text text="{miro>poQty} / {miro>poPrice}" class="vr-tabular-num" />
+							<ObjectStatus text="{miro>grQty}" state="{= ${miro>poQty} !== ${miro>grQty} ? 'Error' : 'Success' }" class="vr-tabular-num" />
+							<ObjectStatus text="{miro>invQty} / {miro>invPrice}" state="{= ${miro>invPrice} > ${miro>poPrice} ? 'Error' : 'Success' }" class="vr-tabular-num" />
+							<ObjectStatus text="{miro>status}" state="{miro>state}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+
+		<buttons>
+			<Button text="Approve Variance (Post to FI)" type="Accept" press=".onApproveVariance" />
+			<Button text="Block invoice — vendor notified" type="Reject" press=".onBlockInvoice" />
+			<Button text="Cancel" press=".onCloseVarianceDialog" />
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

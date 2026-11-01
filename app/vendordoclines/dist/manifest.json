@@ -1,0 +1,264 @@
+{
+  "sap.app": {
+    "id": "vendordoclines",
+    "type": "application",
+    "dataSources": {
+      "mainService": {
+        "uri": "/api/v1/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      },
+      "reconService": {
+        "uri": "/recon/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "applicationVersion": {
+      "version": "1.0.13"
+    },
+    "title": "",
+    "description": "Vendor Reconciliation &amp; Match Exception Engine",
+    "i18n": "i18n/i18n.properties",
+    "crossNavigation": {
+      "inbounds": {
+        "VendorRecon-display": {
+          "semanticObject": "VendorRecon",
+          "action": "display",
+          "title": "Vendor Reconciliation",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui5": {
+    "models": {
+      "": {
+        "dataSource": "mainService",
+        "type": "sap.ui.model.odata.v4.ODataModel"
+      },
+      "recon": {
+        "dataSource": "reconService",
+        "preload": true
+      }
+    },
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.ui.unified": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/cockpit.css?v=3"
+        },
+        {
+          "uri": "css/style.css?v=3"
+        },
+        {
+          "uri": "css/login.css?v=3"
+        }
+      ]
+    },
+    "rootView": {
+      "viewName": "vendordoclines.view.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "vendordoclines.view",
+        "controlAggregation": "pages",
+        "controlId": "appNavContainer",
+        "transition": "slide",
+        "async": true,
+        "bypassed": {
+          "target": "login"
+        }
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "landing",
+          "target": "landing"
+        },
+        {
+          "pattern": "landing",
+          "name": "landingExplicit",
+          "target": "landing"
+        },
+        {
+          "pattern": "login",
+          "name": "login",
+          "target": "login"
+        },
+        {
+          "pattern": "register",
+          "name": "register",
+          "target": "register"
+        },
+        {
+          "pattern": "home",
+          "name": "home",
+          "target": "home"
+        },
+        {
+          "pattern": "workbench",
+          "name": "workbench",
+          "target": "workbench"
+        },
+        {
+          "pattern": "main",
+          "name": "main",
+          "target": "main"
+        },
+        {
+          "pattern": "billing",
+          "name": "billing",
+          "target": "billing"
+        },
+        {
+          "pattern": "ar",
+          "name": "ar",
+          "target": "ar"
+        },
+        {
+          "pattern": "gr",
+          "name": "gr",
+          "target": "gr"
+        },
+        {
+          "pattern": "miro",
+          "name": "miro",
+          "target": "miro"
+        },
+        {
+          "pattern": "pr",
+          "name": "pr",
+          "target": "pr"
+        },
+        {
+          "pattern": "po",
+          "name": "po",
+          "target": "po"
+        },
+        {
+          "pattern": "vendorportal",
+          "name": "vendorportal",
+          "target": "vendorportal"
+        },
+        {
+          "pattern": "appayment",
+          "name": "appayment",
+          "target": "appayment"
+        },
+        {
+          "pattern": "dashboard",
+          "name": "dashboard",
+          "target": "dashboard"
+        },
+        {
+          "pattern": "invoice/{resultId}",
+          "name": "objectPage",
+          "target": "objectPage"
+        },
+        {
+          "pattern": "grobject/{poId}",
+          "name": "grObjectPage",
+          "target": "grObjectPage"
+        }
+      ],
+      "targets": {
+        "landing": {
+          "viewName": "Landing",
+          "viewLevel": 1
+        },
+        "login": {
+          "viewName": "Login",
+          "viewLevel": 1
+        },
+        "register": {
+          "viewName": "Register",
+          "viewLevel": 1
+        },
+        "home": {
+          "viewName": "Home",
+          "viewLevel": 2
+        },
+        "workbench": {
+          "viewName": "PersonaWorkbench",
+          "viewLevel": 2
+        },
+        "main": {
+          "viewName": "Main",
+          "viewLevel": 3
+        },
+        "billing": {
+          "viewName": "BillingDashboard",
+          "viewLevel": 3
+        },
+        "ar": {
+          "viewName": "ARDashboard",
+          "viewLevel": 3
+        },
+        "gr": {
+          "viewName": "GRWorkbench",
+          "viewLevel": 3
+        },
+        "miro": {
+          "viewName": "MIROWorkbench",
+          "viewLevel": 3
+        },
+        "pr": {
+          "viewName": "PRDashboard",
+          "viewLevel": 3
+        },
+        "po": {
+          "viewName": "PODashboard",
+          "viewLevel": 3
+        },
+        "vendorportal": {
+          "viewName": "VendorPortal",
+          "viewLevel": 3
+        },
+        "appayment": {
+          "viewName": "APPayment",
+          "viewLevel": 3
+        },
+        "dashboard": {
+          "viewName": "Dashboard",
+          "viewLevel": 2
+        },
+        "objectPage": {
+          "viewName": "ObjectPage",
+          "viewLevel": 4,
+          "parent": "main",
+          "controlId": "pageContainer",
+          "controlAggregation": "pages"
+        },
+        "grObjectPage": {
+          "viewName": "GRObjectPage",
+          "viewLevel": 4,
+          "parent": "main",
+          "controlId": "pageContainer",
+          "controlAggregation": "pages"
+        }
+      }
+    }
+  },
+  "_version": "1.49.0"
+}

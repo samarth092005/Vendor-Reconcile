@@ -1,0 +1,9 @@
+node_modules/
+.git/
+.vscode/
+playwright_error.png
+test-data/
+gen/
+VendorReconSept/
+sqlite.db-shm
+sqlite.db-wal

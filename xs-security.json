@@ -1,0 +1,8 @@
+{
+  "xsappname": "vendor_reconcile-eu30",
+  "tenant-mode": "dedicated",
+  "scopes": [],
+  "attributes": [],
+  "role-templates": [],
+  "authorities-inheritance": false
+}

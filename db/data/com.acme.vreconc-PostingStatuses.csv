@@ -1,0 +1,4 @@
+code;name;descr
+Posted;Posted;Invoice posted in S/4
+Parked;Parked;Invoice parked, not yet posted
+Blocked;Blocked;Blocked for payment

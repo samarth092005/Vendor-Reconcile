@@ -1,0 +1,564 @@
+/* =========================================================================
+   RECONLY ENTERPRISE LOGIN — High-End SaaS & Fiori Architecture
+   ========================================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Global Page Canvas ────────────────────────────────────────────────── */
+.rcLoginPage,
+.rcLoginPage .sapMPageEnableScrolling {
+  background: #F8FAFC !important;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: auto !important;
+}
+
+.rcLoginWrapper {
+  min-height: 100vh !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+/* ── LEFT PANEL: Enterprise Gradient & 4 Core Pillars ─────────────────── */
+.rcLoginLeftPanel {
+  min-height: 100vh !important;
+  width: 50% !important;
+  background: linear-gradient(140deg, #071536 0%, #0A225C 35%, #0D3B82 70%, #1554B3 100%) !important;
+  color: #FFFFFF !important;
+  position: relative !important;
+  overflow: hidden !important;
+  padding: 4rem 3.5rem !important;
+  box-sizing: border-box !important;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+/* Ambient subtle architectural light accents */
+.rcLoginLeftPanel::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(37, 99, 235, 0.08) 45%, transparent 70%);
+  pointer-events: none;
+}
+
+.rcLoginLeftPanel::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  right: -20%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(37, 99, 235, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.rcLeftTopSection {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+}
+
+.rcBrandLogo {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+
+.rcBrandTitleText {
+  color: #FFFFFF !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.95rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1 !important;
+}
+
+.rcPillBadge {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
+  border-radius: 9999px !important;
+  padding: 5px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+}
+
+.rcPillBadgeText {
+  color: #38BDF8 !important;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+}
+
+.rcLeftHeading {
+  color: #FFFFFF !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 2.15rem !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.025em !important;
+  margin-top: 6px !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+.rcLeftSubText {
+  color: rgba(226, 232, 240, 0.88) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.6 !important;
+  max-width: 520px !important;
+}
+
+/* 4 Pillar List */
+.rcPillarList {
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  padding-top: 1.5rem !important;
+  max-width: 540px !important;
+}
+
+.rcPillarItem {
+  display: flex !important;
+  align-items: flex-start !important;
+}
+
+.rcPillarIconBox {
+  background: rgba(56, 189, 248, 0.14) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border-radius: 9px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.rcPillarTitle {
+  color: #F8FAFC !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+
+.rcPillarDesc {
+  color: rgba(203, 213, 225, 0.8) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.4 !important;
+  margin-top: 2px !important;
+}
+
+/* ── RIGHT PANEL: Auth Canvas & Login Card ────────────────────────────── */
+.rcLoginRightPanel {
+  min-height: 100vh !important;
+  width: 50% !important;
+  background: #F8FAFC !important;
+  padding: 3rem 2.5rem !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.rcLoginCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.07), 0 0 1px 1px rgba(15, 23, 42, 0.02) !important;
+  width: 100% !important;
+  max-width: 530px !important;
+  padding: 2.25rem 2.25rem !important;
+  box-sizing: border-box !important;
+  transition: all 0.25s ease !important;
+}
+
+.rcLoginCard:hover {
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1) !important;
+}
+
+.rcCardHeading {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.rcCardSub {
+  font-size: 0.86rem !important;
+  color: #64748B !important;
+  margin-top: 4px !important;
+}
+
+.rcCardHeaderLogo {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+}
+
+/* ── Visual Persona Selector ──────────────────────────────────────────── */
+.rcPersonaContainer {
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+  margin-top: 10px !important;
+}
+
+.rcPersonaHeaderLabel {
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  color: #475569 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.rcActiveRoleTag {
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  background: #ECFDF5 !important;
+  color: #047857 !important;
+  border: 1px solid #A7F3D0 !important;
+  border-radius: 6px !important;
+  padding: 2px 8px !important;
+}
+
+.rcPersonaRow {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin-bottom: 8px !important;
+}
+
+.rcPersonaRow:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Crucial: SAPUI5 wraps each button in .sapMFlexItem */
+.rcPersonaRow > .sapMFlexItem {
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.rcPersonaRow > .sapMFlexItem > .rcPersonaTile,
+.rcPersonaTile {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: block !important;
+}
+
+.rcPersonaTile:focus,
+.rcPersonaTile:focus-visible,
+.rcPersonaTile .sapMBtnInner:focus,
+.rcPersonaTile .sapMFocusable:focus {
+  outline: none !important;
+}
+
+/* Critical UI5 Overlap neutralization for persona buttons */
+.rcPersonaTile .sapMBtnInner {
+  width: 100% !important;
+  height: 44px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 16px !important;
+  background: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.15s ease !important;
+  box-sizing: border-box !important;
+}
+
+.rcPersonaTile .sapMBtnInner.sapMBtnIconFirst {
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+.rcPersonaTile .sapMBtnIcon,
+.rcPersonaTile .sapMBtnCustomIcon,
+.rcPersonaTile .sapMBtnIconFirst,
+.rcPersonaTile .sapUiIcon {
+  position: static !important;
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 9px 0 0 !important;
+  padding: 0 !important;
+  font-size: 1.15rem !important;
+  color: #2563EB !important;
+  line-height: 1 !important;
+  width: auto !important;
+  height: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.rcPersonaTile .sapMBtnContent {
+  position: static !important;
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #1E293B !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+.rcPersonaTile:hover .sapMBtnInner {
+  background: #EFF6FF !important;
+  border-color: #3B82F6 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.08) !important;
+}
+
+.rcPersonaTile:hover .sapMBtnContent {
+  color: #1D4ED8 !important;
+}
+
+.rcPersonaCardActive .sapMBtnInner {
+  background: #EFF6FF !important;
+  border: 1.5px solid #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+.rcPersonaCardActive .sapMBtnContent {
+  color: #1D4ED8 !important;
+  font-weight: 700 !important;
+}
+
+/* ── Divider ──────────────────────────────────────────────────────────── */
+.rcCardDivider {
+  margin: 1.35rem 0 1rem 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.rcLine {
+  flex: 1 !important;
+  height: 1px !important;
+  background: #E2E8F0 !important;
+}
+
+.rcDividerLabel {
+  padding: 0 12px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  color: #64748B !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+/* ── Inputs & Labels ──────────────────────────────────────────────────── */
+.rcInputGroup {
+  margin-bottom: 1rem !important;
+  width: 100% !important;
+}
+
+.rcInputLabel {
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: #1E293B !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* Base input element */
+.rcSleekInput.sapMInputBase {
+  height: 46px !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* UI5 Content Wrapper */
+.rcSleekInput .sapMInputBaseContentWrapper {
+  height: 46px !important;
+  background: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  border-radius: 9px !important;
+  box-sizing: border-box !important;
+  padding: 0 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow: visible !important;
+}
+
+.rcSleekInput:hover .sapMInputBaseContentWrapper {
+  border-color: #94A3B8 !important;
+}
+
+.rcSleekInput.sapMInputFocused .sapMInputBaseContentWrapper,
+.rcSleekInput:focus-within .sapMInputBaseContentWrapper {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16) !important;
+  background: #FFFFFF !important;
+}
+
+/* Inner input field */
+.rcSleekInput .sapMInputBaseInner {
+  height: 100% !important;
+  line-height: 44px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #0F172A !important;
+  font-size: 0.92rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  outline: none !important;
+}
+
+.rcSleekInput .sapMInputBaseInner::placeholder {
+  color: #94A3B8 !important;
+  font-weight: 400 !important;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.rcSubmitBtn .sapMBtnInner {
+  height: 46px !important;
+  background: #2563EB !important;
+  border: 1px solid #2563EB !important;
+  border-radius: 9px !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
+  letter-spacing: 0.01em !important;
+}
+
+.rcSubmitBtn .sapUiIcon,
+.rcSubmitBtn .sapMBtnContent {
+  color: #FFFFFF !important;
+}
+
+.rcSubmitBtn .sapMBtnInner:hover {
+  background: #1D4ED8 !important;
+  border-color: #1D4ED8 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 18px -2px rgba(37, 99, 235, 0.35) !important;
+}
+
+.rcSubmitBtn .sapMBtnInner:active {
+  transform: scale(0.99) !important;
+}
+
+.rcRegisterBtn .sapMBtnInner {
+  height: 42px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 9px !important;
+  color: #334155 !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  transition: all 0.16s ease !important;
+}
+
+.rcRegisterBtn .sapUiIcon {
+  color: #64748B !important;
+}
+
+.rcRegisterBtn .sapMBtnInner:hover {
+  background: #F8FAFC !important;
+  border-color: #94A3B8 !important;
+  color: #0F172A !important;
+}
+
+/* ── Top-Left Back Button ─────────────────────────────────────────────── */
+.rcTopBackContainer {
+  margin-bottom: 1.5rem !important;
+}
+
+.rcTopBackBtn .sapMBtnInner {
+  height: 34px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 999px !important;
+  padding: 0 16px !important;
+  color: #38BDF8 !important;
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
+  transition: all 0.2s ease !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.rcTopBackBtn .sapUiIcon,
+.rcTopBackBtn .sapMBtnContent {
+  color: #38BDF8 !important;
+}
+
+.rcTopBackBtn .sapMBtnInner:hover {
+  background: rgba(56, 189, 248, 0.16) !important;
+  border-color: #38BDF8 !important;
+  color: #FFFFFF !important;
+  transform: translateX(-2px) !important;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25) !important;
+}
+
+.rcTopBackBtn .sapMBtnInner:hover .sapUiIcon,
+.rcTopBackBtn .sapMBtnInner:hover .sapMBtnContent {
+  color: #FFFFFF !important;
+}
+
+/* ── Return Link ──────────────────────────────────────────────────────── */
+.rcHomeLink {
+  color: #64748B !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: color 0.16s ease !important;
+}
+
+.rcHomeLink:hover {
+  color: #2563EB !important;
+  text-decoration: underline !important;
+}
+
+/* ── Responsive Adaptations ───────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .rcLoginWrapper {
+    flex-direction: column !important;
+  }
+  .rcLoginLeftPanel {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 2.5rem 1.5rem !important;
+  }
+  .rcLoginRightPanel {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 2rem 1.25rem !important;
+  }
+  .rcLeftHeading {
+    font-size: 1.7rem !important;
+  }
+}

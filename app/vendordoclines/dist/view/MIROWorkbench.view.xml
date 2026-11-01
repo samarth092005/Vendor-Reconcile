@@ -1,0 +1,287 @@
+<mvc:View controllerName="vendordoclines.controller.MIROWorkbench"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          xmlns:core="sap.ui.core"
+          xmlns:l="sap.ui.layout"
+          height="100%">
+
+  <VBox class="sapUiMediumMargin">
+    
+    <!-- 1. HERO HEADER WITH LIVE STATUS -->
+    <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrIntakeHero sapUiSmallMarginBottom">
+      <VBox>
+        <Title text="AP Command Center &amp; Settlement Workbench" level="H2" class="vrHeroTitle"/>
+        <Text text="Multi-queue invoice triage, tolerance approvals, supplier collaboration &amp; SAP S/4HANA MIRO posting" class="vrHeroSubtitle"/>
+      </VBox>
+      <HBox alignItems="Center" class="sapUiTinyMarginTopBottom">
+        <Button icon="sap-icon://nav-back" text="Back to Reconciliation" press="onNavBack" type="Ghost" class="sapUiTinyMarginEnd"/>
+        <Button id="btnWorkbenchRefresh" icon="sap-icon://refresh" text="Refresh Queues" press=".onRefreshQueues" type="Transparent"/>
+      </HBox>
+    </HBox>
+
+    <!-- 2. COMPACT QUEUE SUMMARY STRIP (CLICKABLE QUICK-TABS) -->
+    <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap" class="vrRunSummaryStrip sapUiSmallMarginBottom">
+      <HBox alignItems="Center" wrap="Wrap">
+        <Link text="Smart Queue: {miro>/pendingVerification} Invoices" press="onQuickTabPending" class="vrSummaryStatLink sapUiTinyMarginEnd" tooltip="Go to Smart Queue"/>
+        <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+        <Link text="Parked (Awaiting GR): {miro>/parkedInvoices}" press="onQuickTabParked" class="vrSummaryStatLink vrColorWarning sapUiTinyMarginEnd" tooltip="Go to Parked Invoices"/>
+        <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+        <Link text="Blocked (Disputes): {miro>/blockedInvoices}" press="onQuickTabBlocked" class="vrSummaryStatLink vrColorError sapUiTinyMarginEnd" tooltip="Go to Blocked Invoices"/>
+        <ToolbarSeparator class="sapUiSmallMarginBeginEnd"/>
+        <Link text="Approved Today: {miro>/postedTodayCount}" press="onQuickTabApproved" class="vrSummaryStatLink vrColorSuccess" tooltip="Go to Approved Invoices"/>
+      </HBox>
+    </HBox>
+
+    <!-- 3. WORKBENCH CONTAINER CARD -->
+    <VBox class="vrTableCard">
+      <IconTabBar id="workbenchTabs" select="onTabSelect" headerBackgroundDesign="Transparent" class="sapUiNoContentPadding">
+        <items>
+          
+          <!-- TAB 1: SMART QUEUE (CLEAN TEXT - NO TAB ICONS) -->
+          <IconTabFilter key="PENDING" text="Smart Queue ({miro>/pendingVerification})">
+            <VBox>
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://activity-items" size="1.1rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                  <Title text="Invoices to Settle" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <ToolbarSpacer/>
+                <Label text="Group by Reason:" class="sapUiTinyMarginEnd sapUiSmallMarginBegin"/>
+                <Switch state="{miro>/groupByReason}" change="onToggleGroup" customTextOn="ON" customTextOff="OFF" class="sapUiSmallMarginEnd"/>
+                <ToolbarSeparator/>
+                <Button text="Approve Selected" icon="sap-icon://accept" type="Emphasized" press="onActionApprove" class="vrActionCompactBtn sapUiTinyMarginEnd"/>
+                <Button text="Park Selected" icon="sap-icon://pause" type="Ghost" press="onActionPark" class="vrActionCompactBtn sapUiTinyMarginEnd"/>
+                <Button text="Block Selected" icon="sap-icon://decline" type="Reject" press="onActionBlock" class="vrActionCompactBtn"/>
+              </Toolbar>
+
+              <!-- 5-COLUMN AP WORKBENCH TABLE -->
+              <Table id="pendingTable" items="{ path: 'miro>/pendingList', sorter: { path: 'aiScore', descending: true } }"
+                     mode="MultiSelect" sticky="ColumnHeaders" class="sapMListTbl vrModernTable">
+                <columns>
+                  <Column width="22%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="26%"><Text text="Vendor" class="vrColHeader"/></Column>
+                  <Column width="18%"><Text text="GR Status" class="vrColHeader"/></Column>
+                  <Column width="18%" hAlign="End"><Text text="Amount" class="vrColHeader"/></Column>
+                  <Column width="16%" hAlign="Center"><Text text="Actions" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{miro>invoiceNo}" class="vrCode vrInvoiceLink" press="onOpenActionDialog"/>
+                      </HBox>
+                      <Text text="{miro>vendor}" class="vrVendorSubtext vrBold"/>
+                      <ObjectStatus text="{miro>grStatus}" state="{miro>grState}" class="vrBold"/>
+                      <Text text="{miro>amount}" class="vr-tabular-num vrBold"/>
+                      <HBox justifyContent="Center" alignItems="Center" class="vrActionBox">
+                        <Button text="Settle &amp; Review ➔" type="Emphasized" press="onOpenActionDialog" class="vrActionCompactBtn" tooltip="Settle, Park, Block, Chat or Inspect"/>
+                      </HBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+          </IconTabFilter>
+
+          <!-- TAB 2: PARKED INVOICES -->
+          <IconTabFilter key="PARKED" text="Parked ({miro>/parkedInvoices})">
+            <VBox>
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://pause" size="1.1rem" color="#D97706" class="sapUiTinyMarginEnd"/>
+                  <Title text="Parked Invoices (Awaiting Warehouse GRN)" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <ToolbarSpacer/>
+                <Button text="Approve Selected" icon="sap-icon://accept" type="Emphasized" press="onActionApprove" class="vrActionCompactBtn sapUiTinyMarginEnd"/>
+                <Button text="Move to Queue" icon="sap-icon://undo" type="Ghost" press="onActionUnpark" class="vrActionCompactBtn"/>
+              </Toolbar>
+
+              <Table id="parkedTable" items="{miro>/parkedList}" mode="MultiSelect" sticky="ColumnHeaders" class="sapMListTbl vrModernTable">
+                <columns>
+                  <Column width="22%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="26%"><Text text="Vendor" class="vrColHeader"/></Column>
+                  <Column width="18%"><Text text="GR Status" class="vrColHeader"/></Column>
+                  <Column width="18%" hAlign="End"><Text text="Amount" class="vrColHeader"/></Column>
+                  <Column width="16%" hAlign="Center"><Text text="Actions" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{miro>invoiceNo}" class="vrCode vrInvoiceLink" press="onOpenActionDialog"/>
+                      </HBox>
+                      <Text text="{miro>vendor}" class="vrVendorSubtext vrBold"/>
+                      <ObjectStatus text="{miro>grStatus}" state="{miro>grState}" class="vrBold"/>
+                      <Text text="{miro>amount}" class="vr-tabular-num vrBold"/>
+                      <HBox justifyContent="Center" alignItems="Center" class="vrActionBox">
+                        <Button text="Settle &amp; Review ➔" type="Ghost" press="onOpenActionDialog" class="vrActionCompactBtn"/>
+                      </HBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+          </IconTabFilter>
+
+          <!-- TAB 3: BLOCKED INVOICES -->
+          <IconTabFilter key="BLOCKED" text="Blocked ({miro>/blockedInvoices})">
+            <VBox>
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://error" size="1.1rem" color="#DC2626" class="sapUiTinyMarginEnd"/>
+                  <Title text="Blocked Invoices (Payment Hold)" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <ToolbarSpacer/>
+                <Button text="Approve Selected" icon="sap-icon://accept" type="Emphasized" press="onActionApprove" class="vrActionCompactBtn sapUiTinyMarginEnd"/>
+                <Button text="Unblock to Queue" icon="sap-icon://undo" type="Ghost" press="onActionUnpark" class="vrActionCompactBtn"/>
+              </Toolbar>
+
+              <Table id="blockedTable" items="{miro>/blockedList}" mode="MultiSelect" sticky="ColumnHeaders" class="sapMListTbl vrModernTable">
+                <columns>
+                  <Column width="22%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="26%"><Text text="Vendor" class="vrColHeader"/></Column>
+                  <Column width="18%"><Text text="GR Status" class="vrColHeader"/></Column>
+                  <Column width="18%" hAlign="End"><Text text="Amount" class="vrColHeader"/></Column>
+                  <Column width="16%" hAlign="Center"><Text text="Actions" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{miro>invoiceNo}" class="vrCode vrInvoiceLink" press="onOpenActionDialog"/>
+                      </HBox>
+                      <Text text="{miro>vendor}" class="vrVendorSubtext vrBold"/>
+                      <ObjectStatus text="{miro>grStatus}" state="{miro>grState}" class="vrBold"/>
+                      <Text text="{miro>amount}" class="vr-tabular-num vrBold"/>
+                      <HBox justifyContent="Center" alignItems="Center" class="vrActionBox">
+                        <Button text="Settle &amp; Review ➔" type="Emphasized" press="onOpenActionDialog" class="vrActionCompactBtn"/>
+                      </HBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+          </IconTabFilter>
+
+          <!-- TAB 4: APPROVED INVOICES -->
+          <IconTabFilter key="APPROVED" text="Approved Today ({miro>/postedTodayCount})">
+            <VBox>
+              <Toolbar class="vrTableToolbar">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://sys-enter-2" size="1.1rem" color="#059669" class="sapUiTinyMarginEnd"/>
+                  <Title text="Settled &amp; Posted to S/4HANA" level="H4" class="vrTableTitle"/>
+                </HBox>
+                <ToolbarSpacer/>
+              </Toolbar>
+
+              <Table id="approvedTable" items="{miro>/postedToday}" sticky="ColumnHeaders" class="sapMListTbl vrModernTable">
+                <columns>
+                  <Column width="22%"><Text text="Invoice No" class="vrColHeader"/></Column>
+                  <Column width="26%"><Text text="Vendor" class="vrColHeader"/></Column>
+                  <Column width="18%"><Text text="GR Status" class="vrColHeader"/></Column>
+                  <Column width="18%" hAlign="End"><Text text="Amount" class="vrColHeader"/></Column>
+                  <Column width="16%" hAlign="Center"><Text text="Actions" class="vrColHeader"/></Column>
+                </columns>
+                <items>
+                  <ColumnListItem vAlign="Middle" class="vrTableRow">
+                    <cells>
+                      <HBox alignItems="Center">
+                        <core:Icon src="sap-icon://document-text" size="0.95rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+                        <Link text="{miro>invoiceNo}" class="vrCode vrInvoiceLink" press="onOpenActionDialog"/>
+                      </HBox>
+                      <Text text="{miro>vendor}" class="vrVendorSubtext vrBold"/>
+                      <ObjectStatus text="{miro>grStatus}" state="{miro>grState}" class="vrBold"/>
+                      <Text text="{miro>amount}" class="vr-tabular-num vrBold"/>
+                      <HBox justifyContent="Center" alignItems="Center" class="vrActionBox">
+                        <Button text="View MIRO Audit" type="Ghost" press="onOpenActionDialog" class="vrActionCompactBtn"/>
+                      </HBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
+            </VBox>
+          </IconTabFilter>
+
+        </items>
+      </IconTabBar>
+    </VBox>
+
+    <!-- 4. QUICK SETTLEMENT & ACTION MODAL -->
+    <Dialog id="invoiceActionDialog" title="Invoice Settlement &amp; Review Center" contentWidth="680px">
+      <VBox class="sapUiMediumMargin">
+        
+        <!-- Header Strip in Dialog -->
+        <HBox justifyContent="SpaceBetween" alignItems="Center" class="vrModalHeaderBox sapUiSmallMarginBottom">
+          <VBox>
+            <HBox alignItems="Center">
+              <core:Icon src="sap-icon://document-text" size="1.2rem" color="#0A6ED1" class="sapUiTinyMarginEnd"/>
+              <Title text="Invoice #{dialogData>/invoiceNo}" level="H3" class="vrTableTitle"/>
+            </HBox>
+            <Text text="Vendor: {dialogData>/vendor}" class="vrVendorSubtext sapUiTinyMarginTop"/>
+          </VBox>
+          <HBox alignItems="Center">
+            <ObjectStatus text="{dialogData>/aiScore}% Confidence Match" state="{dialogData>/aiScoreState}" class="vrAiScoreBadge vrBold"/>
+          </HBox>
+        </HBox>
+
+        <!-- 3-Way Core Values Grid -->
+        <l:Grid defaultSpan="XL6 L6 M6 S12" hSpacing="1" vSpacing="1" class="sapUiSmallMarginBottom">
+          <VBox class="vrModalFieldBox">
+            <Text text="Purchase Order" class="vrCompareLabel"/>
+            <Text text="{dialogData>/poNo}" class="vrCompareValue vrCode sapUiTinyMarginTop"/>
+          </VBox>
+          <VBox class="vrModalFieldBox">
+            <Text text="Warehouse Receipt (GRN)" class="vrCompareLabel"/>
+            <ObjectStatus text="{dialogData>/grStatus}" state="{dialogData>/grState}" class="vrCompareValue vrBold sapUiTinyMarginTop"/>
+          </VBox>
+          <VBox class="vrModalFieldBox">
+            <Text text="Invoice Billed Amount" class="vrCompareLabel"/>
+            <Text text="{dialogData>/amount}" class="vrCompareValue sapMTextBold sapUiTinyMarginTop"/>
+          </VBox>
+          <VBox class="vrModalFieldBox">
+            <Text text="Variance / Delta" class="vrCompareLabel"/>
+            <Text text="{dialogData>/variance}" class="vrCompareValue sapMTextBold sapUiTinyMarginTop"/>
+          </VBox>
+        </l:Grid>
+
+        <!-- AI Recommendation & Demo Use Case Card -->
+        <VBox class="vrAiRecommendationBox sapUiSmallMarginBottom">
+          <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+            <HBox alignItems="Center">
+              <core:Icon src="sap-icon://lightbulb" color="#4F46E5" size="1.1rem" class="sapUiTinyMarginEnd"/>
+              <Text text="AI Recommendation &amp; Decision Support" class="vrAiRecHeaderTitle"/>
+            </HBox>
+            <ObjectStatus text="{dialogData>/aiBadge}" state="{dialogData>/aiScoreState}" class="vrBold"/>
+          </HBox>
+          <HBox alignItems="Center" class="sapUiTinyMarginTop sapUiTinyMarginBottom">
+            <Text text="{dialogData>/demoUseCase}" class="vrDemoUseCaseTag"/>
+          </HBox>
+          <Text text="{dialogData>/aiSuggestion}" class="vrAiRecSuggestionText vrBold sapUiTinyMarginTop"/>
+          <HBox alignItems="Center" class="sapUiSmallMarginTop">
+            <core:Icon src="sap-icon://tag" size="0.75rem" color="#64748B" class="sapUiTinyMarginEnd"/>
+            <Text text="Trigger Context: {dialogData>/blockReason}" class="vrVendorSubtext"/>
+          </HBox>
+        </VBox>
+
+        <!-- Settlement Actions -->
+        <VBox class="vrModalActionSection sapUiSmallMarginTop">
+          <Button text="Approve &amp; Release for Payment" icon="sap-icon://accept" type="Emphasized" press="onDialogApprove" class="sapUiSmallMarginBottom vrModalActionBtnPrimary" width="100%"/>
+          <l:Grid defaultSpan="XL6 L6 M6 S12" hSpacing="0.5" vSpacing="0.5">
+            <Button text="Park Invoice" icon="sap-icon://pause" type="Ghost" press="onDialogPark" width="100%" class="vrModalActionBtn" tooltip="Hold invoice awaiting Warehouse Goods Receipt"/>
+            <Button text="Block &amp; Dispute" icon="sap-icon://decline" type="Reject" press="onDialogBlock" width="100%" class="vrModalActionBtn" tooltip="Flag discrepancy and block payment"/>
+            <Button text="Collaboration Chat" icon="sap-icon://discussion" type="Transparent" press="onDialogChat" width="100%" class="vrModalActionBtn" tooltip="Open interactive chat with vendor and procurement"/>
+            <Button text="View 3-Way Match ➔" icon="sap-icon://inspect" type="Transparent" press="onDialogView3Way" width="100%" class="vrModalActionBtn" tooltip="Inspect PO, GRN, and Invoice side-by-side"/>
+          </l:Grid>
+        </VBox>
+
+      </VBox>
+      <endButton>
+        <Button text="Close" press="onCloseActionDialog"/>
+      </endButton>
+    </Dialog>
+
+  </VBox>
+</mvc:View>

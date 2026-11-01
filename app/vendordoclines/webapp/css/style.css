@@ -1,0 +1,1686 @@
+/* =========================================================================
+   SAP Fiori Horizon-Inspired Theme (White & Blue)
+   Rich, Enterprise-Grade UI with Fiori Elements Styling
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=72:wght@400;700&display=swap');
+
+:root {
+  /* SAP Fiori Horizon Palette */
+  --fiori-blue-dark: #0854A0;   /* Deep SAP Blue for Sidebar */
+  --fiori-blue-main: #0A6ED1;   /* Primary Active Blue */
+  --fiori-blue-light: #EBF4FC;  /* Light Blue Hover/Background */
+  
+  --fiori-bg-app: #F4F5F6;      /* Fiori App Background */
+  --fiori-bg-card: #FFFFFF;     /* White Card Background */
+  
+  --fiori-text-main: #223548;   /* Fiori Text Color */
+  --fiori-text-muted: #667A8C;
+  --fiori-border: #D9D9D9;
+  
+  --fiori-success: #107E3E;
+  --fiori-success-bg: #E4F5EB;
+  --fiori-error: #B00020;
+  --fiori-error-bg: #FCE8E8;
+  --fiori-warning: #E9730C;
+  --fiori-warning-bg: #FEF0E4;
+
+  --shadow-fiori: 0 0 0.125rem 0 rgba(0,0,0,0.1), 0 0.5rem 1rem 0 rgba(0,0,0,0.05);
+  --shadow-fiori-hover: 0 0 0.125rem 0 rgba(0,0,0,0.1), 0 1rem 2rem 0 rgba(0,0,0,0.1);
+}
+
+/* Global Font (SAP 72 Font Fallback) */
+body, .sapMText, .sapMLabel, .sapMInputBaseInner, .sapMBtnContent, .sapMTitle, .sapMListTblCell {
+  font-family: "72", "72full", Arial, Helvetica, sans-serif !important;
+  color: var(--fiori-text-main) !important;
+}
+
+/* Base App Background & Single Clean Scrollbar (Eliminate Double Scrollbars) */
+html,
+body,
+#content,
+.sapUiBody {
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.sapMApp,
+.sapMPageBgStandard,
+.sapMPage {
+  background-color: var(--fiori-bg-app) !important;
+  background-image: none !important;
+}
+
+.sapTntToolPage,
+.sapTntToolPageMain,
+.sapTntToolPageContentWrapper,
+.sapMNav {
+  background-color: var(--fiori-bg-app) !important;
+  height: 100% !important;
+  overflow: hidden !important; /* Prevents outer double scrollbar completely */
+}
+
+.sapMPageEnableScrolling {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Custom modern sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.vrDashboardPage,
+.vrDashboardPage .sapMPageEnableScrolling {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* -------------------------------------------------------------------------
+   Sleek Harmonized Sidebar (Light Modern SaaS — Seamless Canvas Integration)
+   ------------------------------------------------------------------------- */
+.sapTntSideNavigation {
+  background: #FFFFFF !important;
+  border-right: 1px solid #E2E8F0 !important;
+  box-shadow: 1px 0 3px rgba(15, 23, 42, 0.03) !important;
+}
+
+.sapTntNavLIGroup,
+.sapTntNavLI {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sapTntNavLI .sapMLIBContent {
+  color: #475569 !important;
+  background: transparent !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 500 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  margin: 3px 8px !important;
+  padding: 0.65rem 0.95rem !important;
+  box-shadow: none !important;
+  transition: all 0.16s ease !important;
+}
+
+.sapTntNavLI .sapMLIBContent:hover {
+  background: #F1F5F9 !important;
+  color: #0F172A !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.sapTntNavLI.sapTntNavLISelected .sapMLIBContent {
+  background: #EFF6FF !important;
+  border-left: 3.5px solid #2563EB !important;
+  color: #2563EB !important;
+  font-weight: 700 !important;
+  border-radius: 0 8px 8px 0 !important;
+  box-shadow: none !important;
+}
+
+.sapTntNavLI .sapUiIcon {
+  color: #64748B !important;
+  font-size: 1.05rem !important;
+  margin-right: 10px !important;
+  transition: color 0.16s ease !important;
+}
+
+.sapTntNavLI:hover .sapUiIcon {
+  color: #0F172A !important;
+}
+
+.sapTntNavLI.sapTntNavLISelected .sapUiIcon {
+  color: #2563EB !important;
+}
+
+/* -------------------------------------------------------------------------
+   Sleek Top Shell Header with ERP Status & Persona Badges
+   ------------------------------------------------------------------------- */
+.sapTntToolHeader,
+.rcToolHeader {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05) !important;
+  height: 3.25rem !important;
+  padding: 0 1rem !important;
+}
+
+.rcHeaderBrandTitle {
+  color: #0F172A !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 1.05rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.rcErpStatusBadge {
+  background: rgba(16, 185, 129, 0.09) !important;
+  border: 1px solid rgba(16, 185, 129, 0.28) !important;
+  border-radius: 9999px !important;
+  padding: 4px 11px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.rcErpStatusText {
+  color: #047857 !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.rcUserPersonaBadge {
+  background: rgba(37, 99, 235, 0.08) !important;
+  border: 1px solid rgba(37, 99, 235, 0.22) !important;
+  border-radius: 9999px !important;
+  padding: 4px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.rcUserPersonaText {
+  color: #1D4ED8 !important;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* -------------------------------------------------------------------------
+   Fiori Elements Cards & Panels (White & Structured)
+   ------------------------------------------------------------------------- */
+.sapMPanel, .sapMGT, .vrCard, .vrChartCard, .vrTableCard, .vrKpiCard, .vrQuickActions {
+  background: var(--fiori-bg-card) !important;
+  border: 1px solid var(--fiori-border) !important;
+  border-radius: 0.25rem !important; /* Fiori uses slight rounding */
+  box-shadow: var(--shadow-fiori) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+.sapMGT:hover, .vrCard:hover, .vrKpiCard:hover {
+  box-shadow: var(--shadow-fiori-hover) !important;
+}
+
+/* KPI Cards specifically — Perfectly Symmetrical 4-Card Grid */
+.vrKpiGrid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 1rem !important;
+  padding: 1.25rem 1.25rem 0.75rem 1.25rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+@media (max-width: 1100px) {
+  .vrKpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .vrKpiGrid {
+    grid-template-columns: 1fr !important;
+    padding: 0.75rem 0.75rem 0.5rem 0.75rem !important;
+  }
+}
+
+.vrKpiCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1rem 1rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 126px !important;
+  box-sizing: border-box !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+  border-top: 4px solid #3B82F6 !important;
+  position: relative !important;
+}
+
+.vrKpiClickable {
+  cursor: pointer !important;
+  position: relative !important;
+  user-select: none !important;
+}
+
+.vrKpiClickable:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 24px -4px rgba(37, 99, 235, 0.14), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  border-color: #93C5FD !important;
+}
+
+.vrKpiCardSelected {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(37, 99, 235, 0.12) !important;
+  background: #F8FAFC !important;
+}
+
+.vrKpiDrillHint {
+  display: none !important; /* Eliminate distracting text clutter */
+}
+
+.vrKpiFilterBanner {
+  background: #EFF6FF !important;
+  border: 1px solid #BFDBFE !important;
+  border-radius: 8px !important;
+  padding: 6px 14px !important;
+  margin-left: 1rem !important;
+  margin-right: 1rem !important;
+  margin-bottom: 0.75rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08) !important;
+}
+
+.vrKpiFilterText {
+  color: #1E40AF !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+}
+
+.vrResetFilterBtn .sapMBtnContent {
+  color: #DC2626 !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+}
+
+/* Modern segmented buttons inside chart cards */
+.vrChartToggle.sapMSegB {
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.vrChartToggle .sapMSegBBtn {
+  height: 28px !important;
+  padding: 0 10px !important;
+  font-size: 0.74rem !important;
+}
+
+.vrKpiCard.severity-good {
+  border-top-color: #10B981 !important;
+}
+.vrKpiCard.severity-error {
+  border-top-color: #EF4444 !important;
+}
+.vrKpiCard.severity-warning {
+  border-top-color: #F59E0B !important;
+}
+.vrKpiCard.severity-info {
+  border-top-color: #3B82F6 !important;
+}
+.vrKpiCard.severity-purple {
+  border-top-color: #8B5CF6 !important;
+}
+.vrKpiCard.severity-orange {
+  border-top-color: #F97316 !important;
+}
+.vrKpiCard.severity-cyan {
+  border-top-color: #06B6D4 !important;
+}
+
+.vrKpiHeaderRow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.vrKpiHeaderLeft {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  overflow: hidden !important;
+}
+
+.vrKpiIcon {
+  font-family: 'SAP-icons' !important;
+  font-size: 0.95rem !important;
+  color: #64748B !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+}
+
+.vrKpiLabel {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: #64748B !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.vrKpiBadge {
+  font-size: 0.68rem !important;
+  font-weight: 600 !important;
+  padding: 2px 7px !important;
+  border-radius: 9999px !important;
+  background: #F1F5F9 !important;
+  color: #475569 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  margin-left: 6px !important;
+}
+  color: #475569 !important;
+  white-space: nowrap !important;
+}
+
+.vrKpiValue {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.85rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  line-height: 1.15 !important;
+  margin-bottom: 0.5rem !important;
+  letter-spacing: -0.02em !important;
+}
+
+.vrKpiFooter {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-top: auto !important;
+  font-size: 0.74rem !important;
+  gap: 6px !important;
+}
+
+.vrKpiSub {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: #F8FAFC !important;
+  color: #475569 !important;
+  border: 1px solid #E2E8F0 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  font-size: 0.73rem !important;
+  width: fit-content !important;
+}
+
+.vrKpiDelta {
+  display: none !important;
+}
+.vrKpiDelta.up, .vrKpiDelta.downGood {
+  color: #047857 !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+.vrKpiDelta.down, .vrKpiDelta.upBad {
+  color: #B91C1C !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+.vrKpiDelta.neutral {
+  color: #64748B !important;
+  background: #F1F5F9 !important;
+}
+
+/* -------------------------------------------------------------------------
+   Fiori Inputs & Forms
+   ------------------------------------------------------------------------- */
+.sapMInputBaseInner, .sapMSlt {
+  background: #FFFFFF !important;
+  border: 1px solid #89919A !important; /* Fiori input border */
+  border-radius: 4px !important;
+  height: 2.25rem !important;
+  color: var(--fiori-text-main) !important;
+}
+.sapMInputBaseInner:hover, .sapMSlt:hover {
+  border-color: var(--fiori-blue-main) !important;
+}
+.sapMInputFocused .sapMInputBaseInner, .sapMSltFocused {
+  border-color: var(--fiori-blue-main) !important;
+  border-width: 2px !important;
+  padding-left: 9px !important; /* adjust for 2px border */
+}
+
+/* -------------------------------------------------------------------------
+   Fiori Interactive Buttons
+   ------------------------------------------------------------------------- */
+.sapMBtnInner {
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  height: 2.25rem !important;
+  border: 1px solid var(--fiori-blue-main) !important;
+  background: transparent !important;
+  color: var(--fiori-blue-main) !important;
+  transition: all 0.2s ease !important;
+}
+.sapMBtnInner:hover {
+  background: var(--fiori-blue-light) !important;
+}
+.sapMBtnInner:active {
+  background: var(--fiori-blue-main) !important;
+  color: #FFFFFF !important;
+}
+
+/* Emphasized Button (Blue Tinted) */
+.sapMBtnEmphasized .sapMBtnInner {
+  background: var(--fiori-blue-light) !important;
+  border: 1px solid #C2E0F9 !important;
+  color: var(--fiori-blue-main) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.sapMBtnEmphasized .sapMBtnInner:hover {
+  background: #D3EAFB !important;
+  border-color: #A3D1F5 !important;
+}
+.sapMBtnEmphasized .sapUiIcon, .sapMBtnEmphasized .sapMText {
+  color: var(--fiori-blue-main) !important;
+}
+
+/* Accept Button (Green Tinted) */
+.sapMBtnAccept .sapMBtnInner {
+  background: var(--fiori-success-bg) !important;
+  border: 1px solid #BEE6CB !important;
+  color: var(--fiori-success) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.sapMBtnAccept .sapMBtnInner:hover {
+  background: #D4F0E0 !important;
+  border-color: #9ED9B3 !important;
+}
+.sapMBtnAccept .sapMText, .sapMBtnAccept .sapUiIcon {
+  color: var(--fiori-success) !important;
+}
+
+/* Reject Button (Red Tinted) */
+.sapMBtnReject .sapMBtnInner {
+  background: var(--fiori-error-bg) !important;
+  border: 1px solid #F5C6C6 !important;
+  color: var(--fiori-error) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.sapMBtnReject .sapMBtnInner:hover {
+  background: #FAD4D4 !important;
+  border-color: #EBA8A8 !important;
+}
+.sapMBtnReject .sapMText, .sapMBtnReject .sapUiIcon {
+  color: var(--fiori-error) !important;
+}
+
+/* -------------------------------------------------------------------------
+   Fiori Elements Tables (Structured & Professional)
+   ------------------------------------------------------------------------- */
+.sapMListTbl {
+  background: #FFFFFF !important;
+}
+.sapMListTblHeader .sapMColumnHeader {
+  background: #FAFAFA !important; /* Light gray Fiori header */
+  border-bottom: 1.5px solid #E2E8F0 !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+.sapMColumnHeader .sapMLabel {
+  color: var(--fiori-text-main) !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+}
+.sapMListTblCell {
+  border-bottom: 1px solid var(--fiori-border) !important;
+  padding: 0.75rem 1rem !important;
+}
+.sapMLIBHoverable:hover {
+  background: var(--fiori-blue-light) !important;
+}
+
+/* -------------------------------------------------------------------------
+   Status Badges (Fiori Object Status)
+   ------------------------------------------------------------------------- */
+.sapMObjStatusInverted, .vrPillMatched, .vrPillMismatch, .vrPillTolerance, .vrPillMissingS4, .vrPillDuplicate {
+  border-radius: 2px !important;
+  padding: 2px 6px !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  display: inline-block;
+}
+.sapMObjStatusSuccess, .vrPillMatched { background: var(--fiori-success-bg) !important; color: var(--fiori-success) !important; border: 1px solid #C4ECCF !important; }
+.sapMObjStatusError, .vrPillMismatch, .vrPillMissingS4 { background: var(--fiori-error-bg) !important; color: var(--fiori-error) !important; border: 1px solid #F3C3C3 !important; }
+.sapMObjStatusWarning, .vrPillTolerance { background: var(--fiori-warning-bg) !important; color: var(--fiori-warning) !important; border: 1px solid #F9D8B9 !important; }
+
+/* -------------------------------------------------------------------------
+   Page Specific Overrides
+   ------------------------------------------------------------------------- */
+.vrHeaderBar, .vrCockpitHeader {
+  background: #FFFFFF !important;
+  padding: 0.85rem 1.5rem !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+  height: auto !important;
+  min-height: 4rem !important;
+}
+.vrHeaderTitle, .vrCockpitHeaderTitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  letter-spacing: -0.02em !important;
+}
+.vrHeaderSubtitle, .vrCockpitHeaderSubtitle {
+  font-size: 0.82rem !important;
+  color: #64748B !important;
+  margin-top: 3px !important;
+  font-weight: 500 !important;
+}
+
+/* Login styles are maintained in css/login.css */
+
+/* -------------------------------------------------------------------------
+   Chart Titles & Cards — Modern Cohesive Analytics Architecture
+   ------------------------------------------------------------------------- */
+.vrChartCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1.25rem 1.35rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  margin-bottom: 0.85rem !important;
+  box-sizing: border-box !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.vrChartCard:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+.vrChartCard .sapUiTinyMarginBottom {
+  border-bottom: 1px solid #F1F5F9 !important;
+  padding-bottom: 0.75rem !important;
+  margin-bottom: 0.85rem !important;
+}
+
+.vrChartTitle {
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  text-align: left !important;
+  margin: 0 !important;
+  display: block !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* MicroCharts - Professional Blue/Teal/Indigo Palette */
+.sapSuiteIDCSegment:nth-child(1) { fill: #0A6ED1 !important; } /* Fiori Blue */
+.sapSuiteIDCSegment:nth-child(2) { fill: #0D827D !important; } /* Teal */
+.sapSuiteIDCSegment:nth-child(3) { fill: #107E3E !important; } /* Green */
+.sapSuiteIDCSegment:nth-child(4) { fill: #E9730C !important; } /* Orange */
+.sapSuiteIDCSegment:nth-child(5) { fill: #5A2A82 !important; } /* Dark Indigo */
+
+.sapSuiteIBCBar:nth-child(1) .sapSuiteICSBarValue { background-color: #0A6ED1 !important; }
+.sapSuiteIBCBar:nth-child(2) .sapSuiteICSBarValue { background-color: #0D827D !important; }
+.sapSuiteIBCBar:nth-child(3) .sapSuiteICSBarValue { background-color: #107E3E !important; }
+.sapSuiteIBCBar:nth-child(4) .sapSuiteICSBarValue { background-color: #E9730C !important; }
+
+.sapSuiteCMCBar:nth-child(1) rect { fill: #0A6ED1 !important; }
+.sapSuiteCMCBar:nth-child(2) rect { fill: #0D827D !important; }
+.sapSuiteCMCBar:nth-child(3) rect { fill: #107E3E !important; }
+.sapSuiteCMCBar:nth-child(4) rect { fill: #E9730C !important; }
+
+/* Object Page Comparison Delta & Table styles */
+.vrOpCompareDelta, .vrRedDelta, span.vrOpCompareDelta, span.vrRedDelta {
+  color: #d32f2f !important;
+  font-weight: 700 !important;
+  font-size: 0.92rem !important;
+}
+
+.vrLinesTable {
+  width: 100% !important;
+}
+
+/* Object Page Header Metric Cards */
+.vrHeaderContentGrid {
+  width: 100% !important;
+}
+.vrHeaderCard {
+  background: #FFFFFF !important;
+  border: 1px solid var(--fiori-border) !important;
+  border-radius: 6px !important;
+  padding: 0.85rem 1.1rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  height: 180px !important;
+  min-height: 180px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+.vrHeaderCard:hover {
+  box-shadow: var(--shadow-fiori-hover) !important;
+}
+
+/* =========================================================================
+   MODERN DATA INTAKE & INGESTION CENTER STYLES
+   ========================================================================= */
+
+/* Hero Banner — Minimal Clean Architecture */
+.vrIntakeHero {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1.25rem 1.5rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  color: #0F172A !important;
+  margin-bottom: 1rem !important;
+}
+.vrHeroTitle {
+  color: #0F172A !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+}
+.vrHeroSubtitle {
+  color: #64748B !important;
+  font-size: 0.84rem !important;
+  margin-top: 3px !important;
+}
+
+/* KPI Metric Ribbon */
+.vrKpiRibbon {
+  margin-bottom: 1rem !important;
+}
+.vrKpiTile {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1.1rem 1.25rem !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.vrKpiTile:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08) !important;
+}
+.vrBorderBlue { border-top: 3.5px solid #2563EB !important; }
+.vrBorderGreen { border-top: 3.5px solid #10B981 !important; }
+.vrBorderPurple { border-top: 3.5px solid #8B5CF6 !important; }
+.vrBorderAmber { border-top: 3.5px solid #F59E0B !important; }
+
+.vrKpiTileLabel {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: #64748B !important;
+  text-transform: uppercase !important;
+}
+.vrKpiTileNumber {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  margin: 0.35rem 0 0.15rem 0 !important;
+}
+.vrKpiStatus {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}
+.vrKpiSubText {
+  font-size: 0.75rem !important;
+  color: #94A3B8 !important;
+}
+
+/* 3-Pillar Ingestion Action Cards — Uniform Dimensions & Minimal SaaS Feel */
+.vrHubCardsGrid.sapUiRespGrid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+.vrHubCardsGrid.sapUiRespGrid > div {
+  float: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+}
+
+.vrIntakeCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1.25rem 1.35rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 340px !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  flex: 1 1 100% !important;
+}
+.vrIntakeCard:hover {
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06) !important;
+}
+.vrCardErp:hover { border-color: #93C5FD !important; }
+.vrCardOcr:hover { border-color: #DDD6FE !important; }
+.vrCardUpload:hover { border-color: #A7F3D0 !important; }
+
+.vrCardBodyContent {
+  margin-top: 0.35rem !important;
+  margin-bottom: auto !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.vrCardSubText {
+  font-size: 0.76rem !important;
+  color: #64748B !important;
+  margin-top: 2px !important;
+}
+
+.vrMiniStatus {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+}
+
+.vrBoldText {
+  font-weight: 700 !important;
+  color: #0F172A !important;
+}
+
+.vrCardIconBox {
+  width: 2.75rem !important;
+  height: 2.75rem !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+.vrBgBlue { background: #EFF6FF !important; border: 1px solid #BFDBFE !important; }
+.vrBgPurple { background: #F5F3FF !important; border: 1px solid #DDD6FE !important; }
+.vrBgGreen { background: #ECFDF5 !important; border: 1px solid #A7F3D0 !important; }
+
+.vrCardTitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  line-height: 1.2 !important;
+}
+.vrCardSubtitle {
+  font-size: 0.78rem !important;
+  color: #64748B !important;
+}
+.vrCardDesc {
+  font-size: 0.84rem !important;
+  color: #475569 !important;
+  line-height: 1.45 !important;
+  min-height: 2.6rem !important;
+}
+.vrCardFooter {
+  border-top: 1px dashed #E2E8F0 !important;
+  padding-top: 0.85rem !important;
+  margin-top: auto !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+.vrCardHint {
+  font-size: 0.75rem !important;
+  color: #94A3B8 !important;
+}
+.vrPulseBadge .sapMObjStatusText {
+  color: #059669 !important;
+  background: #ECFDF5 !important;
+  border: 1px solid #A7F3D0 !important;
+  border-radius: 12px !important;
+  padding: 2px 8px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+}
+.vrAiBadge .sapMObjStatusText {
+  color: #7C3AED !important;
+  background: #F5F3FF !important;
+  border: 1px solid #DDD6FE !important;
+  border-radius: 12px !important;
+  padding: 2px 8px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+}
+.vrFormatBadge .sapMObjStatusText {
+  color: #0284C7 !important;
+  background: #F0F9FF !important;
+  border: 1px solid #BAE6FD !important;
+  border-radius: 12px !important;
+  padding: 2px 8px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+}
+
+/* Upload Container styling inside Cards */
+.vrUploaderContainer {
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 0.65rem 0.85rem !important;
+  min-height: 84px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+.vrUploadLabel {
+  font-size: 0.78rem !important;
+  color: #334155 !important;
+}
+.vrSmallUploadBtn .sapMBtnInner {
+  height: 1.85rem !important;
+  line-height: 1.75rem !important;
+  font-size: 0.75rem !important;
+  padding: 0 0.65rem !important;
+  border-radius: 6px !important;
+}
+
+/* Matching Trigger Action Banner — Minimal White & Cohesive */
+.vrReconBanner {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1.15rem 1.5rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  color: #0F172A !important;
+}
+.vrReconIconPulse {
+  width: 2.85rem !important;
+  height: 2.85rem !important;
+  background: #EFF6FF !important;
+  border: 1px solid #BFDBFE !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+.vrReconBannerTitle {
+  color: #0F172A !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+}
+.vrBannerStatusPill {
+  background: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  border: 1px solid #BFDBFE !important;
+  border-radius: 9999px !important;
+  padding: 2px 8px !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+.vrReconBannerDesc {
+  color: #64748B !important;
+  font-size: 0.82rem !important;
+  margin-top: 3px !important;
+}
+.vrRunMatchingBtn .sapMBtnInner {
+  background: #0A6ED1 !important;
+  border: 1px solid #0854A0 !important;
+  border-radius: 8px !important;
+  padding: 0 1.25rem !important;
+  height: 2.35rem !important;
+  line-height: 2.25rem !important;
+  box-shadow: 0 1px 3px rgba(10, 110, 209, 0.2) !important;
+  transition: all 0.16s ease !important;
+}
+.vrRunMatchingBtn:hover .sapMBtnInner {
+  background: #0854A0 !important;
+  border-color: #06407B !important;
+}
+.vrRunMatchingBtn .sapMBtnInner,
+.vrRunMatchingBtn .sapMBtnContent,
+.vrRunMatchingBtn .sapMBtnIcon,
+.vrRunMatchingBtn .sapMBtnText,
+.vrRunMatchingBtn bdi {
+  color: #FFFFFF !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+}
+.vrRunMatchingBtn .sapMBtnIcon {
+  font-size: 0.85rem !important;
+  margin-right: 0.4rem !important;
+  color: #FFFFFF !important;
+}
+
+/* Ingested Table Container */
+.vrTableCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+  box-sizing: border-box !important;
+}
+.vrTableCard .sapMListTbl {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.vrTableCard .sapMListTblCell:last-child {
+  padding-right: 1.25rem !important;
+}
+.vrTableToolbar {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding: 0.85rem 1.25rem !important;
+  height: 3.75rem !important;
+}
+
+/* Standard Clean Segmented Control */
+.vrSegmentedBtn.sapMSegB {
+  width: auto !important;
+  display: inline-flex !important;
+  background: #F1F5F9 !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 3px !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+}
+.vrSegmentedBtn .sapMSegBBtn {
+  width: auto !important;
+  border: none !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  height: 2.05rem !important;
+  line-height: 2.05rem !important;
+  padding: 0 0.95rem !important;
+  margin: 0 1px !important;
+  box-sizing: border-box !important;
+  transition: all 0.15s ease !important;
+}
+.vrSegmentedBtn .sapMSegBBtnInnerWrapper,
+.vrSegmentedBtn .sapMSegBBtnInner {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  height: 100% !important;
+  line-height: 2.05rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #475569 !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+}
+.vrSegmentedBtn .sapMSegBBtn:hover {
+  background: #E2E8F0 !important;
+}
+.vrSegmentedBtn .sapMSegBBtn:hover .sapMSegBBtnInner {
+  color: #0F172A !important;
+}
+.vrSegmentedBtn .sapMSegBBtn.sapMSegBBtnSel {
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.vrSegmentedBtn .sapMSegBBtn.sapMSegBBtnSel .sapMSegBBtnInner,
+.vrSegmentedBtn .sapMSegBBtn.sapMSegBBtnSel bdi {
+  color: #0A6ED1 !important;
+  font-weight: 700 !important;
+}
+.vrSegmentedBtn .sapMSegBBtn .sapMSegBBtnInner,
+.vrSegmentedBtn .sapMSegBBtn bdi {
+  color: inherit !important;
+}
+
+/* Suppress disruptive horizontal overlay/indicator lines across all segmented filter buttons */
+.vrSegmentedBtn .sapMSegBBtn::after,
+.vrSegmentedBtn .sapMSegBBtn::before,
+.vrSegmentedBtn .sapMSegBBtn.sapMSegBBtnSel::after,
+.vrSegmentedBtn .sapMSegBBtn.sapMSegBBtnSel::before,
+.sapMSegB .sapMSegBBtn::after,
+.sapMSegB .sapMSegBBtn::before,
+.sapMSegB .sapMSegBBtnSel::after,
+.sapMSegB .sapMSegBBtnSel::before,
+.sapMSegBBtnFocusIndicator {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  opacity: 0 !important;
+}
+
+/* Also eliminate any disruptive bottom line/indicator on IconTabBar filters in Workbench */
+.sapMITBHead .sapMITBSelected::after,
+.sapMITBFilter.sapMITBSelected::after,
+.sapMITBContentArrow {
+  display: none !important;
+}
+
+/* Exception Diagnosis Modal Styling */
+.vrDiagnosisReasonBox {
+  background: #FEF2F2 !important;
+  border-left: 3.5px solid #DC2626 !important;
+  padding: 10px 12px !important;
+  border-radius: 6px !important;
+}
+.vrDiagnosisReasonText {
+  font-size: 0.85rem !important;
+  color: #991B1B !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+.vrDiagnosisActionBox {
+  background: #EFF6FF !important;
+  border-left: 3.5px solid #2563EB !important;
+  padding: 10px 12px !important;
+  border-radius: 6px !important;
+}
+.vrDiagnosisActionText {
+  font-size: 0.85rem !important;
+  color: #1E40AF !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+.vrTableTitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+}
+.vrTableCountBadge {
+  color: #64748B !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+}
+/* Modern Clean Table Header Styling (Neutral Slate - No harsh blue) */
+.vrModernTable thead,
+.vrModernTable thead tr,
+.vrModernTable .sapMListTblHeader,
+.vrModernTable th,
+.vrModernTable th.sapMListTblHeaderCell,
+.vrModernTable th.sapMTableTH,
+.vrModernTable .sapMColumnHeader {
+  background: #F8FAFC !important;
+  background-color: #F8FAFC !important;
+  border-bottom: 1.5px solid #E2E8F0 !important;
+  border-top: none !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+}
+
+.vrModernTable th.sapMListTblHeaderCell .sapMLabel,
+.vrModernTable th.sapMListTblHeaderCell .vrColHeader,
+.vrModernTable .sapMColumnHeader .sapMLabel,
+.vrModernTable th .vrColHeader {
+  color: #475569 !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.74rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+.vrModernTable th.sapMListTblHeaderCell:hover,
+.vrModernTable .sapMColumnHeader:hover {
+  background: #F1F5F9 !important;
+}
+
+.vrColHeader {
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  color: #475569 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+.vrTableRow:hover {
+  background: #F8FAFC !important;
+}
+.vrInvoiceLink {
+  font-family: 'SF Mono', Monaco, 'JetBrains Mono', Consolas, monospace !important;
+  font-weight: 700 !important;
+  color: #0A6ED1 !important;
+  font-size: 0.86rem !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  letter-spacing: -0.01em !important;
+}
+.vrInvoiceLink:hover {
+  color: #0854A0 !important;
+  text-decoration: underline !important;
+}
+.vrPoPill,
+.vrCode {
+  font-family: 'SF Mono', Monaco, 'JetBrains Mono', Consolas, monospace !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  letter-spacing: -0.01em !important;
+}
+.vrVendorTitle {
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  color: #0F172A !important;
+}
+.vrVendorSubtext {
+  font-size: 0.74rem !important;
+  color: #64748B !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+.vrAmountValue {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+}
+.vrCurrencySubtext {
+  font-size: 0.7rem !important;
+  color: #94A3B8 !important;
+  font-weight: 600 !important;
+}
+.vrSourcePill .sapMObjStatusText {
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+}
+.vrTextMuted {
+  font-size: 0.78rem !important;
+  color: #94A3B8 !important;
+}
+
+/* =========================================================================
+   INVOICE OBJECT PAGE & 3-WAY VERIFICATION AUDIT STYLES
+   ========================================================================= */
+
+/* 3-Way Process Stepper Card */
+.vrStepperContainer {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  padding: 1.25rem 1.5rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  margin-bottom: 1.25rem !important;
+}
+.vrStepperTitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+.vrStepCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 10px !important;
+  padding: 1.15rem 1.25rem !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.2s ease !important;
+  flex: 1 1 0 !important;
+}
+.vrStepCard:hover {
+  background: #FFFFFF !important;
+  border-color: #0A6ED1 !important;
+  box-shadow: 0 4px 12px rgba(10, 110, 209, 0.1) !important;
+}
+.vrStepCardActive {
+  background: #F8FAFC !important;
+  border: 1.5px solid #0A6ED1 !important;
+}
+.vrStepNumber {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  color: #0A6ED1 !important;
+  background: #EBF4FC !important;
+  border-radius: 20px !important;
+  padding: 1px 8px !important;
+  display: inline-block !important;
+}
+.vrStepName {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  margin: 0.35rem 0 0.15rem 0 !important;
+}
+.vrStepDetail {
+  font-size: 0.8rem !important;
+  color: #475569 !important;
+}
+.vrStepArrow {
+  color: #0A6ED1 !important;
+  padding: 0 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.vrStepBadge .sapMObjStatusText {
+  border-radius: 6px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  padding: 2px 7px !important;
+}
+.vrStepConnectorText {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: #0A6ED1 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Side-by-Side Comparison Panels */
+.vrSideBySideGrid {
+  width: 100% !important;
+}
+.vrSideBySideGrid > div {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.vrCompareCard {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  min-height: 425px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+}
+.vrCompareCardVendor {
+  border-top: 3.5px solid #0854A0 !important;
+}
+.vrCompareCardPo {
+  border-top: 3.5px solid #0A6ED1 !important;
+}
+.vrCompareCardGrn {
+  border-top: 3.5px solid #107E3E !important;
+}
+.vrCompareCardErp {
+  border-top: 3.5px solid #0854A0 !important;
+}
+.vrCompareAlertBanner {
+  border-radius: 10px !important;
+  padding: 1rem 1.25rem !important;
+  margin-bottom: 1rem !important;
+}
+.vrCompareAlertBannerSuccess {
+  background: #F0FDF4 !important;
+  border: 1px solid #BBF7D0 !important;
+  border-left: 5px solid #16A34A !important;
+}
+.vrCompareAlertBannerWarning {
+  background: #FFFBEB !important;
+  border: 1px solid #FDE68A !important;
+  border-left: 5px solid #D97706 !important;
+}
+.vrCompareAlertBannerError {
+  background: #FEF2F2 !important;
+  border: 1px solid #FECACA !important;
+  border-left: 5px solid #DC2626 !important;
+}
+.vrCompareAlertTitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.25rem !important;
+  color: #0F172A !important;
+}
+.vrCompareAlertText {
+  font-size: 0.88rem !important;
+  color: #334155 !important;
+  line-height: 1.45 !important;
+}
+.vrTextError {
+  color: #B00020 !important;
+}
+.vrCompareHeaderToolbar {
+  background: #F8FAFC !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding: 0.75rem 1.25rem !important;
+  height: 3.25rem !important;
+  min-height: 3.25rem !important;
+  box-sizing: border-box !important;
+}
+.vrCompareHeaderTitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+}
+.vrCompareBody {
+  padding: 1.25rem 1.4rem !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+.vrCompareFieldBox {
+  background: #F8FAFC !important;
+  border: 1px solid #F1F5F9 !important;
+  border-radius: 8px !important;
+  padding: 0.65rem 0.85rem !important;
+  margin-bottom: 0.65rem !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+.vrCompareLabel {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: #64748B !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+.vrCompareValue {
+  font-size: 0.9rem !important;
+  color: #0F172A !important;
+  margin-top: 2px !important;
+}
+
+/* Match & Delta Indicators */
+.vrDeltaPass {
+  color: #10B981 !important;
+  font-weight: 700 !important;
+  font-size: 0.86rem !important;
+  background: #ECFDF5 !important;
+  border: 1px solid #A7F3D0 !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+}
+.vrDeltaDiff {
+  color: #EF4444 !important;
+  font-weight: 700 !important;
+  font-size: 0.86rem !important;
+  background: #FEF2F2 !important;
+  border: 1px solid #FECACA !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+}
+
+/* Embedded PDF Viewer */
+.vrInvoicePdfHost {
+  width: 100% !important;
+  min-height: 550px !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 10px !important;
+  background: #F8FAFC !important;
+}
+
+/* -------------------------------------------------------------------------
+   Reconciliation Audit & Exception Triage Strips
+   ------------------------------------------------------------------------- */
+.vrRunSummaryStrip {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 0.65rem 1.25rem !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.vrSummaryStatItem {
+  margin-right: 0.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.vrSummaryStatLabel {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  color: #64748B !important;
+}
+
+.vrSummaryStatValue {
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+}
+
+.vrColorSuccess { color: #059669 !important; }
+.vrColorError { color: #DC2626 !important; }
+.vrColorWarning { color: #D97706 !important; }
+
+.vrAiScoreBadge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
+  background: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  border: 1px solid #BFDBFE !important;
+}
+
+.vrActionBtn {
+  height: 30px !important;
+  padding: 0 8px !important;
+}
+
+.vrActionBox {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+}
+
+.vrActionCompactBtn.sapMBtn {
+  margin: 0 2px !important;
+}
+
+.vrActionCompactBtn .sapMBtnInner {
+  height: 1.85rem !important;
+  line-height: 1.75rem !important;
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  padding: 0 0.55rem !important;
+  border-radius: 6px !important;
+}
+
+/* -------------------------------------------------------------------------
+   Settle & Review Modal Enhancements (AP Workbench Action Dialog)
+   ------------------------------------------------------------------------- */
+.vrModalHeaderBox {
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 0.85rem 1.15rem !important;
+}
+
+.vrModalFieldBox {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem !important;
+  min-height: 4.5rem !important;
+  box-sizing: border-box !important;
+}
+
+.vrModalRootCauseBox {
+  background: #FFFBEB !important;
+  border: 1px solid #FDE68A !important;
+  border-radius: 8px !important;
+  padding: 0.9rem 1.15rem !important;
+}
+
+.vrModalRootCauseTitle {
+  color: #92400E !important;
+  font-weight: 700 !important;
+}
+
+.vrModalRootCauseDesc {
+  color: #78350F !important;
+  font-size: 0.95rem !important;
+}
+
+.vrModalRootCauseAction {
+  color: #92400E !important;
+  font-size: 0.82rem !important;
+}
+
+.vrModalActionSection {
+  border-top: 1px solid #E2E8F0 !important;
+  padding-top: 1rem !important;
+}
+
+.vrModalActionBtnPrimary .sapMBtnInner {
+  height: 2.35rem !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+}
+
+.vrModalActionBtn {
+  width: 100% !important;
+}
+
+.vrModalActionBtn .sapMBtnInner {
+  height: 2.25rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  padding: 0 0.85rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.vrModalActionBtn .sapMBtnContent {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+}
+
+.vrAiRecommendationBox {
+  background: #F8FAFC !important;
+  border: 1px solid #CBD5E1 !important;
+  border-left: 4px solid #4F46E5 !important;
+  border-radius: 8px !important;
+  padding: 1rem 1.15rem !important;
+}
+
+.vrAiRecHeaderTitle {
+  color: #4338CA !important;
+  font-weight: 700 !important;
+}
+
+.vrDemoUseCaseTag {
+  color: #4338CA !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  background: #EEF2FF !important;
+  padding: 0.25rem 0.6rem !important;
+  border-radius: 4px !important;
+  border: 1px solid #C7D2FE !important;
+  display: inline-block !important;
+}
+
+.vrAiRecSuggestionText {
+  font-size: 0.95rem !important;
+  line-height: 1.45 !important;
+  color: #1E293B !important;
+}
+
+.vrSummaryStatLink {
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+}
+
+.vrSummaryStatLink:hover {
+  text-decoration: underline !important;
+}
+
+.vrSummaryStatLink.vrColorWarning {
+  color: #D97706 !important;
+}
+
+.vrSummaryStatLink.vrColorError {
+  color: #DC2626 !important;
+}
+
+.vrSummaryStatLink.vrColorSuccess {
+  color: #059669 !important;
+}
+
+/* =========================================================================
+   Showcase Demo Badge (Subtle dark green star pill)
+   ========================================================================= */
+.vrDemoBadge .sapMObjStatusText,
+.vrDemoBadge.sapMObjStatusInverted .sapMObjStatusText,
+.vrDemoBadge.sapMObjStatus {
+  background-color: #065F46 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  min-width: auto !important;
+  line-height: 1.2 !important;
+}
+
+
+
+
+
+
+

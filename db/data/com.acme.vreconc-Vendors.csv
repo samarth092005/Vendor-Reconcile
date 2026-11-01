@@ -1,0 +1,13 @@
+ID;name;taxId;country;companyCode;isBlocked
+V-SIEMENS;Siemens AG;DE129273398;DE;1000;false
+V-BOSCH;Bosch Group;DE811144997;DE;1000;false
+V-SCHNEIDER;Schneider Electric;FR56542097371;FR;2000;false
+V-ABB;ABB Ltd;CHE105921895;CH;3000;false
+V-HONEYWELL;Honeywell Intl;US383921471;US;4000;false
+V-EMERSON;Emerson Electric;US431020010;US;4000;false
+V-3M;3M Company;US410417775;US;4000;false
+V-CARRIER;Carrier Global;US831806315;US;4000;false
+V-JCI;Johnson Controls;US222444589;US;4000;false
+V-LEGRAND;Legrand SA;FR15421259615;FR;2000;false
+V-ROCKWELL;Rockwell Automation;US250535662;US;4000;false
+V-MITSUBISHI;Mitsubishi Electric;JP800112233;JP;5000;false
