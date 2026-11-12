@@ -20,10 +20,9 @@
             <Button icon="sap-icon://nav-back" text="Back to Product Overview" type="Transparent" press="onBackToLanding" class="rcTopBackBtn"/>
           </HBox>
 
-          <!-- Left Panel: White Box Logo + White Horizontal Logo -->
+          <!-- Horizontal Brand Logo (White Text on Dark Background) -->
           <HBox alignItems="Center" class="sapUiSmallMarginBottom">
-            <Image src="images/reconly_box_white.png" height="48px" alt="Reconly Mark" class="sapUiSmallMarginEnd"/>
-            <Image src="images/reconly_brand_white.png" height="38px" alt="Reconly"/>
+            <Image src="images/reconly_brand_white.png" height="42px" alt="Reconly" class="rcBrandLogo"/>
           </HBox>
 
           <!-- Category Pill -->

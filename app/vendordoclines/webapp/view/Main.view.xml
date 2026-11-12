@@ -3,8 +3,7 @@
     <tnt:header>
       <tnt:ToolHeader class="rcToolHeader">
         <Button icon="sap-icon://menu2" type="Transparent" press="onSideNavButtonPress" />
-        <Image src="images/reconly_box_dark.png" height="34px" class="sapUiTinyMarginEnd vrLogo" alt="Reconly Mark" />
-        <Image src="images/reconly_brand_dark.png" height="26px" class="sapUiTinyMarginEnd vrLogo" alt="Reconly" />
+        <Image src="images/reconly_brand_dark.png" height="32px" class="sapUiTinyMarginEnd vrLogo" alt="Reconly" />
         <Title text="| Automated Invoice Reconciliation" class="rcHeaderBrandTitle"/>
         <ToolbarSpacer />
 
