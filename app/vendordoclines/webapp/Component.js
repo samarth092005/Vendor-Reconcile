@@ -4,37 +4,51 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (UIComponent) {
     init: function () {
       const self = this;
 
-      // Sync headers on login/logout
+      // Sync headers on login/logout safely
       const originalSetItem = sessionStorage.setItem;
       sessionStorage.setItem = function (key, value) {
+        try {
+          originalSetItem.apply(this, arguments);
+        } catch (e) {
+          console.warn("sessionStorage.setItem error:", e);
+        }
         if (key === "vr_user") {
-          // Sync headers
-          const user = JSON.parse(value);
-          const oModel = self.getModel();
-          if (oModel) {
-            const role = ['AR', 'BILLING', 'VENDOR'].includes(user.businessRole) ? 'Vendor' : user.businessRole;
-            oModel.changeHttpHeaders({
-              "x-user-role": role,
-              "x-user-vendor": user.vendorCode || undefined
-            });
+          try {
+            const user = JSON.parse(value || "{}");
+            const oModel = self.getModel();
+            if (oModel && typeof oModel.changeHttpHeaders === 'function') {
+              const role = ['AR', 'BILLING', 'VENDOR'].includes(user.businessRole) ? 'Vendor' : user.businessRole;
+              oModel.changeHttpHeaders({
+                "x-user-role": role,
+                "x-user-vendor": user.vendorCode || undefined
+              });
+            }
+          } catch (err) {
+            console.warn("Header sync error on login:", err);
           }
         }
-        originalSetItem.apply(this, arguments);
       };
 
       const originalRemoveItem = sessionStorage.removeItem;
       sessionStorage.removeItem = function (key) {
+        try {
+          originalRemoveItem.apply(this, arguments);
+        } catch (e) {
+          console.warn("sessionStorage.removeItem error:", e);
+        }
         if (key === "vr_user") {
-          // Clear headers
-          const oModel = self.getModel();
-          if (oModel) {
-            oModel.changeHttpHeaders({
-              "x-user-role": undefined,
-              "x-user-vendor": undefined
-            });
+          try {
+            const oModel = self.getModel();
+            if (oModel && typeof oModel.changeHttpHeaders === 'function') {
+              oModel.changeHttpHeaders({
+                "x-user-role": undefined,
+                "x-user-vendor": undefined
+              });
+            }
+          } catch (err) {
+            console.warn("Header clear error on logout:", err);
           }
         }
-        originalRemoveItem.apply(this, arguments);
       };
 
       // Global fetch interceptor to append security headers for raw fetch calls
@@ -65,17 +79,21 @@ sap.ui.define(["sap/ui/core/UIComponent"], function (UIComponent) {
 
       UIComponent.prototype.init.apply(this, arguments);
 
-      // Initialize headers on page reload
+      // Initialize headers on page reload safely
       const sessionUser = sessionStorage.getItem("vr_user");
       if (sessionUser) {
-        const user = JSON.parse(sessionUser);
-        const oModel = this.getModel();
-        if (oModel) {
-          const role = ['AR', 'BILLING', 'VENDOR'].includes(user.businessRole) ? 'Vendor' : user.businessRole;
-          oModel.changeHttpHeaders({
-            "x-user-role": role,
-            "x-user-vendor": user.vendorCode || undefined
-          });
+        try {
+          const user = JSON.parse(sessionUser);
+          const oModel = this.getModel();
+          if (oModel && typeof oModel.changeHttpHeaders === 'function') {
+            const role = ['AR', 'BILLING', 'VENDOR'].includes(user.businessRole) ? 'Vendor' : user.businessRole;
+            oModel.changeHttpHeaders({
+              "x-user-role": role,
+              "x-user-vendor": user.vendorCode || undefined
+            });
+          }
+        } catch (err) {
+          console.warn("Reload header sync warning:", err);
         }
       }
 

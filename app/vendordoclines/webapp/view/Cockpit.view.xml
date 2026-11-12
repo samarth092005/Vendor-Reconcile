@@ -9,11 +9,7 @@
     <!-- ============ HEADER BAR ============ -->
     <Toolbar class="vrHeaderBar" height="4rem" design="Solid">
       <VBox>
-        <HBox alignItems="Center">
-          <Image src="images/reconly_box_dark.png" height="32px" class="sapUiTinyMarginEnd" alt="Reconly Mark"/>
-          <Image src="images/reconly_brand_dark.png" height="24px" class="sapUiSmallMarginEnd" alt="Reconly"/>
-          <Title text="Executive Analytics Dashboard" class="vrHeaderTitle" level="H2"/>
-        </HBox>
+        <Title text="Executive Analytics Dashboard" class="vrHeaderTitle" level="H2"/>
         <Text text="Accounts Payable • Statement Matching • Real-time Analytics" class="vrHeaderSubtitle"/>
       </VBox>
       <ToolbarSpacer/>
