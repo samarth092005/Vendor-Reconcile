@@ -20,9 +20,10 @@
             <Button icon="sap-icon://nav-back" text="Back to Product Overview" type="Transparent" press="onBackToLanding" class="rcTopBackBtn"/>
           </HBox>
 
-          <!-- Logo (White Logo on Dark Background, replacing Reconly text) -->
+          <!-- Logo & Brand Name (White Logo on Dark Background) -->
           <HBox alignItems="Center" class="sapUiSmallMarginBottom">
-            <Image src="images/reconly_logo_white.png" height="52px" alt="Reconly Logo" class="rcBrandLogo"/>
+            <Image src="images/reconly_logo_white.png" height="46px" alt="Reconly Logo" class="rcBrandLogo sapUiTinyMarginEnd"/>
+            <Title text="Reconly" level="H1" class="rcBrandTitleText"/>
           </HBox>
 
           <!-- Category Pill -->
@@ -96,8 +97,8 @@
 
           <!-- Card Header (Dark Logo on White Background) -->
           <VBox class="sapUiSmallMarginBottom" alignItems="Center">
-            <Image src="images/reconly_logo_dark.png" height="48px" alt="Reconly Logo" class="sapUiTinyMarginBottom"/>
-            <Title text="Sign In" level="H2" class="rcCardHeading"/>
+            <Image src="images/reconly_logo_dark.png" height="46px" alt="Reconly Logo" class="sapUiTinyMarginBottom"/>
+            <Title text="Sign In to Reconly" level="H2" class="rcCardHeading"/>
             <Text text="Select a persona to sign in instantly or enter your credentials" class="rcCardSub"/>
           </VBox>
 

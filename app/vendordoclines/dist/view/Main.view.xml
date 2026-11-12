@@ -4,7 +4,7 @@
       <tnt:ToolHeader class="rcToolHeader">
         <Button icon="sap-icon://menu2" type="Transparent" press="onSideNavButtonPress" />
         <Image src="images/reconly_logo_dark.png" height="38px" class="sapUiTinyMarginEnd vrLogo" alt="Reconly Logo" />
-        <Title text="Automated Invoice Reconciliation" class="rcHeaderBrandTitle"/>
+        <Title text="Reconly | Automated Invoice Reconciliation" class="rcHeaderBrandTitle"/>
         <ToolbarSpacer />
 
         <!-- Current User / Persona Tag -->
