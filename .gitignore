@@ -38,6 +38,7 @@ sqlite.db-wal
 scratch/
 make.zip
 *.png
+!app/**/*.png
 *.db
 *.db-*
 *.backup.*

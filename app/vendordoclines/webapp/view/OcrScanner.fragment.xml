@@ -80,7 +80,7 @@
                         <TextArea value="{ocrData>/rawText}" rows="5" editable="false" placeholder="Raw output will appear here..."/>
                         
                         <Label />
-                        <Button text="Submit to Reconly Database" press=".onSubmitScannedInvoice" type="Accept" icon="sap-icon://save"/>
+                        <Button text="Submit to Database" press=".onSubmitScannedInvoice" type="Accept" icon="sap-icon://save"/>
                     </f:content>
                 </f:SimpleForm>
             </Panel>
